@@ -62,7 +62,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
                 -   [oracle_credentials.template.sh](./docker/container_scripts/config/oracle_credentials.template.sh):
                     -   Update the template to define the appropriate bash variables necessary to execute the SQLPlus scripts on the corresponding database instance
             -   [functions](./docker/container_scripts/functions):
-                -   [custom_container_functions.sh](../docker/container_scripts/functions/custom_container_functions.sh):
+                -   [custom_container_functions.sh](./docker/container_scripts/functions/custom_container_functions.sh):
                     -   generate_connection_strings(): Update to construct the Oracle connection strings for each database schema that will have SQLPlus scripts executed
                     -   unset_connection_strings(): Update to unset the connection string variables defined in generate_connection_strings()
             -   (multiple files based on the defined use cases) create a bash script for each use case intended to run in the container to execute SQLPlus scripts on the specified database instance
@@ -82,7 +82,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 
 ## Executing the Appropriate Docker Oracle Deployment Script
 -   \*Note: The [Docker Oracle Deployment Diagram](./diagrams/docker_oracle_deployment_diagram.drawio.png) provides an overview of the steps associated with the automated client script
--   Execute the specific bash script in the [client_scripts](../linux_deployment_scripts/client_scripts) folder for the corresponding use case
+-   Execute the specific bash script in the [client_scripts](./linux_deployment_scripts/client_scripts) folder for the corresponding use case
     -   For example, the [deploy_versionx.x.sh](./linux_deployment_scripts/client_scripts/deploy_versionx.x.sh) will deploy version x.x of the corresponding DB and APEX app to the specific OCI database instance
     -   (shown as step 1 in the diagram) The corresponding client script will prompt the user for the following information:
         -   OCI Environment (dev, qa, prod):
@@ -93,11 +93,11 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
     -   (shown as step 2 in the diagram) The client script will create a directory, copy the local [linux_deployment_scripts](./linux_deployment_scripts) folder to the remote docker host, and executes the [prepare_docker_host.sh](./linux_deployment_scripts/host_scripts/prepare_docker_host.sh) on the docker host via plink.
         -   When prepare_docker_host.sh runs on the remote host it clones the git repository ($DOCKER_GIT_URL) to the designated source directory ($DOCKER_SOURCE_DIR)
         -   The client script copies any special files to the remote host via pscp
-        -   (show as step 3 in the diagram) The client script executes the [initiate_docker.sh](../linux_deployment_scripts/host_scripts/initiate_docker.sh) on the docker host via plink
+        -   (show as step 3 in the diagram) The client script executes the [initiate_docker.sh](./linux_deployment_scripts/host_scripts/initiate_docker.sh) on the docker host via plink
         -   When initiate_docker.sh runs on the remote host it changes the permissions on the designated source directory to allow the docker-user account (this is the designated account to build/run containers) to read the files.
-            -   (show as step 4 in the diagram) The [docker_build_run.sh](../linux_deployment_scripts/host_scripts/docker_build_run.sh) script is executed as docker-user on the remote host
+            -   (show as step 4 in the diagram) The [docker_build_run.sh](./linux_deployment_scripts/host_scripts/docker_build_run.sh) script is executed as docker-user on the remote host
                 -   The script copies the necessary files into the designated directory ($DOCKER_TARGET_DIR) and builds/runs the container
-                -   (show as step 5 in the diagram) The script executes a bash script within the running container (container_$SCRIPT_TYPE.sh - e.g. [container_deploy_version2.0.sh](../docker/container_scripts/container_deploy_version2.0.sh) for the use case that deploys version 2.0 of the database and APEX app to a blank database) and provides the $ENV_NAME as an argument.
+                -   (show as step 5 in the diagram) The script executes a bash script within the running container (container_$SCRIPT_TYPE.sh - e.g. [container_deploy_versionx.x.sh](./docker/container_scripts/container_deploy_versionx.x.sh) will deploy version x.x of the database and APEX app to a blank database) and provides the $ENV_NAME as an argument.
                     -   (show as step 6 in the diagram) The bash container script runs a series of SQLPlus scripts that are managed within the corresponding data system repository that perform the processes on the database based on the use case and OCI environment.  
                 -   When the container script finishes executing the container is shutdown and the docker files are removed from $DOCKER_TARGET_DIR
             -   The docker source files are removed from $DOCKER_SOURCE_DIR
@@ -105,9 +105,9 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 ## Security Features
 -   To prevent leakage of sensitive information (e.g. Oracle credentials), this process uses stdin to pass key-value pairs to the bash scripts that require credentials.  
 -   This approach prevents the following:
-		-   Writing credentials to the file system of the docker host or container
-		-   Using environment variables which can be inspected
-		-   Passing sensitive information via command-line arguments
+    -   Writing credentials to the file system of the docker host or container
+    -   Using environment variables which can be inspected
+    -   Passing sensitive information via command-line arguments
 
 ## License
 See the [LICENSE.md](./LICENSE.md) for details
