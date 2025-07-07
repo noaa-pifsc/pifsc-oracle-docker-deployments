@@ -102,6 +102,13 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
                 -   When the container script finishes executing the container is shutdown and the docker files are removed from $DOCKER_TARGET_DIR
             -   The docker source files are removed from $DOCKER_SOURCE_DIR
 
+## Security Features
+-   To prevent leakage of sensitive information (e.g. Oracle credentials), this process uses stdin to pass key-value pairs to the bash scripts that require credentials.  
+-   This approach prevents the following:
+		-   Writing credentials to the file system of the docker host or container
+		-   Using environment variables which can be inspected
+		-   Passing sensitive information via command-line arguments
+
 ## License
 See the [LICENSE.md](./LICENSE.md) for details
 
