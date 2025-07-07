@@ -3,23 +3,24 @@
 ## Overview
 When the PIFSC Oracle data center was moved to the cloud it was no longer feasible to deploy/upgrade/rollback databases and APEX applications directly from local workstations via the PIFSC network connection.  In an effort to automate the process and move it closer to the database/application servers the Oracle Docker Deployment Process (ODP) was developed.  The ODP can be executed by running a single script on the local client that will execute a series of commands.  This project can be used as a basis to implement the automated process for a specific Oracle data system
 
-## Prerequisites
--   Remote docker host running in OCI that has connectivity to the corresponding OCI database instance
-    -   dos2unix
--   git
--   PuTTY
-    -   PuTTY secure copy client (Pscp) - a file transfer utility
-    -   PuTTY Link (Plink) - a command line connection tool to execute commands on a given remote docker host
--   Windows/Linux machine with bash installed serving as the local client
-
 ## Resources
 -   ODP Version Control Information:
     -   URL: https://github.com/noaa-pifsc/pifsc-oracle-docker-deployments
-		-   Version 1.0 (git tag: pifsc_oracle_docker_deployment_v1.0)
+    -   Version 1.0 (git tag: pifsc_oracle_docker_deployment_v1.0)
 -   [Docker Oracle Deployment Diagram](./diagrams/docker_oracle_deployment_diagram.drawio.png)
     -   [Docker Oracle Deployment Diagram Source File](./diagrams/docker_oracle_deployment_diagram.drawio)
 
-## Prerequisites
+## Platform Requirements
+-   Remote docker host running in OCI that has connectivity to the corresponding OCI database instance
+    -   dos2unix
+    -   git
+-   Windows/Linux machine serving as the local client
+    -   bash
+    -   PuTTY
+        -   PuTTY secure copy client (Pscp) - a file transfer utility
+        -   PuTTY Link (Plink) - a command line connection tool to execute commands on a given remote docker host
+
+## Data System Prerequisites
 -   The git database/app project must have automated SQLPlus scripts to deploy/upgrade/rollback the database/app
     -   The given schema(s) on the target database instance must be in the correct state for the desired script to run (e.g. blank database for new deployments, required database version for upgrades/rollbacks, etc.)
     -   If there are different versions of the automated SQLPlus scripts for the different environments (development, QA, production) they must incorporate the corresponding environment abbreviation (dev, qa, prod) in the script name so the appropriate script can be run for each environment (e.g. deploy_apex_qa_v1.5.sql for deploying version 1.5 of the APEX app to the qa environment)
@@ -36,8 +37,8 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   (multiple files based on the defined use cases) create a bash script for each use case intended to run on the client machine
                 -   Example: [deploy_versionx.x.sh](./linux_deployment_scripts/client_scripts/deploy_versionx.x.sh) for deploying version x.x of the corresponding database to a blank database schema and version x.x of the APEX app
                 -   Ensure that the SCRIPT_TYPE variable value matches the naming convention of the corresponding container script (e.g. [container_deploy_versionx.x.sh](./docker/container_scripts/container_deploy_versionx.x.sh) for SCRIPT_TYPE="deploy_versionx.x")
-								-   Replace all instances of [DB_NAME] with the corresponding database name and remove "APEX" if the given data system does not include APEX
-								-   \*Note: The main difference between the different use case bash scripts is informing the user which use case is being processed (via echo statements) and setting the $SCRIPT_TYPE variable value (e.g. deploy_version2.0)
+                -   Replace all instances of [DB_NAME] with the corresponding database name and remove "APEX" if the given data system does not include APEX
+                -   \*Note: The main difference between the different use case bash scripts is informing the user which use case is being processed (via echo statements) and setting the $SCRIPT_TYPE variable value (e.g. deploy_version2.0)
         -   [host_scripts](./linux_deployment_scripts/host_scripts)
             -   [functions](./linux_deployment_scripts/host_scripts/functions):
                 -   [custom_host_functions.sh](./linux_deployment_scripts/host_scripts/functions/custom_host_functions.sh):
@@ -69,8 +70,8 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
                 -   \*Note: If there are different versions of the automated SQLPlus scripts for the different environments include the ${ENV_NAME} value in the SQLPlus script filename references to ensure the appropriate SQLPlus script is executed
     -   deployment_script_logs
         -   \*Note: the log files for the client script executions will be saved in this directory
-		-   .gitignore
-				-   \*Note: this file prevents dev, qa, and prod oracle credentials from being saved in the data system's repository
+    -   .gitignore
+        -   \*Note: this file prevents dev, qa, and prod oracle credentials from being saved in the data system's repository
 
 ## Setup/Configuration
 -   clone the given git data system project to a directory on the local client computer
