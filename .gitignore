@@ -1,0 +1,3 @@
+/docker/container_scripts/config/oracle_credentials.qa.sh
+/docker/container_scripts/config/oracle_credentials.dev.sh
+/docker/container_scripts/config/oracle_credentials.prod.sh
