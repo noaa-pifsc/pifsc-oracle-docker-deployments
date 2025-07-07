@@ -43,42 +43,42 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   [functions](./linux_deployment_scripts/host_scripts/functions):
                 -   [custom_host_functions.sh](./linux_deployment_scripts/host_scripts/functions/custom_host_functions.sh):
                     -   prepare_docker_target_dir(): update to copy the directories/files from the corresponding project repository into the folder that will be used to build and run the docker container
-        -   config
-            -   docker_host_config.sh: update to define each of the bash variables for the docker host configuration
-            -   deploy_config.${ENV_NAME}.sh: update to define the corresponding docker hostnames for each environment (dev, qa, prod)
-        -   shared_functions
-            -   custom_shared_functions.sh:
+        -   [config](./linux_deployment_scripts/config)
+            -   [docker_host_config.sh](./linux_deployment_scripts/config/docker_host_config.sh): update to define each of the bash variables for the docker host configuration
+            -   deploy_config.${ENV_NAME}.sh (e.g. [deploy_config.prod.sh](./linux_deployment_scripts/config/deploy_config.prod.sh) for production deployments): update to define the corresponding docker hostnames for each environment (dev, qa, prod)
+        -   [shared_functions](./linux_deployment_scripts/shared_functions)
+            -   [custom_shared_functions.sh](./linux_deployment_scripts/shared_functions/custom_shared_functions.sh):
                 -   parse_config_data(): update to include all the corresponding bash variables passed in by stdin
                     -   *\*Note:* when docker secrets has been implemented the scripts can be switched to using environment variables for SCRIPT_TYPE and ENV_NAME and remove this function
                 -   encode_config_data(): update to include all the corresponding bash variables passed in by stdin
                     -   *\*Note:* when docker secrets has been implemented the scripts can be switched to using environment variables for SCRIPT_TYPE and ENV_NAME and remove this function
                 -   unset_config_variables(): update to unset all bash variables passed in via stdin
                     -   *\*Note:* when docker secrets has been implemented the scripts can be switched to using environment variables for SCRIPT_TYPE and ENV_NAME and remove this function
-    -   docker
-        -   docker-compose.yml:
+    -   [docker](./docker)
+        -   [docker-compose.yml](./docker/docker-compose.yml):
             -   Update the image and container name appropriately
-        -   container_scripts:
-            -   config:
-                -   oracle_credentials.template.sh:
+        -   [container_scripts](./docker/container_scripts):
+            -   [config](./docker/container_scripts/config):
+                -   [oracle_credentials.template.sh](./docker/container_scripts/config/oracle_credentials.template.sh):
                     -   Update the template to define the appropriate bash variables necessary to execute the SQLPlus scripts on the corresponding database instance
-            -   functions:
+            -   [functions](./docker/container_scripts/functions):
                 -   [custom_container_functions.sh](../docker/container_scripts/functions/custom_container_functions.sh):
                     -   generate_connection_strings(): Update to construct the Oracle connection strings for each database schema that will have SQLPlus scripts executed
                     -   unset_connection_strings(): Update to unset the connection string variables defined in generate_connection_strings()
             -   (multiple files based on the defined use cases) create a bash script for each use case intended to run in the container to execute SQLPlus scripts on the specified database instance
                 -   Example: [container_deploy_versionx.x.sh](./docker/container_scripts/container_deploy_versionx.x.sh) for deploying version x.x of the database to a blank database schema and version x.x of the APEX app
                 -   \*Note: If there are different versions of the automated SQLPlus scripts for the different environments include the ${ENV_NAME} value in the SQLPlus script filename references to ensure the appropriate SQLPlus script is executed
-    -   deployment_script_logs
+    -   [deployment_script_logs](./deployment_script_logs)
         -   \*Note: the log files for the client script executions will be saved in this directory
-    -   .gitignore
+    -   [.gitignore](./.gitignore)
         -   \*Note: this file prevents dev, qa, and prod oracle credentials from being saved in the data system's repository
 
 ## Setup/Configuration
 -   clone the given git data system project to a directory on the local client computer
 -   Create the database connection information using the docker/container_scripts/config/oracle_credentials.template.sh file
-    -   Make a copy of oracle_credentials.template.sh file within the docker/container_scripts/config folder and rename it to the corresponding OCI environment that the DB/APEX app will be depoyed to (e.g. oracle_credentials.qa.sh for the QA/test OCI environment)
+    -   Make a copy of [oracle_credentials.template.sh](./docker/container_scripts/config/oracle_credentials.template.sh) file and rename it to the corresponding OCI environment that the DB/APEX app will be depoyed to (e.g. oracle_credentials.qa.sh for the QA/test OCI environment)
         -   Specify the OCI database connection information and save the file
-        -   \*Note: the actual configuration files should not be committed to the repository for security purposes, add a .gitignore file has been added to the repository to prevent these files from being included in git.  
+        -   \*Note: the actual configuration files should not be committed to the repository for security purposes, a .gitignore file has been added to the repository to prevent these files from being included in git.  
 
 ## Executing the Appropriate Docker Oracle Deployment Script
 -   \*Note: The [Docker Oracle Deployment Diagram](./diagrams/docker_oracle_deployment_diagram.drawio.png) provides an overview of the steps associated with the automated client script
