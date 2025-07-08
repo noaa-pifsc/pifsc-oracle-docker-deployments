@@ -28,7 +28,7 @@ CONFIG_DATA=$(encode_config_data)
 unset_config_variables
 
 # define the absolute path to the deployment script that will run as docker-user.
-SCRIPT_PATH="${DOCKER_SOURCE_DIR}/${DOCKER_GIT_DIR}/linux_deployment_scripts/host_scripts/docker_build_run.sh"
+SCRIPT_PATH="${DOCKER_SOURCE_DIR}/${DOCKER_GIT_DIR}/oracle_docker_deployment/linux_deployment_scripts/host_scripts/docker_build_run.sh"
 
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
 # The outer heredoc (<<EOF) sends commands to 'sudo su - docker-user'.

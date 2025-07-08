@@ -19,14 +19,10 @@ function prepare_docker_target_dir ()
 	# copy the shared functions so they are available for the container scripts
 	rsync -a "$DOCKER_SOURCE_DIR"/"$DOCKER_GIT_DIR"/oracle_docker_deployment/linux_deployment_scripts/shared_functions/* "$DOCKER_TARGET_DIR/src/container_scripts/functions"
 	
-	
-	
-	
 	# copy project-specific files into the corresponding directories within the $DOCKER_TARGET_DIR:
 	
 	#################################################
 	######## Project-Specific Code Goes Here ########
 	#################################################
-
 
 }

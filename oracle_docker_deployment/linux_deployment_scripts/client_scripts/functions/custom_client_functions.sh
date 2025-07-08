@@ -9,9 +9,9 @@
 function transfer_special_files()
 {
 #	echo "running transfer_special_files()"
-
-	# copy the custom DB data backup file to the docker host
-	echo "copy the custom DB data backup file to the docker host"
-	transfer_files ../../SQL/queries/PIC_LIFEHIST_table_data_export20250617.sql "$DOCKER_SOURCE_DIR"/"$DOCKER_GIT_DIR"/SQL/queries
+	
+	#################################################
+	######## Project-Specific Code Goes Here ########
+	#################################################
 
 }

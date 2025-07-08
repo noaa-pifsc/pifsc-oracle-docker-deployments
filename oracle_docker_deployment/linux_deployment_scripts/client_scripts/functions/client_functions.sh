@@ -55,7 +55,7 @@ function prepare_execute_deployment_script ()
 	unset_config_variables
 
 	# execute the deployment/upgrade script on the host server and specify the bash variable values as stdin
-	exec_remote_cmd_with_stdin "$CONFIG_DATA" "bash $DOCKER_SOURCE_DIR/$DOCKER_GIT_DIR/linux_deployment_scripts/host_scripts/initiate_docker.sh"
+	exec_remote_cmd_with_stdin "$CONFIG_DATA" "bash $DOCKER_SOURCE_DIR/$DOCKER_GIT_DIR/oracle_docker_deployment/linux_deployment_scripts/host_scripts/initiate_docker.sh"
 
 	# unset the CONFIG_DATA now that the plink call has completed
 	unset CONFIG_DATA
