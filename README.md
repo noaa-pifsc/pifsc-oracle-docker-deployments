@@ -27,7 +27,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 
 ## Data System Deployment Process Implementation Procedure
 -   \*Note: A working example of this Deployment Process for an Oracle/APEX data system is available in the [LHP data system](https://picgitlab.nmfs.local/lhp/lhp-data-management) ([Documentation](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/docs/cloud%20docker%20deployment/LHP%20-%20Cloud%20Docker%20Deployment%20Method.md?ref_type=heads)).
--   Copy the [oracle_docker_deployment](./oracle_docker_deployment) folder from this project repository to the root folder of the data system repository the automated deployment method is being implemented in.  Update the corresponding files based on the specified guidance:
+-   Copy the [oracle_docker_deployment](./oracle_docker_deployment) folder from this project repository to the root folder of the data system repository the automated deployment method is being implemented in.  Update the corresponding files based on the following guidance:
     -   [linux_deployment_scripts](./oracle_docker_deployment/linux_deployment_scripts)
         -   [client_scripts](./oracle_docker_deployment/linux_deployment_scripts/client_scripts)
             -   [functions](./oracle_docker_deployment/linux_deployment_scripts/client_scripts/functions)
