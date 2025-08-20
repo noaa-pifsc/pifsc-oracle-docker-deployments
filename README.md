@@ -6,24 +6,30 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 ## Resources
 -   ODP Version Control Information:
     -   URL: https://github.com/noaa-pifsc/pifsc-oracle-docker-deployments
-    -   Version 1.0 (git tag: pifsc_oracle_docker_deployment_v1.0)
+    -   Version 1.1 (git tag: pifsc_oracle_docker_deployment_v1.1)
 -   [Docker Oracle Deployment Diagram](./diagrams/docker_oracle_deployment_diagram.drawio.png)
     -   [Docker Oracle Deployment Diagram Source File](./diagrams/docker_oracle_deployment_diagram.drawio)
 
 ## Platform Requirements
 -   Remote docker host running in OCI that has connectivity to the corresponding OCI database instance
+    -   Docker
     -   dos2unix
     -   git
 -   Windows/Linux machine serving as the local client
-    -   bash
-    -   PuTTY
-        -   PuTTY secure copy client (Pscp) - a file transfer utility
-        -   PuTTY Link (Plink) - a command line connection tool to execute commands on a given remote docker host
+    -   Git Bash
+    -   OpenSSH is setup to work with CAC authentication
+    -   OpenSSH is configured to specify the username in the ~/.ssh/config file for each docker host (e.g. pifsc-dev-docker-01-as for the dev docker host)
+        -   The ForwardAgent feature is enabled to allow the git repositories to be cloned on the docker host
 
 ## Data System Prerequisites
 -   The git database/app project must have automated SQLPlus scripts to deploy/upgrade/rollback the database/app
     -   The given schema(s) on the target database instance must be in the correct state for the desired script to run (e.g. blank database for new deployments, required database version for upgrades/rollbacks, etc.)
     -   If there are different versions of the automated SQLPlus scripts for the different environments (development, QA, production) they must incorporate the corresponding environment abbreviation (dev, qa, prod) in the script name so the appropriate script can be run for each environment (e.g. deploy_apex_qa_v1.5.sql for deploying version 1.5 of the APEX app to the qa environment)
+
+## Database Instances
+-   For the development docker and database instances the abbreviation used is "dev" 
+-   For the test/QA docker and database instances the abbreviation used is "test" 
+-   For the production docker and database instances the abbreviation used is "prod" 
 
 ## Data System Deployment Process Implementation Procedure
 -   \*Note: A working example of this Deployment Process for an Oracle/APEX data system is available in the [LHP data system](https://picgitlab.nmfs.local/lhp/lhp-data-management) ([Documentation](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/docs/cloud%20docker%20deployment/LHP%20-%20Cloud%20Docker%20Deployment%20Method.md?ref_type=heads)).
