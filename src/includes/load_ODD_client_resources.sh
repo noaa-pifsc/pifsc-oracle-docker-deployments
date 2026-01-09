@@ -5,9 +5,6 @@
 # determine current folder path (ODD/src/includes)
 ODD_INCL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# source the ODD client functions
-source "$ODD_INCL_DIR/../functions/client_functions.sh"
-
 # determine CDS submodule root folder (ODD/modules/CDS)
 CDS_DIR="$ODD_INCL_DIR/../../modules/CDS"
 

@@ -5,7 +5,7 @@
 # 1: the full script path name that was executed
 # 2: the full path to the designated SQL folder within the container
 # 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
-# Usage: 
+# Example Usage:  
 # initialize_container_script "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR"
 function initialize_container_script ()
 {
@@ -31,7 +31,7 @@ function initialize_container_script ()
 
 # function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
 # 1: the name of an associative array that maps the secret values passed to bash commands via STDIN
-# Usage: 
+# Example Usage:  
 # cleanup_container_variables "SECRET_MAPPING_ARR"
 function cleanup_container_variables ()
 {

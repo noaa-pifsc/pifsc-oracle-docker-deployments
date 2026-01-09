@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# function to initialize the docker target folder (where the docker project will be built/run) and build/run the container.  This function is run by the ${DOCKER_ACCOUNT_NAME} to build and run the container. This function accepts 2 parameters:
+# function to initialize the docker target folder (where the docker project will be built/run) and build/run the container.  This function is run to build and run the container. This function accepts 2 parameters:
 # 1: the full path to the docker source directory
 # 2: the path of the docker compose file (relative to the docker source directory)
-# Usage: 
+# Example Usage:  
 # initialize_run_docker_project "/tmp/lhp-data-management-deploy/docker" "./docker-compose.yml"
 function initialize_run_docker_project ()
 {
@@ -26,10 +26,10 @@ function initialize_run_docker_project ()
 	build_deploy_container ${docker_compose_file_path}
 }
 
-# function to shutdown the docker container and cleanup docker target folder after the container scripts have been executed. This function is run by the ${DOCKER_ACCOUNT_NAME} to build and run the container. This function accepts 2 parameters:
+# function to shutdown the docker container and cleanup docker target folder after the container scripts have been executed. This function is run to shutdown the container. This function accepts 2 parameters:
 # 1: the name of the configuration data variable used to store the STDIN data
 # 2: the path of the docker compose file (relative to the docker source directory - see docker_host_container_source_path in initialize_run_docker_project())
-# Usage:
+# Example Usage: 
 # shutdown_cleanup_docker_project "CONFIG_DATA" "./docker-compose.yml" 
 function shutdown_cleanup_docker_project ()
 {
