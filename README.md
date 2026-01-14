@@ -1,12 +1,12 @@
-# PIFSC Oracle Docker Deployment Process
+# PIFSC Container Database Deployment Process
 
 ## Overview
-When the PIFSC Oracle data center was moved to the cloud it was no longer feasible to deploy/upgrade/rollback databases and APEX applications directly from local workstations via the PIFSC network connection.  In an effort to automate the process and move it closer to the database/application servers the Oracle Docker Deployment Process (ODP) was developed.  The ODP can be executed by running a single script on the local client that will execute a series of commands.  This project can be used as a basis to implement the automated process for a specific Oracle data system
+When the PIFSC Oracle data center was moved to the cloud it was no longer feasible to deploy/upgrade/rollback databases and APEX applications directly from local workstations via the PIFSC network connection.  In an effort to automate the process and move it closer to the database/application servers the Container Database Deployment (CDD) project was developed.  The CDD can be executed by running a single script on the local client that will execute a series of commands.  This project can be implemented as a submodule in any database system repository to implement the automated deployment process.
 
 ## Resources
--   ODP Version Control Information:
-    -   URL: https://github.com/noaa-pifsc/pifsc-oracle-docker-deployments
-    -   Version 1.1 (git tag: pifsc_oracle_docker_deployment_v1.1)
+-   CDD Version Control Information:
+    -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
+    -   Version 1.2 (git tag: pifsc_oracle_docker_deployment_v1.2)
 -   [Docker Oracle Deployment Diagram](./diagrams/docker_oracle_deployment_diagram.drawio.png)
     -   [Docker Oracle Deployment Diagram Source File](./diagrams/docker_oracle_deployment_diagram.drawio)
 
@@ -91,14 +91,12 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   This value is saved in $ENV_NAME and provided to subsequent scripts to inform their behavior based on the OCI environment
         -   A log file for each client script execution is saved in [deployment_script_logs](./docker/deployment_script_logs) and is named $SCRIPT_TYPE.$(date +%Y%m%d_%H%M%S).log based on the date/time the script is executed.  This file will include the output from the remote host and container scripts
     -   (shown as step 2 in the diagram) The client script will clone the data system repository ($DOCKER_GIT_URL) to the designated folder ($DOCKER_SOURCE_DIR) in docker host via ssh.
-    -   (shown as step 3 in the diagram) The client script executes the [prepare_docker_host.sh](./docker/deployment_scripts/host_scripts/prepare_docker_host.sh) script on the docker host to copy necessary source files from the designated folder ($DOCKER_SOURCE_DIR) locations into the [src](./docker/src) directory
-        - The client script copies any special files to the remote host's designated folder ($DOCKER_SOURCE_DIR) within the [src](./docker/src) directory via scp
-    -   (shown as step 4 in the diagram) The client script executes the [initiate_docker.sh](./docker/deployment_scripts/host_scripts/initiate_docker.sh) script on the docker host via ssh
+    -   (shown as step 3 in the diagram) The client script executes the [initiate_docker.sh](./docker/deployment_scripts/host_scripts/initiate_docker.sh) script on the docker host via ssh
         -   When initiate_docker.sh runs on the remote host it changes the permissions on the designated source directory to allow the designated docker account (this is the account allowed to build/run containers) to read the files.
-            -   (shown as step 5 in the diagram) The [docker_build_run.sh](./docker/deployment_scripts/host_scripts/docker_build_run.sh) script is executed as the designated docker account on the remote host
+            -   (shown as step 4 in the diagram) The [docker_build_run.sh](./docker/deployment_scripts/host_scripts/docker_build_run.sh) script is executed as the designated docker account on the remote host
                 -   The script copies the necessary files into the designated directory ($DOCKER_TARGET_DIR) and builds/runs the container
-                -   (shown as step 6 in the diagram) The script executes the corresponding bash script within the running container (container_$SCRIPT_TYPE.sh - e.g. [container_deploy_versionx.x.sh](./docker/deployment_scripts/container_scripts/container_deploy_versionx.x.sh) will deploy version x.x of the database and APEX app to a blank database).
-                    -   (shown as step 7 in the diagram) The bash container script runs a series of SQLPlus scripts that are managed within the corresponding data system repository that perform the processes on the database based on the use case and OCI environment.  
+                -   (shown as step 5 in the diagram) The script executes the corresponding bash script within the running container (container_$SCRIPT_TYPE.sh - e.g. [container_deploy_versionx.x.sh](./docker/deployment_scripts/container_scripts/container_deploy_versionx.x.sh) will deploy version x.x of the database and APEX app to a blank database).
+                    -   (shown as step 6 in the diagram) The bash container script runs a series of SQLPlus scripts that are managed within the corresponding data system repository that perform the processes on the database based on the use case and OCI environment.  
                 -   When the container script finishes executing the container is shutdown and the docker files are removed from $DOCKER_TARGET_DIR
             -   The docker source files are removed from $DOCKER_SOURCE_DIR
 

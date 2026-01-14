@@ -1,0 +1,142 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.3.1">
+  <diagram name="Page-1" id="mX9WFPaPRQZbATmu6Zbr">
+    <mxGraphModel dx="1554" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="OCI Docker Host (dev, test, prod)&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="460" width="360" x="370" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="Client Computer (e.g. Windows laptop)" vertex="1">
+          <mxGeometry height="160" width="213" x="20" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="Data System Repository" vertex="1">
+          <mxGeometry height="120" width="177.5" x="37.75" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-2" edge="1" parent="1" source="m3ywG3zxG51LFpHeeQUq-1" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="xqHPgo2YLqQgxxea8p6s-5" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="530" y="620" as="sourcePoint" />
+            <mxPoint x="580" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-3" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="2) Clone data&amp;nbsp;&lt;div&gt;system repository&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0468" y="1" as="geometry">
+            <mxPoint x="3" y="-34" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="${SCRIPT_TYPE}.sh" vertex="1">
+          <mxGeometry height="80" width="161.5" x="45.75" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="Git Server" vertex="1">
+          <mxGeometry height="50" width="120" x="170" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-6" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-8" style="endArrow=none;startArrow=classic;html=1;rounded=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;endFill=0;" target="xqHPgo2YLqQgxxea8p6s-5" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="530" y="620" as="sourcePoint" />
+            <mxPoint x="580" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-7" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-6" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="2) Repository&lt;div&gt;&amp;nbsp;files&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0807" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Git working copy&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="160" x="469.75" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-11" edge="1" parent="1" source="m3ywG3zxG51LFpHeeQUq-1" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" target="xqHPgo2YLqQgxxea8p6s-13" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="530" y="620" as="sourcePoint" />
+            <mxPoint x="580" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-12" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="3) Initiate docker&lt;div&gt;(execute script)&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0831" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="intiate_docker.sh" vertex="1">
+          <mxGeometry height="30" width="131.5" x="484" y="222" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="docker_build_run.sh" vertex="1">
+          <mxGeometry height="30" width="131.5" x="484" y="253" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-15" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-13" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="xqHPgo2YLqQgxxea8p6s-14" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="270" />
+            </Array>
+            <mxPoint x="530" y="620" as="sourcePoint" />
+            <mxPoint x="656" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-16" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="4) Run script as&amp;nbsp;&lt;div&gt;docker-user (sudo)&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.5015" y="-8" as="geometry">
+            <mxPoint x="-97" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Deployment Container&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="290" x="404.75" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-18" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-14" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="xqHPgo2YLqQgxxea8p6s-17" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="220.21" y="470" as="sourcePoint" />
+            <mxPoint x="593.21" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-19" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-18" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="4) Build/Run&lt;div&gt;container&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0005" y="3" as="geometry">
+            <mxPoint y="-6" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-20" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-14" style="endArrow=classic;html=1;rounded=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.872;entryY=-0.033;entryDx=0;entryDy=0;entryPerimeter=0;" target="xqHPgo2YLqQgxxea8p6s-22" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="220.21" y="470" as="sourcePoint" />
+            <mxPoint x="527.21" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-21" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-20" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="5) Execute container&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;script&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2105" y="1" as="geometry">
+            <mxPoint y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="container_${SCRIPT_TYPE}.sh" vertex="1">
+          <mxGeometry height="30" width="240" x="429.75" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-23" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="OCI ${ENV_NAME} DB" vertex="1">
+          <mxGeometry height="150" width="140" x="910" y="384.5" as="geometry" />
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-24" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-22" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="xqHPgo2YLqQgxxea8p6s-23" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="250" y="470" as="sourcePoint" />
+            <mxPoint x="300" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-25" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-24" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="6) Execute SQLPlus&lt;div&gt;&amp;nbsp;scripts&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0219" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <UserObject label="Container Database Deployment Diagram" link="LHP_docker_DB_deployment_diagram.drawio" id="xqHPgo2YLqQgxxea8p6s-26">
+          <mxCell parent="1" style="text;whiteSpace=wrap;align=center;fontSize=18;" vertex="1">
+            <mxGeometry height="40" width="1100" y="17" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="4cox58JU91g2Krtaamnl-1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="User" vertex="1">
+          <mxGeometry height="60" width="30" x="280" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="4cox58JU91g2Krtaamnl-2" edge="1" parent="1" source="4cox58JU91g2Krtaamnl-1" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="m3ywG3zxG51LFpHeeQUq-1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="530" y="620" as="sourcePoint" />
+            <mxPoint x="580" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4cox58JU91g2Krtaamnl-3" connectable="0" parent="4cox58JU91g2Krtaamnl-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1) Specify ${ENV_NAME}" vertex="1">
+          <mxGeometry relative="1" x="-0.3912" y="1" as="geometry">
+            <mxPoint x="-30" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
