@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="m3ywG3zxG51LFpHeeQUq-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="OCI Docker Host (dev, test, prod)&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="OCI Container Host (dev, test, prod)&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="460" width="360" x="370" y="90" as="geometry" />
         </mxCell>
         <mxCell id="m3ywG3zxG51LFpHeeQUq-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="Client Computer (e.g. Windows laptop)" vertex="1">
@@ -50,15 +50,15 @@
             <mxPoint x="580" y="570" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-12" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="3) Initiate docker&lt;div&gt;(execute script)&lt;/div&gt;" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-12" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="3) Initiate container&lt;div&gt;(execute script)&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.0831" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="intiate_docker.sh" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="intiate_container.sh" vertex="1">
           <mxGeometry height="30" width="131.5" x="484" y="222" as="geometry" />
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="docker_build_run.sh" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="container_build_run.sh" vertex="1">
           <mxGeometry height="30" width="131.5" x="484" y="253" as="geometry" />
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-15" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-13" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="xqHPgo2YLqQgxxea8p6s-14" value="">
@@ -70,7 +70,7 @@
             <mxPoint x="656" y="290" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-16" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="4) Run script as&amp;nbsp;&lt;div&gt;docker-user (sudo)&lt;/div&gt;" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-16" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="4) Run script as&amp;nbsp;&lt;div&gt;privileged account (sudo)&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.5015" y="-8" as="geometry">
             <mxPoint x="-97" as="offset" />
           </mxGeometry>
