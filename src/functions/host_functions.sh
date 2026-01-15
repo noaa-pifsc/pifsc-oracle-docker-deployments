@@ -33,19 +33,19 @@ function initialize_run_container_project ()
 # shutdown_cleanup_container_project "CONFIG_DATA" "./docker-compose.yml" 
 function shutdown_cleanup_container_project ()
 {
-	local config_data_var="$1"
+	local config_var_name="$1"
 	local container_compose_file_path="$2"
 
 	# input validation
-    if [[ -z "$config_data_var" || -z "$container_compose_file_path" ]]; then
+    if [[ -z "$config_var_name" || -z "$container_compose_file_path" ]]; then
         echo "ERROR: shutdown_cleanup_container_project() requires the name of the configuration data variable and the path to the container compose file as arguments" >&2
         return 1
     fi
 
 	echo "shutdown the container and cleanup the container target folder"
 
-	# unset the variable named $config_data_var
-	unset_config_data "$config_data_var"
+	# unset the variable named $config_var_name
+	unset_config_data "$config_var_name"
 
 	# when the deployment has been completed, shutdown the container
  	shutdown_container ${container_compose_file_path}
