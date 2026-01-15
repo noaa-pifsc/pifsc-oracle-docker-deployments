@@ -59,9 +59,6 @@ function prepare_execute_deployment_script ()
         return 1
     fi
 
-	# prepare the client resources so they can be provided to the client scripts
-	prepare_client_resources "$env_name" "$deployment_destination"
-
 	# Check if the DEPLOY_DEST variable is "server" 
 	if [[ "$DEPLOY_DEST" == "server" ]]; then
 		# Prepare the container host by cloning the project repository

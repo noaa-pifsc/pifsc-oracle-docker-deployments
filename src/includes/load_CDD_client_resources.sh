@@ -13,5 +13,4 @@ CDS_DIR="$CDD_INCL_DIR/../../modules/CDS"
 
 # source the nested CDS submodule client/shared functions
 source "$CDS_DIR/src/shared_functions.sh"
-source "$CDS_DIR/src/local_client_functions.sh"
 source "$CDS_DIR/src/client_functions.sh"
