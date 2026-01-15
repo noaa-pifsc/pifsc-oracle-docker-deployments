@@ -9,17 +9,17 @@ function initialize_run_container_project ()
 {
  	echo "Change to the container directory and build/run the container"
 
-	local CONTAINER_HOST_SOURCE_PATH="$1"
+	local container_host_source_path="$1"
 	local container_compose_file_path="$2"
 
 	# input validation
-    if [[ -z "$CONTAINER_HOST_SOURCE_PATH" || -z "$container_compose_file_path" ]]; then
+    if [[ -z "$container_host_source_path" || -z "$container_compose_file_path" ]]; then
         echo "ERROR: shutdown_cleanup_container_project() requires the full path to the container source directory and the path to the container compose file as arguments" >&2
         return 1
     fi
 
 	# change to the container container directory
-	cd ${CONTAINER_HOST_SOURCE_PATH}
+	cd ${container_host_source_path}
 
 	# build and run the sqlplus container
 	echo "build and run the sqlplus container"
