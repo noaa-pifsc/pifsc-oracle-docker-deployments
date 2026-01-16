@@ -52,7 +52,7 @@ function shutdown_cleanup_container_project ()
 }
 
 
-# function to build/run the container using the ${CONTAINER_ACCOUNT_NAME} account. This function accepts the following parameters:
+# function to build/run the container using the ${container_account_name} account. This function accepts the following parameters:
 # 1: the container source directory on the container host
 # 2: the name of a container privileged user account that can run container commands
 # 3: the path to the folder where the host bash scripts are contained  
@@ -64,20 +64,20 @@ function build_run_container ()
 	local container_host_scripts_path="${3}"
 	local config_data_var_name="${4}"
 
-	if [[ -z "${env_name}" || -z "${container_account_name}" || -z "${container_host_project_path}" || -z "${container_host_scripts_path}" ]]; then
-        echo "ERROR: build_run_container() requires the container source directory on the container host, the name of a container privileged user account that can run container commands, the name of the configuration data variable, and the path to the folder where the host bash scripts are contained as arguments" >&2
+	if [[ -z "${container_host_project_path}" || -z "${container_account_name}" || -z "${container_host_scripts_path}" || -z "${config_data_var_name}" ]]; then
+        echo "ERROR: build_run_container() requires the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, and the name of the configuration data variable as arguments" >&2
         return 1
     fi
 
-	# define the absolute path to the deployment script that will run as ${CONTAINER_ACCOUNT_NAME}.
+	# define the absolute path to the deployment script that will run as ${container_account_name}.
 	local script_path="${container_host_project_path}/container_build_run.sh"
 	
 	echo "build and run the container with the container user account"
 
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
-# The outer heredoc (<<EOF) sends commands to 'sudo su - ${CONTAINER_ACCOUNT_NAME}'.
+# The outer heredoc (<<EOF) sends commands to 'sudo su - ${container_account_name}'.
 # This command chain works passwordless due to specific sudoers configuration:
-# 1. 'sudo su - ${CONTAINER_ACCOUNT_NAME}': Allowed via 'NOPASSWD: /bin/su - ${CONTAINER_ACCOUNT_NAME}' in sudoers.
+# 1. 'sudo su - ${container_account_name}': Allowed via 'NOPASSWD: /bin/su - ${container_account_name}' in sudoers.
 # 2. Bypasses 'Defaults requiretty': This specific nested heredoc structure
 #    was designed to bypass sudo's 'requiretty' setting in non-interactive contexts,
 #    which would otherwise demand a terminal and cause the script to fail.
@@ -87,7 +87,7 @@ function build_run_container ()
 # on the \$CONFIG_DATA content, ensuring that special characters (like literal '$')
 # are preserved exactly as defined.
 # set the environment variable values 
-sudo su - ${CONTAINER_ACCOUNT_NAME} <<EOF
+sudo su - ${container_account_name} <<EOF
 # Set the environment variables in the new shell.
 export SCRIPT_TYPE="${SCRIPT_TYPE}"
 export DB_HOST="${DB_HOST}"
