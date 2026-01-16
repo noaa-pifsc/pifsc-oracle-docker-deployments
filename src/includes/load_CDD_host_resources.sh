@@ -8,6 +8,9 @@ CDD_INCL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # source the ODD host functions
 source "${CDD_INCL_DIR}/../functions/host_functions.sh"
 
+# source the ODD configuration
+source "${CDD_INCL_DIR}/../config/container_config.sh"
+
 # determine CDS submodule root folder (ODD/modules/CDS)
 CDS_DIR="${CDD_INCL_DIR}/../../modules/CDS"
 
