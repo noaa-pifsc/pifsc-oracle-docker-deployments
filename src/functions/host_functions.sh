@@ -70,7 +70,7 @@ function build_run_container ()
     fi
 
 	# define the absolute path to the deployment script that will run as ${container_account_name}.
-	local script_path="${container_host_project_path}/container_build_run.sh"
+	local script_path="${container_host_scripts_path}/container_build_run.sh"
 	
 	echo "build and run the container with the container user account"
 
