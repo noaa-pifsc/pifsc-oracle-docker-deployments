@@ -24,7 +24,7 @@
             <mxPoint x="3" y="-34" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="m3ywG3zxG51LFpHeeQUq-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="${SCRIPT_TYPE}.sh" vertex="1">
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="database_deployment.sh" vertex="1">
           <mxGeometry height="80" width="161.5" x="45.75" y="290" as="geometry" />
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="Git Server" vertex="1">
@@ -131,7 +131,7 @@
             <mxPoint x="580" y="570" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="4cox58JU91g2Krtaamnl-3" connectable="0" parent="4cox58JU91g2Krtaamnl-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1) Specify ${ENV_NAME}" vertex="1">
+        <mxCell id="4cox58JU91g2Krtaamnl-3" connectable="0" parent="4cox58JU91g2Krtaamnl-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;div&gt;1) Specify runtime&lt;/div&gt;&lt;div&gt;&amp;nbsp;arguments&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.3912" y="1" as="geometry">
             <mxPoint x="-30" y="-13" as="offset" />
           </mxGeometry>

@@ -6,11 +6,11 @@
 CDD_INCL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # source the CDD container functions
-source "$CDD_INCL_DIR/../functions/container_functions.sh"
+source "${CDD_INCL_DIR}/../functions/container_functions.sh"
 
 # determine CDS submodule root folder (CDD/modules/CDS)
-CDS_DIR="$CDD_INCL_DIR/../../modules/CDS"
+CDS_DIR="${CDD_INCL_DIR}/../../modules/CDS"
 
 # source the nested CDS submodule host/shared functions
-source "$CDS_DIR/src/shared_functions.sh"
-source "$CDS_DIR/src/host_functions.sh"
+source "${CDS_DIR}/src/shared_functions.sh"
+source "${CDS_DIR}/src/host_functions.sh"
