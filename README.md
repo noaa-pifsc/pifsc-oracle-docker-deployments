@@ -39,8 +39,6 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
         -   [.dockerignore](./container_database_deployment_template/.dockerignore): 
             - Update to include/exclude folders as appropriate to build the docker image, by default the Dockerfile will copy everything from the data system repository's root folder to the /usr/src/oracle_deploy folder within the image
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
-            -   [client_scripts/functions/custom_client_functions.sh](./container_database_deployment_template/deployment_scripts/client_scripts/functions/custom_client_functions.sh):
-                -   \*Note: no changes to this file are necessary if the container_database_deployment folder is created in the repository's root folder
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
                 -   Update generate_database_connection_strings() to define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
                     -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.${ENV_NAME}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
