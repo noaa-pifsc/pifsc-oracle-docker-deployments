@@ -52,6 +52,12 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
                 -   Update the global bash variable declarations based on the specific data system being implemented, each one has comments and an example.  In some cases the variable declaration has a placeholder enclosed by brackets that are intended to be replaced with appropriate values for the given data system:
                     -   SECRET_MAPPING_ARR is a special variable that is used to send the database credentials between bash scripts, each array element value needs to correspond with a global bash variable declaration in the corresponding secrets.sh file
 
+## Adding New Use Cases
+-   Create a new bash script in the [container_scripts](../../container_database_deployment/deployment_scripts/container_scripts) folder with the name container_${SCRIPT_TYPE}.sh where ${SCRIPT_TYPE} is the value provided at runtime when the [database_deployment.sh](./container_database_deployment_template/deployment_scripts/client_scripts/database_deployment.sh) bash script is executed
+    -   \*Note: an existing container bash script (e.g. [container_deploy_version2.0.template.sh](./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_version2.0.template.sh)) can be copied and modified to create a bash script for the new use case.  
+    -   Update the sqlplus commands to run the automated SQLPlus scripts to deploy/upgrade/rollback the database schema(s) and APEX app
+        -   If there are different versions of the automated SQLPlus scripts for the different environments include the ${ENV_NAME} value in the SQLPlus script filename references to ensure the appropriate SQLPlus script is executed
+
 ## Setup
 -   Clone the given git project to a directory on the local client computer
 -   Within the project repository create the necessary bash files with the database credentials in each database instance (e.g. secrets.sh in the [dev folder](./container_database_deployment_template/secrets/dev/) for the development database instance)
@@ -67,6 +73,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
     -   For example, to deploy the development version to a container server for the deploy_version2.0 script type use the following command:
         -   `bash database_deployments.sh dev server deploy_version2.0`
     -   If some/all of the arguments are not provided when the script is executed the script will prompt the user for the values of the arguments that were not provided:
+        -   `bash database_deployments.sh`
         -   Database Environment (dev, test, prod):
             -   This value is saved in $ENV_NAME and provided to subsequent scripts to inform their behavior based on the database environment
         -   Deployment Destination (local, server)
