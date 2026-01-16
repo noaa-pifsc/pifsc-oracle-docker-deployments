@@ -51,6 +51,9 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   [config/custom_container_config.sh](./container_database_deployment_template/deployment_scripts/config/custom_container_config.sh):
                 -   Update the global bash variable declarations based on the specific data system being implemented, each one has comments and an example.  In some cases the variable declaration has a placeholder enclosed by brackets that are intended to be replaced with appropriate values for the given data system:
                     -   SECRET_MAPPING_ARR is a special variable that is used to send the database credentials between bash scripts, each array element value needs to correspond with a global bash variable declaration in the corresponding secrets.sh file
+        -   [Oracle Docker Deployment Process.template.md](./container_database_deployment_template/docs/Oracle%20Docker%20Deployment%20Process.template.md):
+            -   Rename the file to an appropriate name for the given data system (without the ".template") 
+                -   Update the [DATA SYSTEM NAME] placeholder with the given data system name
 
 ## Adding New Use Cases
 -   Create a new bash script in the [container_scripts](../../container_database_deployment/deployment_scripts/container_scripts) folder with the name container_${SCRIPT_TYPE}.sh where ${SCRIPT_TYPE} is the value provided at runtime when the [database_deployment.sh](./container_database_deployment_template/deployment_scripts/client_scripts/database_deployment.sh) bash script is executed
