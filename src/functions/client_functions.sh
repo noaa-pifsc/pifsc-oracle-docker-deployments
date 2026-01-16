@@ -86,7 +86,7 @@ function prepare_execute_deployment_script ()
 		build_deploy_container "${container_compose_file_path}"
 
 		# execute the corresponding container scripts and shutdown the container
-		execute_container_scripts "${local_container_build_path}/container_scripts" "${container_compose_file_path}" "${config_data_var_name}"
+		execute_container_scripts "${container_host_scripts_path}" "${container_compose_file_path}" "${config_data_var_name}"
 
 		echo "the local container deployment script has finished executing"
 
