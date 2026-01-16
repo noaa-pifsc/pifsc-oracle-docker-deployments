@@ -13,12 +13,6 @@
 	# define the path to the folder where the host bash scripts are contained
 	CONTAINER_HOST_SCRIPTS_PATH="${CONTAINER_HOST_PROJECT_PATH}/container_database_deployment/deployment_scripts/host_scripts"
 
-	# determine current folder path (container_database_deployment/deployment_scripts/host_scripts/includes)
-	CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-	# determine where the designated container subfolder in the local filesystem is (/container_database_deployment):
-	LOCAL_CONTAINER_BUILD_PATH="${CURR_DIR}/../../"
-
 ##### Container Configuration Variables: #####
 
 	# define the container's root folder where the source files are copied
