@@ -14,7 +14,7 @@ function initialize_run_container_project ()
 
 	# input validation
     if [[ -z "${container_host_source_path}" || -z "${container_compose_file_path}" ]]; then
-        echo "ERROR: shutdown_cleanup_container_project() requires the full path to the container source directory and the path to the container compose file as arguments" >&2
+        echo "ERROR: initialize_run_container_project() requires the full path to the container source directory and the path to the container compose file as arguments" >&2
         return 1
     fi
 
