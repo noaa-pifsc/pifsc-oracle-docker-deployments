@@ -1,0 +1,12 @@
+services:
+  oracle_deploy:
+    build:
+      context: ..
+      dockerfile: container_database_deployment/Dockerfile
+    image: pifsc/oracle_deploy:latest
+    container_name: oracle_deploy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"

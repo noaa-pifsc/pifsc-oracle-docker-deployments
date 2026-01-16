@@ -1,0 +1,36 @@
+#! /bin/bash
+
+# define a list of configuration variables that drive the behavior of the oracle container deployment scripts 
+
+##### Container Host Configuration Variables: #####
+
+	# define the container source directory that will be created on the container host by cloning the project repository
+	CONTAINER_HOST_PROJECT_PATH="/tmp/${CONTAINER_PROJECT_FOLDER}"
+
+	# define the container source directory that contains the container source files (e.g. Dockerfile, docker-compose.yml)
+	CONTAINER_HOST_SOURCE_PATH="${CONTAINER_HOST_PROJECT_PATH}/container_database_deployment"
+
+	# define the path to the folder where the host bash scripts are contained
+	CONTAINER_HOST_SCRIPTS_PATH="${CONTAINER_HOST_PROJECT_PATH}/container_database_deployment/deployment_scripts/host_scripts"
+
+	# determine current folder path (container_database_deployment/deployment_scripts/host_scripts/includes)
+	CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+	# determine where the designated container subfolder in the local filesystem is (/container_database_deployment):
+	LOCAL_CONTAINER_BUILD_PATH="${CURR_DIR}/../../"
+
+##### Container Configuration Variables: #####
+
+	# define the container's root folder where the source files are copied
+	CONTAINER_ROOT_PATH="/usr/src/database_deploy"
+
+	# define the path to the container's bash scripts folder
+	CONTAINER_SCRIPTS_PATH="${CONTAINER_ROOT_PATH}/container_database_deployment/deployment_scripts/container_scripts"
+
+##### Container Project Configuration Variables: #####
+
+	#declare a variable to store the name of the configuration data variable that is passed via STDIN that contains secret values
+	CONFIG_DATA_VAR_NAME="CONFIG_DATA"
+
+	#declare a variable to store the name of the associative array containing the secret names and corresponding bash variables
+	SECRET_MAPPING_VAR="SECRET_MAPPING_ARR"
