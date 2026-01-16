@@ -60,7 +60,7 @@ function shutdown_cleanup_container_project ()
 function build_run_container ()
 {
 	local container_host_project_path="${1}"
-	local docker_account_name="${2}"
+	local container_account_name="${2}"
 	local container_host_scripts_path="${3}"
 	local config_data_var_name="${4}"
 
@@ -114,7 +114,7 @@ function execute_container_scripts ()
 	local config_data_var_name="${3}"
 
 	if [[ -z "${container_scripts_path}" || -z "${container_compose_file_path}" || -z "${config_data_var_name}" ]]; then
-        echo "ERROR: build_run_container() requires the path to the container's bash scripts folder, the path of the container compose file, and the name of the configuration data variable as arguments" >&2
+        echo "ERROR: execute_container_scripts() requires the path to the container's bash scripts folder, the path of the container compose file, and the name of the configuration data variable as arguments" >&2
         return 1
     fi
 
