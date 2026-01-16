@@ -6,7 +6,6 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 ## Resources
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
-    -   Version 1.2 (git tag: pifsc_container_database_deployment_v1.2)
 
 ## Platform Requirements
 -   See [CDD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#platform-requirements)
