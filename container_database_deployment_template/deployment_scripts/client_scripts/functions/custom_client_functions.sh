@@ -35,8 +35,8 @@ function execute_deployment ()
 	source "${curr_dir}/../../../secrets/${ENV_NAME}/secrets.sh"
 
 	# process the configuration data
-	process_config_data "${SECRET_MAPPING_VAR}" "${CONFIG_DATA_VAR_NAME}"
+	process_config_data "${SECRET_MAPPING_VAR_NAME}" "${CONFIG_DATA_VAR_NAME}"
 	
 	# prepare and execute the corresponding deployment script:
-	prepare_execute_deployment_script "${ENV_NAME}" "${DEPLOY_DEST}" "${CONTAINER_HOSTNAME}" "${CONTAINER_HOST_PROJECT_PATH}" "${CONTAINER_GIT_URL}" "${CONFIG_DATA_VAR_NAME}" "${CONTAINER_HOST_SCRIPTS_PATH}" "${LOCAL_CONTAINER_BUILD_PATH}" "${CONTAINER_COMPOSE_FILE_PATH}" "${SCRIPT_TYPE}" "${DB_HOST}" "${DB_SERVICE_NAME}" "${SECRET_MAPPING_VAR}"	"${CONTAINER_SCRIPTS_PATH}"
+	prepare_execute_deployment_script "${ENV_NAME}" "${DEPLOY_DEST}" "${CONTAINER_HOSTNAME}" "${CONTAINER_HOST_PROJECT_PATH}" "${CONTAINER_GIT_URL}" "${CONFIG_DATA_VAR_NAME}" "${CONTAINER_HOST_SCRIPTS_PATH}" "${LOCAL_CONTAINER_BUILD_PATH}" "${CONTAINER_COMPOSE_FILE_PATH}" "${SCRIPT_TYPE}" "${DB_HOST}" "${DB_SERVICE_NAME}" "${SECRET_MAPPING_VAR_NAME}"	"${CONTAINER_SCRIPTS_PATH}"
 }

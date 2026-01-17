@@ -7,7 +7,7 @@ cd "$(dirname "$(realpath "$0")")"
 source ./includes/include_container_resources.sh
 
 # initialize the container
-initialize_container "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR}"
+initialize_container "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}"
 
 echo "deploy version 2.0 of the DB"
 
@@ -33,6 +33,6 @@ sqlplus -s /nolog <<EOF
 EOF
 
 # cleanup the container variables now that the script has finished running
-cleanup_container "${SECRET_MAPPING_VAR}"
+cleanup_container "${SECRET_MAPPING_VAR_NAME}"
 
 echo "The deployment script finished running"

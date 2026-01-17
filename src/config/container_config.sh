@@ -27,4 +27,4 @@
 	CONFIG_DATA_VAR_NAME="CONFIG_DATA"
 
 	#declare a variable to store the name of the associative array containing the secret names and corresponding bash variables
-	SECRET_MAPPING_VAR="SECRET_MAPPING_ARR"
+	SECRET_MAPPING_VAR_NAME="SECRET_MAPPING_ARR"

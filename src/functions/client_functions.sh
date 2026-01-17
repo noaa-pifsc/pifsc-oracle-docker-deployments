@@ -52,11 +52,11 @@ function prepare_execute_deployment_script ()
 	local script_type="${10}"
 	local db_host="${11}"
 	local db_service_name="${12}"
-	local secret_mapping_var="${13}"
+	local SECRET_MAPPING_VAR_NAME="${13}"
 	local container_scripts_path="${14}"
 	
 	# input validation
-    if [[ -z "${env_name}" || -z "${deployment_destination}" || -z "${container_hostname}" || -z "${container_host_project_path}" || -z "${container_git_url}" || -z "${config_data_var_name}" || -z "${container_host_scripts_path}" || -z "${local_container_build_path}" || -z "${container_compose_file_path}" || -z "${script_type}" || -z "${db_host}" || -z "${db_service_name}" || -z "${secret_mapping_var}" || -z "${container_scripts_path}" ]]; then
+    if [[ -z "${env_name}" || -z "${deployment_destination}" || -z "${container_hostname}" || -z "${container_host_project_path}" || -z "${container_git_url}" || -z "${config_data_var_name}" || -z "${container_host_scripts_path}" || -z "${local_container_build_path}" || -z "${container_compose_file_path}" || -z "${script_type}" || -z "${db_host}" || -z "${db_service_name}" || -z "${SECRET_MAPPING_VAR_NAME}" || -z "${container_scripts_path}" ]]; then
         echo "ERROR: prepare_execute_deployment_script() requires the environment name, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the script type, the database host, the database service name, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the path to the container's bash scripts folder as arguments" >&2
         return 1
     fi
