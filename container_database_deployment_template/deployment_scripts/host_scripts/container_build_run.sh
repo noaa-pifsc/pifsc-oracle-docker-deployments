@@ -16,4 +16,4 @@ initialize_run_container_project "${CONTAINER_HOST_SOURCE_PATH}" "${CONTAINER_CO
 process_stdin_config_data "${SECRET_MAPPING_VAR_NAME}" "${CONFIG_DATA_VAR_NAME}"
 
 # execute the scripts from within the container
-execute_container_scripts "${CONTAINER_SCRIPTS_PATH}" "${CONTAINER_COMPOSE_FILE_PATH}" "${CONFIG_DATA_VAR_NAME}"
+execute_container_scripts "${CONTAINER_SCRIPTS_PATH}" "${CONTAINER_COMPOSE_FILE_PATH}" "${CONFIG_DATA_VAR_NAME}" "$(host_deploy_define_env_vars_block)"

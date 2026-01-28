@@ -57,20 +57,24 @@ function shutdown_cleanup_container_project ()
 # 2: the name of a container privileged user account that can run container commands
 # 3: the path to the folder where the host bash scripts are contained  
 # 4: name of the configuration data variable
+# 5: name of the host script that is executed to deploy the container
+# 6: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 function build_run_container ()
 {
 	local container_host_project_path="${1}"
 	local container_account_name="${2}"
 	local container_host_scripts_path="${3}"
 	local config_data_var_name="${4}"
+	local host_script_name="${5}"
+	local env_vars_block="${6:-}"
 
-	if [[ -z "${container_host_project_path}" || -z "${container_account_name}" || -z "${container_host_scripts_path}" || -z "${config_data_var_name}" ]]; then
-        echo "ERROR: build_run_container() requires the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, and the name of the configuration data variable as arguments" >&2
+	if [[ -z "${container_host_project_path}" || -z "${container_account_name}" || -z "${container_host_scripts_path}" || -z "${config_data_var_name}" || -z "${host_script_name}" ]]; then
+        echo "ERROR: build_run_container() requires the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, the name of the configuration data variable, and the host script name as arguments" >&2
         return 1
     fi
 
 	# define the absolute path to the deployment script that will run as ${container_account_name}.
-	local script_path="${container_host_scripts_path}/container_build_run.sh"
+	local script_path="${container_host_scripts_path}/${host_script_name}"
 	
 	echo "build and run the container with the container user account"
 
@@ -89,10 +93,8 @@ function build_run_container ()
 # set the environment variable values 
 sudo su - ${container_account_name} <<EOF
 # Set the environment variables in the new shell.
-export SCRIPT_TYPE="${SCRIPT_TYPE}"
-export DB_HOST="${DB_HOST}"
-export DB_SERVICE_NAME="${DB_SERVICE_NAME}"
-export ENV_NAME='${ENV_NAME}'
+${env_vars_block}
+
 cat <<'CREDEND' | bash "${script_path}"
 ${!config_data_var_name}
 CREDEND
@@ -107,11 +109,13 @@ EOF
 # 1: the path to the container's bash scripts folder
 # 2: the path of the container compose file
 # 3: name of the configuration data variable
+# 4: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 function execute_container_scripts ()
 {
 	local container_scripts_path="${1}"
 	local container_compose_file_path="${2}"
 	local config_data_var_name="${3}"
+	local env_vars_block="${4:-}"
 
 	if [[ -z "${container_scripts_path}" || -z "${container_compose_file_path}" || -z "${config_data_var_name}" ]]; then
         echo "ERROR: execute_container_scripts() requires the path to the container's bash scripts folder, the path of the container compose file, and the name of the configuration data variable as arguments" >&2
@@ -126,10 +130,8 @@ function execute_container_scripts ()
 # open a bash session into the running container and run the appropriate container deployment script (based on $SCRIPT_TYPE) and provide the value of the variable identified by $config_data_var_name via stdin
 docker exec -i oracle_deploy bash -c "
 	# specify the environment variables that are defined in the calling script:
-	export SCRIPT_TYPE='${SCRIPT_TYPE}'
-	export DB_HOST='${DB_HOST}'
-	export DB_SERVICE_NAME='${DB_SERVICE_NAME}'
-	export ENV_NAME='${ENV_NAME}'
+	${env_vars_block}
+	
 	# Execute the target script, which will inherit the variables above.
 	bash '${script_path}'
 " <<< "${!config_data_var_name}"

@@ -13,16 +13,16 @@ function initialize_container_script ()
 	get_script_name_from_path "${1}"
 
 	local container_sql_directory="${2}"
-	local SECRET_MAPPING_VAR_NAME="${3}"
+	local secret_mapping_var_name="${3}"
 	
 	# input validation
-    if [[ -z "${container_sql_directory}" || -z "${SECRET_MAPPING_VAR_NAME}" ]]; then
+    if [[ -z "${container_sql_directory}" || -z "${secret_mapping_var_name}" ]]; then
         echo "ERROR: initialize_container_script() requires the full path to the designated SQL directory within the container and the name of an associative array that maps the secret values passed to bash commands via STDIN as arguments" >&2
         return 1
     fi
 
 	# read the key/value pairs from STDIN and store them in bash variables
-	generic_parse_config_data "${SECRET_MAPPING_VAR_NAME}"
+	generic_parse_config_data "${secret_mapping_var_name}"
 
 	# change the current directory to the designated SQL folder where the SQLPlus scripts can be executed using relative paths
 	cd "${container_sql_directory}"
@@ -35,14 +35,14 @@ function initialize_container_script ()
 # cleanup_container_variables "SECRET_MAPPING_ARR"
 function cleanup_container_variables ()
 {
-	local SECRET_MAPPING_VAR_NAME="${1}"
+	local secret_mapping_var_name="${1}"
 
 	# input validation
-    if [[ -z "${SECRET_MAPPING_VAR_NAME}" ]]; then
+    if [[ -z "${secret_mapping_var_name}" ]]; then
         echo "ERROR: cleanup_container_variables() requires the name of an associative array that maps the secret values passed to bash commands via STDIN as an argument" >&2
         return 1
     fi
 
 	# unset bash variables specified by STDIN
-	generic_unset_config_variables "${SECRET_MAPPING_VAR_NAME}"
+	generic_unset_config_variables "${secret_mapping_var_name}"
 }
