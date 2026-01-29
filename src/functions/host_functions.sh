@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# function to initialize the container target folder (where the container project will be built/run) and build/run the container.  This function is run to build and run the container. This function accepts 2 parameters:
+# function to initialize the container target folder (where the container project will be built/run) and build/run the container using an account with elevated privileges.  This function is run to build and run the container. This function accepts 2 parameters:
 # 1: the full path to the container source directory
 # 2: the path of the container compose file (relative to the container_database_deployment source directory)
 # Example Usage:  
-# initialize_run_container_project "/tmp/lhp-data-management-deploy/container_database_deployment" "./docker-compose.yml"
-function initialize_run_container_project ()
+# host_deploy_container_elev_privs "/tmp/lhp-data-management-deploy/container_database_deployment" "./docker-compose.yml"
+function host_deploy_container_elev_privs ()
 {
  	echo "Change to the container directory and build/run the container"
 
@@ -14,7 +14,7 @@ function initialize_run_container_project ()
 
 	# input validation
     if [[ -z "${container_host_source_path}" || -z "${container_compose_file_path}" ]]; then
-        echo "ERROR: initialize_run_container_project() requires the full path to the container source directory and the path to the container compose file as arguments" >&2
+        echo "ERROR: host_deploy_container_elev_privs() requires the full path to the container source directory and the path to the container compose file as arguments" >&2
         return 1
     fi
 
@@ -28,17 +28,17 @@ function initialize_run_container_project ()
 
 # function to shutdown the container and cleanup the container target folder after the container scripts have been executed. This function is run to shutdown the container. This function accepts 2 parameters:
 # 1: the name of the configuration data variable used to store the STDIN data
-# 2: the path of the container compose file (relative to the container_database_deployment source directory - see CONTAINER_HOST_SOURCE_PATH in initialize_run_container_project())
+# 2: the path of the container compose file (relative to the container_database_deployment source directory - see CONTAINER_HOST_SOURCE_PATH in host_deploy_container_elev_privs())
 # Example Usage: 
-# shutdown_cleanup_container_project "CONFIG_DATA" "./docker-compose.yml" 
-function shutdown_cleanup_container_project ()
+# host_shutdown_container_elev_privs "CONFIG_DATA" "./docker-compose.yml" 
+function host_shutdown_container_elev_privs ()
 {
 	local config_data_var_name="${1}"
 	local container_compose_file_path="${2}"
 
 	# input validation
     if [[ -z "${config_data_var_name}" || -z "${container_compose_file_path}" ]]; then
-        echo "ERROR: shutdown_cleanup_container_project() requires the name of the configuration data variable and the path to the container compose file as arguments" >&2
+        echo "ERROR: host_shutdown_container_elev_privs() requires the name of the configuration data variable and the path to the container compose file as arguments" >&2
         return 1
     fi
 
@@ -59,7 +59,7 @@ function shutdown_cleanup_container_project ()
 # 4: name of the configuration data variable
 # 5: name of the host script that is executed to deploy the container
 # 6: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
-function build_run_container ()
+function host_deploy_container ()
 {
 	local container_host_project_path="${1}"
 	local container_account_name="${2}"
@@ -69,7 +69,7 @@ function build_run_container ()
 	local env_vars_block="${6:-}"
 
 	if [[ -z "${container_host_project_path}" || -z "${container_account_name}" || -z "${container_host_scripts_path}" || -z "${config_data_var_name}" || -z "${host_script_name}" ]]; then
-        echo "ERROR: build_run_container() requires the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, the name of the configuration data variable, and the host script name as arguments" >&2
+        echo "ERROR: host_deploy_container() requires the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, the name of the configuration data variable, and the host script name as arguments" >&2
         return 1
     fi
 
@@ -110,7 +110,7 @@ EOF
 # 2: the path of the container compose file
 # 3: name of the configuration data variable
 # 4: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
-function execute_container_scripts ()
+function host_execute_container_script ()
 {
 	local container_scripts_path="${1}"
 	local container_compose_file_path="${2}"
@@ -118,7 +118,7 @@ function execute_container_scripts ()
 	local env_vars_block="${4:-}"
 
 	if [[ -z "${container_scripts_path}" || -z "${container_compose_file_path}" || -z "${config_data_var_name}" ]]; then
-        echo "ERROR: execute_container_scripts() requires the path to the container's bash scripts folder, the path of the container compose file, and the name of the configuration data variable as arguments" >&2
+        echo "ERROR: host_execute_container_script() requires the path to the container's bash scripts folder, the path of the container compose file, and the name of the configuration data variable as arguments" >&2
         return 1
     fi
 
@@ -137,5 +137,5 @@ docker exec -i oracle_deploy bash -c "
 " <<< "${!config_data_var_name}"
 
 	# shutdown and cleanup the container project
-	shutdown_cleanup_container_project "${config_data_var_name}" "${container_compose_file_path}"
+	host_shutdown_container_elev_privs "${config_data_var_name}" "${container_compose_file_path}"
 }

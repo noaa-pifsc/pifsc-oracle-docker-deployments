@@ -6,8 +6,8 @@
 # 2: the full path to the designated SQL folder within the container
 # 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # Example Usage:  
-# initialize_container_script "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR"
-function initialize_container_script ()
+# container_initialize_script "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR"
+function container_initialize_script ()
 {
 	# retrieve the current script name that was originally invoked
 	get_script_name_from_path "${1}"
@@ -17,7 +17,7 @@ function initialize_container_script ()
 	
 	# input validation
     if [[ -z "${container_sql_directory}" || -z "${secret_mapping_var_name}" ]]; then
-        echo "ERROR: initialize_container_script() requires the full path to the designated SQL directory within the container and the name of an associative array that maps the secret values passed to bash commands via STDIN as arguments" >&2
+        echo "ERROR: container_initialize_script() requires the full path to the designated SQL directory within the container and the name of an associative array that maps the secret values passed to bash commands via STDIN as arguments" >&2
         return 1
     fi
 
@@ -32,14 +32,14 @@ function initialize_container_script ()
 # function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
 # 1: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # Example Usage:  
-# cleanup_container_variables "SECRET_MAPPING_ARR"
-function cleanup_container_variables ()
+# container_cleanup_variables "SECRET_MAPPING_ARR"
+function container_cleanup_variables ()
 {
 	local secret_mapping_var_name="${1}"
 
 	# input validation
     if [[ -z "${secret_mapping_var_name}" ]]; then
-        echo "ERROR: cleanup_container_variables() requires the name of an associative array that maps the secret values passed to bash commands via STDIN as an argument" >&2
+        echo "ERROR: container_cleanup_variables() requires the name of an associative array that maps the secret values passed to bash commands via STDIN as an argument" >&2
         return 1
     fi
 

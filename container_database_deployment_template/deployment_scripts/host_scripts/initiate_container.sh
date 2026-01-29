@@ -16,4 +16,4 @@ convert_dos2unix "../../../"
 process_stdin_config_data "${SECRET_MAPPING_VAR_NAME}" "${CONFIG_DATA_VAR_NAME}"
 
 # build/run the container
-build_run_container "${CONTAINER_HOST_PROJECT_PATH}" "${CONTAINER_ACCOUNT_NAME}" "${CONTAINER_HOST_SCRIPTS_PATH}" "${CONFIG_DATA_VAR_NAME}" "container_build_run.sh" "$(host_deploy_define_env_vars_block)"
+host_deploy_container "${CONTAINER_HOST_PROJECT_PATH}" "${CONTAINER_ACCOUNT_NAME}" "${CONTAINER_HOST_SCRIPTS_PATH}" "${CONFIG_DATA_VAR_NAME}" "host_deploy_database_elev_privs.sh" "$(host_deploy_define_env_vars_block)"

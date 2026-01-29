@@ -3,8 +3,8 @@
 # function to generate oracle connection strings for the various database schemas the script connects to
 # this function accepts no parameters
 # Usage:
-# generate_database_connection_strings
-function generate_database_connection_strings ()
+# container_generate_connection_strings
+function container_generate_connection_strings ()
 {
 	# construct connection strings (enclose the passwords in quotation characters in case there are special characters including "@")
 
@@ -22,8 +22,8 @@ function generate_database_connection_strings ()
 # function to unset the connection bash variables
 # this function accepts no parameters
 # Usage:
-# unset_connection_strings
-function unset_connection_strings()
+# container_unset_connection_strings
+function container_unset_connection_strings()
 {
 
 	######## Database Connection Placeholder - START ########
@@ -36,32 +36,32 @@ function unset_connection_strings()
 
 }
 
-# function to initialize the container by parsing the configuration data, changing the directory to the container SQL directory, and generating the database connection scripts. Input validation is handled by initialize_container_script()
+# function to initialize the container by parsing the configuration data, changing the directory to the container SQL directory, and generating the database connection scripts. Input validation is handled by container_initialize_script()
 # this function accepts 3 parameters: 
 # 1: the full script path name that was executed
 # 2: the full path to the designated SQL folder within the container
 # 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # Example Usage: 
-# initialize_container "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR"
-function initialize_container()
+# container_initialize "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR"
+function container_initialize()
 {
 	# initialize the container scripts
-	initialize_container_script "${1}" "${2}" "${3}"
+	container_initialize_script "${1}" "${2}" "${3}"
 
 	# generate the database connection strings so they can be used to execute the SQLPlus scripts
-	generate_database_connection_strings
+	container_generate_connection_strings
 }
 
 
 # function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
-# 1: the name of an associative array that maps the secret values passed to bash commands via STDIN. Input validation is handled by cleanup_container_variables()
+# 1: the name of an associative array that maps the secret values passed to bash commands via STDIN. Input validation is handled by container_cleanup_variables()
 # Example Usage: 
-# cleanup_container "SECRET_MAPPING_ARR"
-function cleanup_container ()
+# container_cleanup "SECRET_MAPPING_ARR"
+function container_cleanup ()
 {
 	# unset bash variables specified by STDIN
-	cleanup_container_variables "${1}"
+	container_cleanup_variables "${1}"
 
 	# unset the connection string variables
-	unset_connection_strings
+	container_unset_connection_strings
 }

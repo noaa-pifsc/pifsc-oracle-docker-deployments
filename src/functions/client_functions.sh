@@ -36,8 +36,8 @@ function set_script_type_var ()
 # 14: the path to the container's bash scripts folder
 # 15: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # Example Usage:
-#   prepare_execute_deployment_script "$1" "$2" "$3" "docker-server-as1" "/tmp/lhp-data-management-deploy" "git@github.com:example-repo.git" "CONFIG_DATA" "/tmp/lhp-data-management-deploy/container_database_deployment/host_scripts" "/c/Users/USERNAME/lhp-data-management/container_database_deployment" "./docker-compose.yml" "deploy_version2.0" "oracle-db-host" "oracle-db-servicename" "SECRET_MAPPING_ARR"
-function prepare_execute_deployment_script ()
+#   client_execute_deploy_database "$1" "$2" "$3" "docker-server-as1" "/tmp/lhp-data-management-deploy" "git@github.com:example-repo.git" "CONFIG_DATA" "/tmp/lhp-data-management-deploy/container_database_deployment/host_scripts" "/c/Users/USERNAME/lhp-data-management/container_database_deployment" "./docker-compose.yml" "deploy_version2.0" "oracle-db-host" "oracle-db-servicename" "SECRET_MAPPING_ARR"
+function client_execute_deploy_database ()
 {
 	echo "prepare the container source files and deploy the container"
 	
@@ -59,7 +59,7 @@ function prepare_execute_deployment_script ()
 	
 	# input validation
     if [[ -z "${env_name}" || -z "${deployment_destination}" || -z "${container_hostname}" || -z "${container_host_project_path}" || -z "${container_git_url}" || -z "${config_data_var_name}" || -z "${container_host_scripts_path}" || -z "${local_container_build_path}" || -z "${container_compose_file_path}" || -z "${script_type}" || -z "${db_host}" || -z "${db_service_name}" || -z "${secret_mapping_var_name}" || -z "${container_scripts_path}" ]]; then
-        echo "ERROR: prepare_execute_deployment_script() requires the environment name, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the script type, the database host, the database service name, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the path to the container's bash scripts folder as arguments" >&2
+        echo "ERROR: client_execute_deploy_database() requires the environment name, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the script type, the database host, the database service name, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the path to the container's bash scripts folder as arguments" >&2
         return 1
     fi
 
@@ -69,7 +69,7 @@ function prepare_execute_deployment_script ()
 		prepare_container_host "${container_hostname}" "${container_host_project_path}" "${container_git_url}"
 
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
-		exec_remote_cmd_with_stdin "${container_hostname}" "${!config_data_var_name}" "SCRIPT_TYPE=\"${script_type}\" DB_HOST=\"${db_host}\" DB_SERVICE_NAME=\"${db_service_name}\" ENV_NAME=\"${env_name}\" bash ${container_host_scripts_path}/initiate_container.sh"
+		exec_remote_cmd_with_stdin "${container_hostname}" "${!config_data_var_name}" "SCRIPT_TYPE=\"${script_type}\" DB_HOST=\"${db_host}\" DB_SERVICE_NAME=\"${db_service_name}\" ENV_NAME=\"${env_name}\" bash ${container_host_scripts_path}/host_deploy_database.sh"
 
 		# unset the configuration now that the ssh call has completed
 		unset_config_data "${config_data_var_name}"
@@ -90,7 +90,7 @@ function prepare_execute_deployment_script ()
 		build_deploy_container "${container_compose_file_path}"
 
 		# execute the corresponding container scripts and shutdown the container
-		execute_container_scripts "${container_scripts_path}" "${container_compose_file_path}" "${config_data_var_name}"  "$(env_vars_block)"
+		host_execute_container_script "${container_scripts_path}" "${container_compose_file_path}" "${config_data_var_name}"  "$(env_vars_block)"
 
 		echo "the local container deployment script has finished executing"
 

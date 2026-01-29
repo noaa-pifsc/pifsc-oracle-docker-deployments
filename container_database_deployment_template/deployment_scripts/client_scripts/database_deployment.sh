@@ -11,4 +11,4 @@ source ./includes/include_client_resources.sh
 initialize_deployment_script "${0}"
 
 # prepare and execute the deployment script
-time execute_deployment "${1:-}" "${2:-}" "${3:-}"
+time client_deploy_database "${1:-}" "${2:-}" "${3:-}"
