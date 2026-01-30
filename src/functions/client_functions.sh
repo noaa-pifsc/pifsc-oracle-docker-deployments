@@ -17,19 +17,37 @@ function set_script_type_var ()
         "${1}"
 }
 
-
-# this function accepts the required runtime arguments (calling script path, ENV_NAME, DEPLOY_DEST, SCRIPT_TYPE) and prompts for any missing values
+# function that initializes the client deployment script and processes the client runtime arguments and prompts for any missing values
+# this function accepts the following runtime arguments:
+# 1: deployment script logs path
+# 2: calling script path
+# 3: (optional) ENV_NAME
+# 4: (optional) DEPLOY_DEST
+# 5: (optional) SCRIPT_TYPE
 function client_process_runtime_arguments ()
 {
+	echo "process client runtime arguments"
+
+	local script_log_path="${1}"
+	local current_script_name="${2}"
+	local env_name="${3}"
+	local deploy_dest="${4}"
+	local script_type="${5}"
+
+	# input validation
+    if [[ -z "${script_log_path}" || -z "${current_script_name}" ]]; then
+        echo "ERROR: client_process_runtime_arguments() requires the deployment script logs path and calling script path as arguments" >&2
+        return 1
+    fi
 
 	# initialize the deployment script
-	initialize_deployment_script "${1}"
+	initialize_deployment_script "${script_log_path}" "${current_script_name}"
 
 	# set the environment and deployment destination variable values
-	set_env_deployment_vars "${2}" "${3}"
+	set_env_deployment_vars "${env_name}" "${deploy_dest}"
 	
 	# set the script type variable value
-	set_script_type_var "${4}"
+	set_script_type_var "${script_type}"
 }
 
 
