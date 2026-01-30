@@ -5,8 +5,9 @@
 # determine current folder path (CDD/src/includes)
 CDD_INCL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# include CDD client functions
+# include CDD client/shared functions
 source "${CDD_INCL_DIR}/../functions/client_functions.sh"
+source "${CDD_INCL_DIR}/../functions/shared_functions.sh"
 
 # source the ODD configuration
 source "${CDD_INCL_DIR}/../config/container_config.sh"

@@ -5,10 +5,11 @@
 # determine current folder path (CDD/src/includes)
 CDD_INCL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# source the CDD container functions
+# source the CDD container/shared functions
 source "${CDD_INCL_DIR}/../functions/container_functions.sh"
+source "${CDD_INCL_DIR}/../functions/shared_functions.sh"
 
-# source the ODD configuration
+# source the CDD configuration
 source "${CDD_INCL_DIR}/../config/container_config.sh"
 
 # determine CDS submodule root folder (CDD/modules/CDS)

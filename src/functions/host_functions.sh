@@ -1,110 +1,77 @@
 #!/bin/bash
 
-# function to initialize the container target folder (where the container project will be built/run) and build/run the container using an account with elevated privileges.  This function is run to build and run the container. This function accepts 2 parameters:
-# 1: the full path to the container source directory
-# 2: the path of the container compose file (relative to the container_database_deployment source directory)
-# Example Usage:  
-# host_deploy_container_elev_privs "/tmp/lhp-data-management-deploy/container_database_deployment" "./docker-compose.yml"
-function host_deploy_container_elev_privs ()
-{
-	local container_host_source_path="${1}"
-	local container_compose_file_path="${2}"
-
-	# input validation
-    if [[ -z "${container_host_source_path}" || -z "${container_compose_file_path}" ]]; then
-        echo "ERROR: host_deploy_container_elev_privs() requires the full path to the container source directory and the path to the container compose file as arguments" >&2
-        return 1
-    fi
-
-	# change to the container container directory
-	cd "${container_host_source_path}"
-
-	# build and run the sqlplus container
-	echo "build and run the sqlplus container"
-	build_deploy_container "${container_compose_file_path}"
-}
-
-# function to shutdown the container and cleanup the container target folder after the container scripts have been executed. This function is run to shutdown the container. This function accepts 2 parameters:
-# 1: the name of the configuration data variable used to store the STDIN data
-# 2: the path of the container compose file (relative to the container_database_deployment source directory - see CONTAINER_HOST_SOURCE_PATH in host_deploy_container_elev_privs())
-# Example Usage: 
-# host_shutdown_container_elev_privs "CONFIG_DATA" "./docker-compose.yml" 
-function host_shutdown_container_elev_privs ()
-{
-	local config_data_var_name="${1}"
-	local container_compose_file_path="${2}"
-
-	# input validation
-    if [[ -z "${config_data_var_name}" || -z "${container_compose_file_path}" ]]; then
-        echo "ERROR: host_shutdown_container_elev_privs() requires the name of the configuration data variable and the path to the container compose file as arguments" >&2
-        return 1
-    fi
-
-	echo "shutdown the container and cleanup the container target folder"
-
-	# unset the variable named $config_data_var_name
-	unset_config_data "${config_data_var_name}"
-
-	# when the deployment has been completed, shutdown the container
- 	shutdown_container "${container_compose_file_path}"
-}
-
-# function to run the oracle database scripts within the running container. This function accepts the following parameters as elements in the specified array name  (arg_array):
-# current_script_name: the full path of the calling script
-# container_scripts_path: the path to the container's bash scripts folder
-# container_compose_file_path: the path of the container compose file
-# config_data_var_name: name of the configuration data variable
+# function to initialize the container target folder (where the container project will be built/run) and build/run the container using an account with elevated privileges.  This function is run to build and run the container.  
+# This function accepts the following parameters as elements in the specified array name  (arg_array):
 # container_host_source_path: the full path to the container source directory
-# secret_mapping_var_name: the name of the associative array containing the secret names and corresponding bash variables
-# env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
-function host_execute_container_script ()
+# container_compose_file_path: the path of the container compose file (relative to the container_database_deployment source directory)
+# secret_mapping_var_name: the name of an associative array that maps the secret values passed to bash commands via STDIN
+# config_data_var_name: name of the configuration data variable
+# current_script_name: the full path of the calling script
+function host_deploy_container_elev_privs ()
 {
 	# store the function array argument
 	local arg_array="${1}"
 
-	if [[ -z $(get_array_val "${arg_array}" "current_script_name") || -z $(get_array_val "${arg_array}" "container_scripts_path") || -z $(get_array_val "${arg_array}" "container_compose_file_path") || -z $(get_array_val "${arg_array}" "config_data_var_name") || -z $(get_array_val "${arg_array}" "container_host_source_path") || -z $(get_array_val "${arg_array}" "secret_mapping_var_name") ]]; then
-        echo "ERROR: host_execute_container_script() requires the full path of the calling script, the path to the container's bash scripts folder, the path of the container compose file, the name of the configuration data variable, the full path to the container source directory, the name of the associative array containing the secret names and corresponding bash variables as arguments" >&2
+	# input validation
+    if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" ]]; then
+        echo "ERROR: host_deploy_container_elev_privs() requires the full path to the container source directory, the path to the container compose file, the name of the configuration data variable, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the full path of the calling script as arguments" >&2
         return 1
     fi
 
-	# check if this is a server deployment or a local deployment
-	if [[ $(get_array_val "${arg_array}" "deploy_dest") == "server" ]]; then
-		# initialize the container environment variables
-		initialize_container_env_var $(get_array_val "${arg_array}" "current_script_name")
+	# initialize the container environment variables
+	initialize_container_env_var "$(get_array_val "${arg_array}" "current_script_name")"
 
-		# initialize the container target folder and build/run the container
-		host_deploy_container_elev_privs $(get_array_val "${arg_array}" "container_host_source_path") $(get_array_val "${arg_array}" "container_compose_file_path")
+	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
+	process_stdin_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
 
-		# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
-		process_stdin_config_data $(get_array_val "${arg_array}" "secret_mapping_var_name") $(get_array_val "${arg_array}" "config_data_var_name")
-	fi
+	# change to the container container directory
+	cd "$(get_array_val "${arg_array}" "container_host_source_path")"
 
-
-
-
-	# construct the full path to the script that will be executed within the container (${SCRIPT_TYPE} is passed in as an environment variable):
-	local script_path=$(get_array_val "${arg_array}" "container_scripts_path")"/container_${SCRIPT_TYPE}.sh"
-
-	# store the values of the variables used in local variables
-	local env_vars_block=$(get_array_val "${arg_array}" "env_vars_block")
-	local config_data_var_name=$(get_array_val "${arg_array}" "config_data_var_name")
-
-	echo "run the container_${SCRIPT_TYPE}.sh script from within the container to execute the corresponding automated scripts"
-
-# open a bash session into the running container and run the appropriate container deployment script (based on $SCRIPT_TYPE) and provide the value of the variable identified by $config_data_var_name via stdin
-docker exec -i oracle_deploy bash -c "
-	# specify the environment variables that are defined in the calling script:
-	${env_vars_block}
-	
-	# Execute the target script, which will inherit the variables above.
-	bash '${script_path}'
-" <<< "${!config_data_var_name}"
-
-	# shutdown and cleanup the container project
-	host_shutdown_container_elev_privs $(get_array_val "${arg_array}" "config_data_var_name") $(get_array_val "${arg_array}" "container_compose_file_path")
+	# build and run the sqlplus container
+	echo "build and run the sqlplus container"
+	build_deploy_container "$(get_array_val "${arg_array}" "container_compose_file_path")"
 }
 
+# function to deploy the database container and execute the container script
+# This function accepts the following parameters as elements in the specified array name  (arg_array):
+# container_host_source_path: the full path to the container source directory
+# container_compose_file_path: the path of the container compose file (relative to the container_database_deployment source directory)
+# secret_mapping_var_name: the name of an associative array that maps the secret values passed to bash commands via STDIN
+# config_data_var_name: name of the configuration data variable
+# current_script_name: the full path of the calling script
+# container_scripts_path: the path to the container's bash scripts folder
+# env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
+function host_deploy_database_execute_container_script()
+{
+	
+	# store the function array argument
+	local arg_array="${1}"
 
+	# declare the function arguments
+	declare -A FUNC_ARGS=(
+			["current_script_name"]="$(get_array_val "${arg_array}" "current_script_name")"
+			["container_host_source_path"]="$(get_array_val "${arg_array}" "container_host_source_path")"
+			["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
+			["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
+			["secret_mapping_var_name"]="$(get_array_val "${arg_array}" "secret_mapping_var_name")"
+		)
+
+	# deploy the container to the host server
+	host_deploy_container_elev_privs "FUNC_ARGS"
+	
+
+	# declare the function arguments
+	declare -A FUNC_ARGS=(
+			["container_scripts_path"]="$(get_array_val "${arg_array}" "container_scripts_path")"
+			["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
+			["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
+			["env_vars_block"]="$(get_array_val "${arg_array}" "env_vars_block")"
+		)
+
+	# execute the container script 
+	execute_container_script "FUNC_ARGS"
+
+}
 
 # function to initialize and run the database deployment container on the host machine. This function accepts the following parameters as elements in the specified array name (arg_array):
 # current_script_name: the full path of the calling script

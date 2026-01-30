@@ -1,17 +1,18 @@
 #!/bin/bash
 
-# this file includes the ODD and CDS host functions so the path to the CDS functions does not need to be known by projects that implement ODD as a submodule
+# this file includes the CDD and CDS host functions so the path to the CDS functions does not need to be known by projects that implement CDD as a submodule
 
-# determine current folder path (ODD/src/includes)
+# determine current folder path (CDD/src/includes)
 CDD_INCL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# source the ODD host functions
+# source the CDD host/shared functions
 source "${CDD_INCL_DIR}/../functions/host_functions.sh"
+source "${CDD_INCL_DIR}/../functions/shared_functions.sh"
 
-# source the ODD configuration
+# source the CDD configuration
 source "${CDD_INCL_DIR}/../config/container_config.sh"
 
-# determine CDS submodule root folder (ODD/modules/CDS)
+# determine CDS submodule root folder (CDD/modules/CDS)
 CDS_DIR="${CDD_INCL_DIR}/../../modules/CDS"
 
 # source the nested CDS submodule client/shared functions
