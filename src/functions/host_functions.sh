@@ -62,7 +62,7 @@ function host_deploy_database_execute_container_script()
     fi
 
 	# declare the function arguments
-	declare -A FUNC_ARGS=(
+	local -A DEPLOY_FUNC_ARGS=(
 			["current_script_name"]="$(get_array_val "${arg_array}" "current_script_name")"
 			["container_host_source_path"]="$(get_array_val "${arg_array}" "container_host_source_path")"
 			["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
@@ -71,10 +71,10 @@ function host_deploy_database_execute_container_script()
 		)
 
 	# deploy the container to the host server
-	host_deploy_container_elev_privs "FUNC_ARGS"
+	host_deploy_container_elev_privs "DEPLOY_FUNC_ARGS"
 	
 	# declare the function arguments
-	declare -A FUNC_ARGS=(
+	local -A EXEC_FUNC_ARGS=(
 			["container_scripts_path"]="$(get_array_val "${arg_array}" "container_scripts_path")"
 			["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
 			["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
@@ -82,7 +82,7 @@ function host_deploy_database_execute_container_script()
 		)
 
 	# execute the container script 
-	execute_container_script "FUNC_ARGS"
+	execute_container_script "EXEC_FUNC_ARGS"
 }
 
 # function to initialize and run the database deployment container on the host machine. This function accepts the following parameters as elements in the specified array name (arg_array):
