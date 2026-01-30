@@ -26,8 +26,6 @@ function set_script_type_var ()
 # 5: (optional) SCRIPT_TYPE
 function client_process_runtime_arguments ()
 {
-	echo "process client runtime arguments"
-
 	local script_log_path="${1}"
 	local current_script_name="${2}"
 	local env_name="${3}"

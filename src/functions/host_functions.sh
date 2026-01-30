@@ -7,8 +7,6 @@
 # host_deploy_container_elev_privs "/tmp/lhp-data-management-deploy/container_database_deployment" "./docker-compose.yml"
 function host_deploy_container_elev_privs ()
 {
- 	echo "Change to the container directory and build/run the container"
-
 	local container_host_source_path="${1}"
 	local container_compose_file_path="${2}"
 
@@ -139,8 +137,6 @@ function host_deploy_container ()
 	# store the values of the variables used in local variables
 	local env_vars_block=$(get_array_val "${arg_array}" "env_vars_block")
 	local config_data_var_name=$(get_array_val "${arg_array}" "config_data_var_name")
-
-	echo "build and run the container with the container user account"
 
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
 # The outer heredoc (<<EOF) sends commands to 'sudo su - ${container_account_name}'.
