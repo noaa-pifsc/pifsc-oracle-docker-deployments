@@ -135,7 +135,7 @@ function host_deploy_container ()
 	initialize_container_env_var "${current_script_name}"
 
 	# convert the line endings for all .sh and .env files in the parent folder
-	convert_dos2unix "../../../"
+	convert_dos2unix "${parent_root_folder}"
 
 	# process the stdin configuration data: parse and store in variables, construct the formatted CONFIG_DATA variable
 	process_stdin_config_data "${secret_mapping_var_name}" "${config_data_var_name}"
