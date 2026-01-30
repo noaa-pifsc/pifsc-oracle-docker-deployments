@@ -20,8 +20,13 @@ function host_deploy_container_elev_privs ()
         return 1
     fi
 
+	echo "running initialize_container_env_var($(get_array_val "${arg_array}" "current_script_name"))"
+
 	# initialize the container environment variables
 	initialize_container_env_var "$(get_array_val "${arg_array}" "current_script_name")"
+
+
+	echo "running initialize_container_env_var($(get_array_val "${arg_array}" "secret_mapping_var_name"), $(get_array_val "${arg_array}" "config_data_var_name"))"
 
 	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
 	process_stdin_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
