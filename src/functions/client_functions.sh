@@ -71,8 +71,6 @@ function client_process_runtime_arguments ()
 #   client_execute_deploy_database "FUNC_ARGS"
 function client_execute_deploy_database ()
 {
-	echo "prepare the container source files and deploy the container"
-	
 	# store the function array argument
 	local arg_array="${1}"
 
@@ -93,6 +91,10 @@ function client_execute_deploy_database ()
 
 	# Check if the DEPLOY_DEST variable is "server" 
 	if [[ "$(get_array_val "${arg_array}" "deploy_dest")" == "server" ]]; then
+
+		# this is a server deployment
+		echo "deploy the database deployment container to the server"
+
 		# Prepare the container host by cloning the project repository
 		prepare_container_host "$(get_array_val "${arg_array}" "container_hostname")" "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "container_git_url")"
 
@@ -109,7 +111,7 @@ function client_execute_deploy_database ()
 		cd "$(get_array_val "${arg_array}" "local_container_build_path")"
 
 		# this is a mounted directory deployment
-		echo "deploy the container with container compose for development purposes"
+		echo "deploy the database deployment container locally with container compose for development purposes"
 
 		# stop and remove any running container and build/run the container from the source code
 		build_deploy_container "$(get_array_val "${arg_array}" "container_compose_file_path")"

@@ -12,21 +12,14 @@ function host_deploy_container_elev_privs ()
 	# store the function array argument
 	local arg_array="${1}"
 
-	echo "running host_deploy_container_elev_privs()"
-
 	# input validation
     if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" ]]; then
         echo "ERROR: host_deploy_container_elev_privs() requires the full path to the container source directory, the path to the container compose file, the name of the configuration data variable, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the full path of the calling script as arguments" >&2
         return 1
     fi
 
-	echo "running initialize_container_env_var($(get_array_val "${arg_array}" "current_script_name"))"
-
 	# initialize the container environment variables
 	initialize_container_env_var "$(get_array_val "${arg_array}" "current_script_name")"
-
-
-	echo "running initialize_container_env_var($(get_array_val "${arg_array}" "secret_mapping_var_name"), $(get_array_val "${arg_array}" "config_data_var_name"))"
 
 	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
 	process_stdin_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
@@ -52,8 +45,6 @@ function host_deploy_database_execute_container_script()
 {
 	# store the function array argument
 	local arg_array="${1}"
-
-	echo "running host_deploy_database_execute_container_script()"
 
 	# input validation
     if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
@@ -99,8 +90,6 @@ function host_deploy_container ()
 {
 	# store the function array argument
 	local arg_array="${1}"
-
-	echo "running host_deploy_container()"
 
 	# input validation
     if [[ -z $(get_array_val "${arg_array}" "current_script_name") || -z $(get_array_val "${arg_array}" "parent_root_folder") || -z $(get_array_val "${arg_array}" "secret_mapping_var_name") || -z $(get_array_val "${arg_array}" "config_data_var_name") || -z $(get_array_val "${arg_array}" "container_host_project_path") || -z $(get_array_val "${arg_array}" "container_account_name") || -z $(get_array_val "${arg_array}" "container_host_scripts_path") || -z $(get_array_val "${arg_array}" "host_script_name") ]]; then
