@@ -54,7 +54,7 @@ function client_process_runtime_arguments ()
 # this function prepares and executes the client deployment scripts
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
 # env_name: (optional) the environment name (dev, test, prod)
-# deployment_destination: (optional) deployment destination (local, server)
+# deploy_dest: (optional) deployment destination (local, server)
 # container_hostname: container hostname to connect to
 # container_host_project_path: the container source directory on the container host
 # container_git_url: git url for the container project's repository
@@ -93,7 +93,7 @@ function client_execute_deploy_database ()
 
 
 	# Check if the DEPLOY_DEST variable is "server" 
-	if [[ "$(get_array_val "${arg_array}" "deployment_destination")" == "server" ]]; then
+	if [[ "$(get_array_val "${arg_array}" "deploy_dest")" == "server" ]]; then
 		# Prepare the container host by cloning the project repository
 		prepare_container_host "$(get_array_val "${arg_array}" "container_hostname")" "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "container_git_url")"
 
