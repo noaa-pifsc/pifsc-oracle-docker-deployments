@@ -115,35 +115,31 @@ docker exec -i oracle_deploy bash -c "
 # 9: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 function host_deploy_container ()
 {
-	local current_script_name="${1}"
-	local parent_root_folder="${2}"
-	local secret_mapping_var_name="${3}"
-	local config_data_var_name="${4}"
-	local container_host_project_path="${5}"
-	local container_account_name="${6}"
-	local container_host_scripts_path="${7}"
-	local host_script_name="${8}"
-	local env_vars_block="${9}"
+	local array_pointer="${1}"
 
 	# input validation
-    if [[ -z "${current_script_name}" || -z "${parent_root_folder}" || -z "${secret_mapping_var_name}" || -z "${config_data_var_name}" || -z "${container_host_project_path}" || -z "${container_account_name}" || -z "${container_host_scripts_path}" || -z "${host_script_name}" ]]; then
+    if [[ -z $(get_array_val "${array_pointer}" "current_script_name") || -z $(get_array_val "${array_pointer}" "parent_root_folder") || -z $(get_array_val "${array_pointer}" "secret_mapping_var_name") || -z $(get_array_val "${array_pointer}" "config_data_var_name") || -z $(get_array_val "${array_pointer}" "container_host_project_path") || -z $(get_array_val "${array_pointer}" "container_account_name") || -z $(get_array_val "${array_pointer}" "container_host_scripts_path") || -z $(get_array_val "${array_pointer}" "host_script_name") ]]; then
         echo "ERROR: host_initialize_deploy_container() requires the full path of the calling script, the repository root folder, the name of the associative array containing the secret names and corresponding bash variables, the name of the configuration data variable, the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, and name of the host script that is executed to deploy the container as arguments" >&2
         return 1
     fi
 
 	# initialize the container environment variables
-	initialize_container_env_var "${current_script_name}"
+	initialize_container_env_var $(get_array_val "${array_pointer}" "current_script_name")
 
 	# convert the line endings for all .sh and .env files in the parent folder
-	convert_dos2unix "${parent_root_folder}"
+	convert_dos2unix $(get_array_val "${array_pointer}" "parent_root_folder")
 
 	# process the stdin configuration data: parse and store in variables, construct the formatted CONFIG_DATA variable
-	process_stdin_config_data "${secret_mapping_var_name}" "${config_data_var_name}"
+	process_stdin_config_data $(get_array_val "${array_pointer}" "secret_mapping_var_name") $(get_array_val "${array_pointer}" "config_data_var_name")
 
 	# build/run the container
 	# define the absolute path to the deployment script that will run as ${container_account_name}.
-	local script_path="${container_host_scripts_path}/${host_script_name}"
+	local script_path=$(get_array_val "${array_pointer}" "container_host_scripts_path")"/"$(get_array_val "${array_pointer}" "host_script_name")
 	
+	# store the values of the variables used in local variables
+	local env_vars_block=$(get_array_val "${array_pointer}" "env_vars_block")
+	local config_data_var_name=$(get_array_val "${array_pointer}" "config_data_var_name")
+
 	echo "build and run the container with the container user account"
 
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
@@ -159,7 +155,7 @@ function host_deploy_container ()
 # on the \$CONFIG_DATA content, ensuring that special characters (like literal '$')
 # are preserved exactly as defined.
 # set the environment variable values 
-sudo su - ${container_account_name} <<EOF
+sudo su - $(get_array_val "${array_pointer}" "container_account_name") <<EOF
 # Set the environment variables in the new shell.
 ${env_vars_block}
 
@@ -169,5 +165,5 @@ CREDEND
 EOF
 
 	# cleanup the container source folder
-	cleanup_container_source_folder "${container_host_project_path}" "${config_data_var_name}"
+	cleanup_container_source_folder $(get_array_val "${array_pointer}" "container_host_project_path") $(get_array_val "${array_pointer}" "config_data_var_name")
 }
