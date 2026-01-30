@@ -67,14 +67,20 @@ function host_execute_container_script ()
         return 1
     fi
 
-	# initialize the container environment variables
-	initialize_container_env_var $(get_array_val "${arg_array}" "current_script_name")
+	# check if this is a server deployment or a local deployment
+	if [[ $(get_array_val "${arg_array}" "deploy_dest") == "server" ]]; then
+		# initialize the container environment variables
+		initialize_container_env_var $(get_array_val "${arg_array}" "current_script_name")
 
-	# initialize the container target folder and build/run the container
-	host_deploy_container_elev_privs $(get_array_val "${arg_array}" "container_host_source_path") $(get_array_val "${arg_array}" "container_compose_file_path")
+		# initialize the container target folder and build/run the container
+		host_deploy_container_elev_privs $(get_array_val "${arg_array}" "container_host_source_path") $(get_array_val "${arg_array}" "container_compose_file_path")
 
-	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
-	process_stdin_config_data $(get_array_val "${arg_array}" "secret_mapping_var_name") $(get_array_val "${arg_array}" "config_data_var_name")
+		# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
+		process_stdin_config_data $(get_array_val "${arg_array}" "secret_mapping_var_name") $(get_array_val "${arg_array}" "config_data_var_name")
+	fi
+
+
+
 
 	# construct the full path to the script that will be executed within the container (${SCRIPT_TYPE} is passed in as an environment variable):
 	local script_path=$(get_array_val "${arg_array}" "container_scripts_path")"/container_${SCRIPT_TYPE}.sh"

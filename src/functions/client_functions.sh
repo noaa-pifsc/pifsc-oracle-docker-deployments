@@ -66,6 +66,7 @@ function client_process_runtime_arguments ()
 # secret_mapping_var_name: the name of the associative array containing the secret names and corresponding bash variables
 # container_scripts_path: the path to the container's bash scripts folder
 # parent_root_folder: the repository root folder (used to convert all .sh files to use linux-style line endings for compatibility purposes)
+# current_script_name: the full path of the calling script
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # Example Usage:
 #   client_execute_deploy_database "FUNC_ARGS"
@@ -77,7 +78,7 @@ function client_execute_deploy_database ()
 	local arg_array="${1}"
 
 	# input validation
-    if [[ -z "$(get_array_val "${arg_array}" "parent_root_folder")" || -z "$(get_array_val "${arg_array}" "env_name")" || -z "$(get_array_val "${arg_array}" "deployment_destination")" || -z "$(get_array_val "${arg_array}" "container_hostname")" || -z "$(get_array_val "${arg_array}" "container_host_project_path")" || -z "$(get_array_val "${arg_array}" "container_git_url")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "container_host_scripts_path")" || -z "$(get_array_val "${arg_array}" "local_container_build_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "script_type")" || -z "$(get_array_val "${arg_array}" "db_host")" || -z "$(get_array_val "${arg_array}" "db_service_name")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
+    if [[ -z "$(get_array_val "${arg_array}" "parent_root_folder")" || -z "$(get_array_val "${arg_array}" "env_name")" || -z "$(get_array_val "${arg_array}" "deploy_dest")" || -z "$(get_array_val "${arg_array}" "container_hostname")" || -z "$(get_array_val "${arg_array}" "container_host_project_path")" || -z "$(get_array_val "${arg_array}" "container_git_url")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "container_host_scripts_path")" || -z "$(get_array_val "${arg_array}" "local_container_build_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "script_type")" || -z "$(get_array_val "${arg_array}" "db_host")" || -z "$(get_array_val "${arg_array}" "db_service_name")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
         echo "ERROR: client_execute_deploy_database() requires the environment name, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the script type, the database host, the database service name, the name of an associative array that maps the secret values passed to bash commands via STDIN, the path to the container's bash scripts folder, and the repository root folder as arguments" >&2
         return 1
     fi
@@ -114,8 +115,22 @@ function client_execute_deploy_database ()
 		# stop and remove any running container and build/run the container from the source code
 		build_deploy_container "$(get_array_val "${arg_array}" "container_compose_file_path")"
 
+
+		# declare the function arguments
+		declare -A FUNC_ARGS=(
+				["current_script_name"]="$(get_array_val "${arg_array}" "current_script_name")"
+				["secret_mapping_var_name"]="$(get_array_val "${arg_array}" "secret_mapping_var_name")"
+				["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
+				["env_vars_block"]="$(get_array_val "${arg_array}" "env_vars_block")"
+				["container_scripts_path"]="$(get_array_val "${arg_array}" "container_scripts_path")"
+				["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
+				["container_host_source_path"]="$(get_array_val "${arg_array}" "container_host_source_path")"
+				["deploy_dest"]="$(get_array_val "${arg_array}" "deploy_dest")"
+			)
+
+
 		# execute the corresponding container scripts and shutdown the container
-		host_execute_container_script "$(get_array_val "${arg_array}" "container_scripts_path")" "$(get_array_val "${arg_array}" "container_compose_file_path")" "$(get_array_val "${arg_array}" "config_data_var_name")"  "$(get_array_val "${arg_array}" "env_vars_block")"
+		host_execute_container_script "FUNC_ARGS"
 
 		echo "the local container deployment script has finished executing"
 
