@@ -18,79 +18,97 @@ function set_script_type_var ()
 }
 
 
+# this function accepts the required runtime arguments (calling script path, ENV_NAME, DEPLOY_DEST, SCRIPT_TYPE) and prompts for any missing values
+function client_process_runtime_arguments ()
+{
+
+	# initialize the deployment script
+	initialize_deployment_script "${1}"
+
+	# set the environment and deployment destination variable values
+	set_env_deployment_vars "${2}" "${3}"
+	
+	# set the script type variable value
+	set_script_type_var "${4}"
+	
+	# determine current folder path (/container_database_deployment/deployment_scripts/client_scripts/functions)
+	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+	# validate that the corresponding container script exists:
+	if [ ! -f "${curr_dir}/../../container_scripts/container_${SCRIPT_TYPE}.sh" ]; then
+		echo "ERROR: the script type definition (script type: ${SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $curr_dir/../../container_scripts/container_${SCRIPT_TYPE}.sh"
+		return 1
+	fi
+
+}
+
+
 # this function prepares and executes the client deployment scripts
-# this function accepts the following parameters: 
-# 1: (optional) the environment name (dev, test, prod)
-# 2: (optional) deployment destination (local, server)
-# 3: container hostname to connect to
-# 4: the container source directory on the container host
-# 5: git url for the container project's repository
-# 6: name of the configuration data variable
-# 7: the path to the folder where the host bash scripts are contained
-# 8: the local container build folder path (/container_database_deployment)
-# 9: the path of the container compose file (relative to the container build folder path)
-# 10: the script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
-# 11: the database hostname
-# 12: the database service name
-# 13: the name of the associative array containing the secret names and corresponding bash variables
-# 14: the path to the container's bash scripts folder
-# 15: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
+# This function accepts the following parameters as elements in the specified array name (arg_array): 
+# env_name: (optional) the environment name (dev, test, prod)
+# deployment_destination: (optional) deployment destination (local, server)
+# container_hostname: container hostname to connect to
+# container_host_project_path: the container source directory on the container host
+# container_git_url: git url for the container project's repository
+# config_data_var_name: name of the configuration data variable
+# container_host_scripts_path: the path to the folder where the host bash scripts are contained
+# local_container_build_path: the local container build folder path (/container_database_deployment)
+# container_compose_file_path: the path of the container compose file (relative to the container build folder path)
+# script_type: the script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
+# db_host: the database hostname
+# db_service_name: the database service name
+# secret_mapping_var_name: the name of the associative array containing the secret names and corresponding bash variables
+# container_scripts_path: the path to the container's bash scripts folder
+# parent_root_folder: the repository root folder (used to convert all .sh files to use linux-style line endings for compatibility purposes)
+# env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # Example Usage:
-#   client_execute_deploy_database "$1" "$2" "$3" "docker-server-as1" "/tmp/lhp-data-management-deploy" "git@github.com:example-repo.git" "CONFIG_DATA" "/tmp/lhp-data-management-deploy/container_database_deployment/host_scripts" "/c/Users/USERNAME/lhp-data-management/container_database_deployment" "./docker-compose.yml" "deploy_version2.0" "oracle-db-host" "oracle-db-servicename" "SECRET_MAPPING_ARR"
+#   client_execute_deploy_database "FUNC_ARGS"
 function client_execute_deploy_database ()
 {
 	echo "prepare the container source files and deploy the container"
 	
-	local env_name="${1}"
-	local deployment_destination="${2}"
-	local container_hostname="${3}"
-	local container_host_project_path="${4}"
-	local container_git_url="${5}"
-	local config_data_var_name="${6}"
-	local container_host_scripts_path="${7}"
-	local local_container_build_path="${8}"
-	local container_compose_file_path="${9}"
-	local script_type="${10}"
-	local db_host="${11}"
-	local db_service_name="${12}"
-	local secret_mapping_var_name="${13}"
-	local container_scripts_path="${14}"
-	local env_vars_block="${15:-}"
-	
+	# store the function array argument
+	local arg_array="${1}"
+
 	# input validation
-    if [[ -z "${env_name}" || -z "${deployment_destination}" || -z "${container_hostname}" || -z "${container_host_project_path}" || -z "${container_git_url}" || -z "${config_data_var_name}" || -z "${container_host_scripts_path}" || -z "${local_container_build_path}" || -z "${container_compose_file_path}" || -z "${script_type}" || -z "${db_host}" || -z "${db_service_name}" || -z "${secret_mapping_var_name}" || -z "${container_scripts_path}" ]]; then
-        echo "ERROR: client_execute_deploy_database() requires the environment name, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the script type, the database host, the database service name, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the path to the container's bash scripts folder as arguments" >&2
+    if [[ -z "$(get_array_val "${arg_array}" "parent_root_folder")" || -z "$(get_array_val "${arg_array}" "env_name")" || -z "$(get_array_val "${arg_array}" "deployment_destination")" || -z "$(get_array_val "${arg_array}" "container_hostname")" || -z "$(get_array_val "${arg_array}" "container_host_project_path")" || -z "$(get_array_val "${arg_array}" "container_git_url")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "container_host_scripts_path")" || -z "$(get_array_val "${arg_array}" "local_container_build_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "script_type")" || -z "$(get_array_val "${arg_array}" "db_host")" || -z "$(get_array_val "${arg_array}" "db_service_name")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
+        echo "ERROR: client_execute_deploy_database() requires the environment name, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the script type, the database host, the database service name, the name of an associative array that maps the secret values passed to bash commands via STDIN, the path to the container's bash scripts folder, and the repository root folder as arguments" >&2
         return 1
     fi
 
+
+	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
+	convert_dos2unix "$(get_array_val "${arg_array}" "parent_root_folder")"
+
+	# process the configuration data
+	process_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
+
+
 	# Check if the DEPLOY_DEST variable is "server" 
-	if [[ "${deployment_destination}" == "server" ]]; then
+	if [[ "$(get_array_val "${arg_array}" "deployment_destination")" == "server" ]]; then
 		# Prepare the container host by cloning the project repository
-		prepare_container_host "${container_hostname}" "${container_host_project_path}" "${container_git_url}"
+		prepare_container_host "$(get_array_val "${arg_array}" "container_hostname")" "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "container_git_url")"
 
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
-		exec_remote_cmd_with_stdin "${container_hostname}" "${!config_data_var_name}" "SCRIPT_TYPE=\"${script_type}\" DB_HOST=\"${db_host}\" DB_SERVICE_NAME=\"${db_service_name}\" ENV_NAME=\"${env_name}\" bash ${container_host_scripts_path}/host_deploy_database.sh"
+		exec_remote_cmd_with_stdin "$(get_array_val "${arg_array}" "container_hostname")" "${!config_data_var_name}" "SCRIPT_TYPE=\"$(get_array_val "${arg_array}" "script_type")\" DB_HOST=\"$(get_array_val "${arg_array}" "db_host")\" DB_SERVICE_NAME=\"$(get_array_val "${arg_array}" "db_service_name")\" ENV_NAME=\"$(get_array_val "${arg_array}" "env_name")\" bash $(get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
 
 		# unset the configuration now that the ssh call has completed
-		unset_config_data "${config_data_var_name}"
+		unset_config_data "$(get_array_val "${arg_array}" "config_data_var_name")"
 
 	else
 		# this is a local deployment scenario:
 		
-		# determine current folder path (/container_database_deployment/deployment_scripts/client_scripts/functions)
-		local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 		# change directory into the container folder that contains the Dockerfile and .yml files (/container_database_deployment)
-		cd "${local_container_build_path}"
+		cd $(get_array_val "${arg_array}" "local_container_build_path")
 
 		# this is a mounted directory deployment
 		echo "deploy the container with container compose for development purposes"
 
 		# stop and remove any running container and build/run the container from the source code
-		build_deploy_container "${container_compose_file_path}"
+		build_deploy_container "$(get_array_val "${arg_array}" "container_compose_file_path")"
 
 		# execute the corresponding container scripts and shutdown the container
-		host_execute_container_script "${container_scripts_path}" "${container_compose_file_path}" "${config_data_var_name}"  "$(env_vars_block)"
+		host_execute_container_script "$(get_array_val "${arg_array}" "container_scripts_path")" "$(get_array_val "${arg_array}" "container_compose_file_path")" "$(get_array_val "${arg_array}" "config_data_var_name")"  "$(get_array_val "${arg_array}" "env_vars_block")"
 
 		echo "the local container deployment script has finished executing"
 
