@@ -89,7 +89,7 @@ function client_execute_deploy_database ()
 		# this is a local deployment scenario:
 		
 		# change directory into the container folder that contains the Dockerfile and .yml files (/container_database_deployment)
-		cd $(get_array_val "${arg_array}" "local_container_build_path")
+		cd "$(get_array_val "${arg_array}" "local_container_build_path")"
 
 		# this is a mounted directory deployment
 		echo "deploy the container with container compose for development purposes"
