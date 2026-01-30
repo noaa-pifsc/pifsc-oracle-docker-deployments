@@ -30,16 +30,6 @@ function client_process_runtime_arguments ()
 	
 	# set the script type variable value
 	set_script_type_var "${4}"
-	
-	# determine current folder path (/container_database_deployment/deployment_scripts/client_scripts/functions)
-	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-	# validate that the corresponding container script exists:
-	if [ ! -f "${curr_dir}/../../container_scripts/container_${SCRIPT_TYPE}.sh" ]; then
-		echo "ERROR: the script type definition (script type: ${SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $curr_dir/../../container_scripts/container_${SCRIPT_TYPE}.sh"
-		return 1
-	fi
-
 }
 
 
