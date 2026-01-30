@@ -7,6 +7,8 @@
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 function execute_container_script ()
 {
+	echo "running execute_container_script()"
+	
 	# store the function array argument
 	local arg_array="${1}"
 
@@ -46,6 +48,8 @@ docker exec -i oracle_deploy bash -c "
 # shutdown_cleanup_container "CONFIG_DATA" "./docker-compose.yml" 
 function shutdown_cleanup_container ()
 {
+	echo "running shutdown_cleanup_container()"
+	
 	local config_data_var_name="${1}"
 	local container_compose_file_path="${2}"
 

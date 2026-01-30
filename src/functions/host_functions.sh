@@ -12,6 +12,8 @@ function host_deploy_container_elev_privs ()
 	# store the function array argument
 	local arg_array="${1}"
 
+	echo "running host_deploy_container_elev_privs()"
+
 	# input validation
     if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" ]]; then
         echo "ERROR: host_deploy_container_elev_privs() requires the full path to the container source directory, the path to the container compose file, the name of the configuration data variable, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the full path of the calling script as arguments" >&2
@@ -43,9 +45,16 @@ function host_deploy_container_elev_privs ()
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 function host_deploy_database_execute_container_script()
 {
-	
 	# store the function array argument
 	local arg_array="${1}"
+
+	echo "running host_deploy_database_execute_container_script()"
+
+	# input validation
+    if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
+        echo "ERROR: host_deploy_database_execute_container_script() requires the full path to the container source directory, the path to the container compose file, the name of the configuration data variable, the name of an associative array that maps the secret values passed to bash commands via STDIN, the full path of the calling script, and the path to the container's bash scripts folder as arguments" >&2
+        return 1
+    fi
 
 	# declare the function arguments
 	declare -A FUNC_ARGS=(
@@ -59,7 +68,6 @@ function host_deploy_database_execute_container_script()
 	# deploy the container to the host server
 	host_deploy_container_elev_privs "FUNC_ARGS"
 	
-
 	# declare the function arguments
 	declare -A FUNC_ARGS=(
 			["container_scripts_path"]="$(get_array_val "${arg_array}" "container_scripts_path")"
@@ -70,7 +78,6 @@ function host_deploy_database_execute_container_script()
 
 	# execute the container script 
 	execute_container_script "FUNC_ARGS"
-
 }
 
 # function to initialize and run the database deployment container on the host machine. This function accepts the following parameters as elements in the specified array name (arg_array):
@@ -88,9 +95,11 @@ function host_deploy_container ()
 	# store the function array argument
 	local arg_array="${1}"
 
+	echo "running host_deploy_container()"
+
 	# input validation
     if [[ -z $(get_array_val "${arg_array}" "current_script_name") || -z $(get_array_val "${arg_array}" "parent_root_folder") || -z $(get_array_val "${arg_array}" "secret_mapping_var_name") || -z $(get_array_val "${arg_array}" "config_data_var_name") || -z $(get_array_val "${arg_array}" "container_host_project_path") || -z $(get_array_val "${arg_array}" "container_account_name") || -z $(get_array_val "${arg_array}" "container_host_scripts_path") || -z $(get_array_val "${arg_array}" "host_script_name") ]]; then
-        echo "ERROR: host_initialize_deploy_container() requires the full path of the calling script, the repository root folder, the name of the associative array containing the secret names and corresponding bash variables, the name of the configuration data variable, the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, and name of the host script that is executed to deploy the container as arguments" >&2
+        echo "ERROR: host_deploy_container() requires the full path of the calling script, the repository root folder, the name of the associative array containing the secret names and corresponding bash variables, the name of the configuration data variable, the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, and name of the host script that is executed to deploy the container as arguments" >&2
         return 1
     fi
 
