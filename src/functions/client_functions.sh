@@ -84,6 +84,7 @@ function client_execute_deploy_database ()
         return 1
     fi
 
+	local config_data_var_name="$(get_array_val "${arg_array}" "config_data_var_name")"
 
 	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
 	convert_dos2unix "$(get_array_val "${arg_array}" "parent_root_folder")"
