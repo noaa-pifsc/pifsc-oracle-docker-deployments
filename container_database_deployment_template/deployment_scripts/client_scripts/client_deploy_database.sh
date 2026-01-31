@@ -1,14 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# change to the directory the script is running in
-cd "$(dirname "$(realpath "${0}")")"
-
-# include shell script function definitions
-source ./includes/include_client_resources.sh
-
-# initialize the deployment script
-initialize_deployment_script "${0}"
+# include the client functions
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_client_resources.sh"
 
 # prepare and execute the deployment script
-time client_deploy_database "${1:-}" "${2:-}" "${3:-}"
+time client_deploy_database "${0}" "${1:-}" "${2:-}" "${3:-}"

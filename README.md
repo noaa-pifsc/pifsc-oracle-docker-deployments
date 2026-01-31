@@ -32,7 +32,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 -   For the production docker and database instances the abbreviation used is "prod" 
 
 ## CDD Implementation Procedure
--   \*Note: A working example of this Deployment Process for an Oracle/APEX data system is available in the [LHP data system](https://picgitlab.nmfs.local/lhp/lhp-data-management) ([Documentation](https://picgitlab.nmfs.local/lhp/lhp-data-management/-/blob/master/docs/cloud%20docker%20deployment/LHP%20-%20Cloud%20Docker%20Deployment%20Method.md?ref_type=heads)).
+-   \*Note: A working example of this Deployment Process for an Oracle/APEX data system is available in the [PIFSC Resource Inventory (PRI)](https://github.com/noaa-pifsc/PIFSC-Resource-Inventory) ([Documentation](https://github.com/noaa-pifsc/PIFSC-Resource-Inventory/blob/master/container_database_deployment/docs/Oracle%20Docker%20Deployment%20Process.md)).
 -   Add this repository as a git submodule in the given specific data system repository in the designated folder path within the repository root folder: modules/CDD
     -   Copy the [container_database_deployment_template](./container_database_deployment_template) to the root repository folder of the data system repository and rename it to container_database_deployment
     -   Update the corresponding files in the data system repository based on the following guidance:
@@ -40,11 +40,11 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             - Update to include/exclude folders as appropriate to build the docker image, by default the Dockerfile will copy everything from the data system repository's root folder to the /usr/src/oracle_deploy folder within the image
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
-                -   Update generate_database_connection_strings() to define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
+                -   Update container_generate_connection_strings() to define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
                     -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.${ENV_NAME}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
-                -   Update unset_connection_strings() to unset each of the connection string variables defined in generate_database_connection_strings() to ensure the credentials are not left available in the given bash/ssh session
+                -   Update container_unset_connection_strings() to unset each of the connection string variables defined in container_generate_connection_strings() to ensure the credentials are not left available in the given bash/ssh session
             -   [container_scripts](./container_database_deployment_template/deployment_scripts/container_scripts):
-                -   Create a new .sh file for each database deployment/upgrade/rollback script implemented in the data system project in the format container_${SCRIPT_TYPE}.sh where ${SCRIPT_TYPE} is provided by the user at runtime when the [client_scripts/database_deployment.sh](./container_database_deployment_template/deployment_scripts/client_scripts/database_deployment.sh) script is executed
+                -   Create a new .sh file for each database deployment/upgrade/rollback script implemented in the data system project in the format container_${SCRIPT_TYPE}.sh where ${SCRIPT_TYPE} is provided by the user at runtime when the [client_scripts/client_deploy_database.sh](./container_database_deployment_template/deployment_scripts/client_scripts/client_deploy_database.sh) script is executed
                     -   [container_deploy_version2.0.template.sh](./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_version2.0.template.sh) is provided as an example of a container database deployment script with a ${SCRIPT_TYPE} value of "deploy_version2.0" so it can be copied and renamed to remove the ".template" in the file name based on the ${SCRIPT_TYPE} value
             -   [config/custom_container_config.sh](./container_database_deployment_template/deployment_scripts/config/custom_container_config.sh):
                 -   Update the global bash variable declarations based on the specific data system being implemented, each one has comments and an example.  In some cases the variable declaration has a placeholder enclosed by brackets that are intended to be replaced with appropriate values for the given data system:
@@ -54,7 +54,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
                 -   Update the [DATA SYSTEM NAME] placeholder with the given data system name
 
 ## Adding New Use Cases
--   Create a new bash script in the [container_scripts](../../container_database_deployment/deployment_scripts/container_scripts) folder with the name container_${SCRIPT_TYPE}.sh where ${SCRIPT_TYPE} is the value provided at runtime when the [database_deployment.sh](./container_database_deployment_template/deployment_scripts/client_scripts/database_deployment.sh) bash script is executed
+-   Create a new bash script in the [container_scripts](../../container_database_deployment/deployment_scripts/container_scripts) folder with the name container_${SCRIPT_TYPE}.sh where ${SCRIPT_TYPE} is the value provided at runtime when the [client_deploy_database.sh](./container_database_deployment_template/deployment_scripts/client_scripts/client_deploy_database.sh) bash script is executed
     -   \*Note: an existing container bash script (e.g. [container_deploy_version2.0.template.sh](./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_version2.0.template.sh)) can be copied and modified to create a bash script for the new use case.  
     -   Update the sqlplus commands to run the automated SQLPlus scripts to deploy/upgrade/rollback the database schema(s) and APEX app
         -   If there are different versions of the automated SQLPlus scripts for the different environments include the ${ENV_NAME} value in the SQLPlus script filename references to ensure the appropriate SQLPlus script is executed
@@ -70,11 +70,11 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 
 ## Executing the Appropriate CDD Script
 -   \*Note: The [CDD Diagram](./diagrams/container_database_deployment_diagram.drawio.png) provides an overview of the steps associated with the automated client script
--   (shown as step 1 in the diagram) Execute the [database_deployment.sh](./container_database_deployment_template/deployment_scripts/client_scripts/database_deployment.sh) bash script and optionally specify the appropriate arguments.
+-   (shown as step 1 in the diagram) Execute the [client_deploy_database.sh](./container_database_deployment_template/deployment_scripts/client_scripts/client_deploy_database.sh) bash script and optionally specify the appropriate arguments.
     -   For example, to deploy the development version to a container server for the deploy_version2.0 script type use the following command:
-        -   `bash database_deployments.sh dev server deploy_version2.0`
+        -   `bash client_deploy_database.sh dev server deploy_version2.0`
     -   If some/all of the arguments are not provided when the script is executed the script will prompt the user for the values of the arguments that were not provided:
-        -   `bash database_deployments.sh`
+        -   `bash client_deploy_database.sh`
         -   Database Environment (dev, test, prod):
             -   This value is saved in $ENV_NAME and provided to subsequent scripts to inform their behavior based on the database environment
         -   Deployment Destination (local, server)
@@ -83,9 +83,9 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   This value is saved in $SCRIPT_TYPE and provided to subsequent scripts to specify which automated container database deployment script is executed
     -   A log file for each client script execution is saved in [deployment_script_logs](./container_database_deployment_template/deployment_script_logs) and is named $SCRIPT_TYPE.$(date +%Y%m%d_%H%M%S).log based on the date/time the script is executed.  This file will include the output from the remote host and container scripts
     -   (shown as step 2 in the diagram) The client script will clone the data system repository ($CONTAINER_GIT_URL) to the designated folder ($CONTAINER_HOST_PROJECT_PATH) in docker host via ssh.
-    -   (shown as step 3 in the diagram) The client script executes the [initiate_container.sh](./container_database_deployment_template/deployment_scripts/host_scripts/initiate_container.sh) script on the docker host via ssh
+    -   (shown as step 3 in the diagram) The client script executes the [host_deploy_database.sh](./container_database_deployment_template/deployment_scripts/host_scripts/host_deploy_database.sh) script on the docker host via ssh
         -   When initiate_container.sh runs on the remote host it changes the permissions on the designated source directory to allow the designated docker account (this is the account allowed to build/run containers) to read the files.
-            -   (shown as step 4 in the diagram) The [container_build_run.sh](./container_database_deployment_template/deployment_scripts/host_scripts/container_build_run.sh) script is executed as the designated docker account ($CONTAINER_ACCOUNT_NAME) on the remote host
+            -   (shown as step 4 in the diagram) The [host_deploy_database_elev_privs.sh](./container_database_deployment_template/deployment_scripts/host_scripts/host_deploy_database_elev_privs.sh) script is executed as the designated docker account ($CONTAINER_ACCOUNT_NAME) on the remote host
                 -   The script builds/runs the container
                 -   (shown as step 5 in the diagram) The script executes the corresponding bash script within the running container (container_$SCRIPT_TYPE.sh - e.g. ./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_versionx.x.sh] will deploy version x.x of the database and APEX app to a blank database).
                     -   (shown as step 6 in the diagram) The bash container script runs a series of SQLPlus scripts that are managed within the corresponding data system repository that perform the processes on the database based on the use case and database environment.  

@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.3.1">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.3.6">
   <diagram name="Page-1" id="mX9WFPaPRQZbATmu6Zbr">
-    <mxGraphModel dx="1554" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+    <mxGraphModel dx="2066" dy="1111" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -24,7 +24,7 @@
             <mxPoint x="3" y="-34" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="m3ywG3zxG51LFpHeeQUq-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="database_deployment.sh" vertex="1">
+        <mxCell id="m3ywG3zxG51LFpHeeQUq-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="client_deploy_database.sh" vertex="1">
           <mxGeometry height="80" width="161.5" x="45.75" y="290" as="geometry" />
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="Git Server" vertex="1">
@@ -42,7 +42,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Git working copy&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="150" width="160" x="469.75" y="170" as="geometry" />
+          <mxGeometry height="150" width="260" x="420" y="170" as="geometry" />
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-11" edge="1" parent="1" source="m3ywG3zxG51LFpHeeQUq-1" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" target="xqHPgo2YLqQgxxea8p6s-13" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
@@ -55,11 +55,11 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="intiate_container.sh" vertex="1">
-          <mxGeometry height="30" width="131.5" x="484" y="222" as="geometry" />
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;" value="host_deploy_database.sh" vertex="1">
+          <mxGeometry height="42" width="220" x="440" y="210" as="geometry" />
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="container_build_run.sh" vertex="1">
-          <mxGeometry height="30" width="131.5" x="484" y="253" as="geometry" />
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=middle;" value="host_deploy_database_elev_privs.sh" vertex="1">
+          <mxGeometry height="42" width="220" x="440" y="253" as="geometry" />
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-15" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-13" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="xqHPgo2YLqQgxxea8p6s-14" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">

@@ -16,6 +16,9 @@ source "${CURR_DIR}/../../config/custom_container_config.sh"
 source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_client_resources.sh"
 source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_host_resources.sh"
 
+# include the custom shared function definitions
+source "${CURR_DIR}/../../shared_scripts/custom_shared_functions.sh"
+
 # include the custom client functions
 source "${CURR_DIR}/../functions/custom_client_functions.sh"
 

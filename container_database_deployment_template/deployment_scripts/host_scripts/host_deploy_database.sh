@@ -1,19 +1,20 @@
 #!/bin/bash
 
-# change to the directory the script is running in
-cd "$(dirname "$(realpath "${0}")")"
-
 # include the host functions
-source ./includes/include_host_resources.sh
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_resources.sh"
 
-# initialize the container environment variables
-initialize_container_env_var "${0}"
+# declare the function arguments
+declare -A FUNC_ARGS=(
+		["current_script_name"]="${0}"
+		["parent_root_folder"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../../"
+		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
+		["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
+		["container_host_project_path"]="${CONTAINER_HOST_PROJECT_PATH}"
+		["container_account_name"]="${CONTAINER_ACCOUNT_NAME}" 
+		["container_host_scripts_path"]="${CONTAINER_HOST_SCRIPTS_PATH}"
+		["host_script_name"]="host_deploy_database_elev_privs.sh"
+		["env_vars_block"]="$(host_deploy_define_env_vars_block)"
+	)
 
-# convert the line endings for all .sh and .env files in the parent folder
-convert_dos2unix "../../../"
-
-# process the stdin configuration data: parse and store in variables, construct the formatted CONFIG_DATA variable
-process_stdin_config_data "${SECRET_MAPPING_VAR_NAME}" "${CONFIG_DATA_VAR_NAME}"
-
-# build/run the container
-host_deploy_container "${CONTAINER_HOST_PROJECT_PATH}" "${CONTAINER_ACCOUNT_NAME}" "${CONTAINER_HOST_SCRIPTS_PATH}" "${CONFIG_DATA_VAR_NAME}" "host_deploy_database_elev_privs.sh" "$(host_deploy_define_env_vars_block)"
+# initialize and build/run the container on the host machine with the specified function arguments:
+host_deploy_container "FUNC_ARGS"
