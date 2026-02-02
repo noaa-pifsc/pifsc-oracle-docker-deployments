@@ -39,6 +39,11 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
         -   [.dockerignore](./container_database_deployment_template/.dockerignore): 
             - Update to include/exclude folders as appropriate to build the docker image, by default the Dockerfile will copy everything from the data system repository's root folder to the /usr/src/oracle_deploy folder within the image
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
+            -   [shared_scripts/custom_shared_functions.sh](./container_database_deployment_template/deployment_scripts/shared_scripts/custom_shared_functions.sh):
+                -   Update define_env_vars_block() to define the list of environment variables that are passed to bash scripts as arguments when they are executed (examples are provided)
+            -   [client_scripts/functions/custom_client_functions.sh](./container_database_deployment_template/deployment_scripts/client_scripts/functions/custom_client_functions.sh):
+                -   Update client_generate_ssh_parameters() to construct the string of ssh environment variables for the database deployment server bash script (examples are provided)
+                -   Update client_load_config_files() to load the secrets file and deployment configuration file that are used to connect to the database for the deployment
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
                 -   Update container_generate_connection_strings() to define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
                     -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.${ENV_NAME}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
@@ -49,7 +54,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   [config/custom_container_config.sh](./container_database_deployment_template/deployment_scripts/config/custom_container_config.sh):
                 -   Update the global bash variable declarations based on the specific data system being implemented, each one has comments and an example.  In some cases the variable declaration has a placeholder enclosed by brackets that are intended to be replaced with appropriate values for the given data system:
                     -   SECRET_MAPPING_ARR is a special variable that is used to send the database credentials between bash scripts, each array element value needs to correspond with a global bash variable declaration in the corresponding secrets.sh file
-        -   [Oracle Docker Deployment Process.template.md](./container_database_deployment_template/docs/Oracle%20Docker%20Deployment%20Process.template.md):
+        -   [Container Database Deployment Process.template.md](./container_database_deployment_template/docs/Container%20Database%20Deployment%20Process.template.md):
             -   Rename the file to an appropriate name for the given data system (without the ".template") 
                 -   Update the [DATA SYSTEM NAME] placeholder with the given data system name
 

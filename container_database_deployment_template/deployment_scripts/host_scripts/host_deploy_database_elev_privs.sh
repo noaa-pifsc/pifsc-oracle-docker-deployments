@@ -5,7 +5,7 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_
 
 # declare the function arguments
 declare -A FUNC_ARGS=(
-		["env_vars_block"]="$(host_deploy_define_env_vars_block)"
+		["env_vars_block"]="$(define_env_vars_block)"
 		["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 		["current_script_name"]="${0}"
 		["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
