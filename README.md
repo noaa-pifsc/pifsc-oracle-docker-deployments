@@ -42,8 +42,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
             -   [shared_scripts/custom_shared_functions.sh](./container_database_deployment_template/deployment_scripts/shared_scripts/custom_shared_functions.sh):
                 -   Update define_env_vars_block() to define the list of environment variables that are passed to bash scripts as arguments when they are executed (examples are provided)
             -   [client_scripts/functions/custom_client_functions.sh](./container_database_deployment_template/deployment_scripts/client_scripts/functions/custom_client_functions.sh):
-                -   Update client_generate_ssh_parameters() to construct the string of ssh environment variables for the database deployment server bash script (examples are provided)
-                -   Update client_load_config_files() to load the secrets file and deployment configuration file that are used to connect to the database for the deployment
+                -   Update client_generate_ssh_env_vars() to construct the string of ssh environment variables for the database deployment server bash script (examples are provided)
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
                 -   Update container_generate_connection_strings() to define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
                     -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.${ENV_NAME}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
