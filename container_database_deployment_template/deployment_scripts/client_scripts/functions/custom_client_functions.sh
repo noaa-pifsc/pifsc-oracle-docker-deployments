@@ -38,10 +38,9 @@ function client_deploy_database ()
 	# declare the function arguments
 	declare -A FUNC_ARGS=(
 			["parent_root_folder"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../../../"
-			["env_name"]="${ENV_NAME}"
 			["deploy_dest"]="${DEPLOY_DEST}"
 			["container_hostname"]="${CONTAINER_HOSTNAME}"
-			["env_vars_block"]="$(host_deploy_define_env_vars_block)"
+			["env_vars_block"]="$(define_env_vars_block)"
 			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 			["container_compose_file_path"]="${CONTAINER_COMPOSE_FILE_PATH}"
 			["container_host_project_path"]="${CONTAINER_HOST_PROJECT_PATH}"
@@ -49,10 +48,8 @@ function client_deploy_database ()
 			["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
 			["container_host_scripts_path"]="${CONTAINER_HOST_SCRIPTS_PATH}"
 			["local_container_build_path"]="${LOCAL_CONTAINER_BUILD_PATH}"
-			["script_type"]="${SCRIPT_TYPE}"
-			["db_host"]="${DB_HOST}"
-			["db_service_name"]="${DB_SERVICE_NAME}"
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
+			["ssh_env_vars"]="$(client_generate_ssh_env_vars)"
 		)
 
 	# prepare and execute the corresponding deployment script:
@@ -70,4 +67,16 @@ function client_load_config_files()
 	
 	# load the oracle credentials into bash variables (/container_database_deployment/secrets/$ENV_NAME)
 	source "${curr_dir}/../../../secrets/${ENV_NAME}/secrets.sh"
+}
+
+# function to define the ssh environment variables for the database deployment server bash script 
+function client_generate_ssh_env_vars ()
+{
+	######## Environment Variable String Placeholder - START ########
+	# construct the ssh environment variables that are passed to the server bash script call based on the global bash variable values
+
+	# Example:
+	# echo "SCRIPT_TYPE=\"${SCRIPT_TYPE}\" DB_HOST=\"${DB_HOST}\" DB_SERVICE_NAME=\"${DB_SERVICE_NAME}\" ENV_NAME=\"${ENV_NAME}\""
+	
+	######## Environment Variable String Placeholder - END ########
 }
