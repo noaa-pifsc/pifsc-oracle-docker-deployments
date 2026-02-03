@@ -111,7 +111,7 @@ function client_execute_deploy_database ()
 		echo "deploy the database deployment container locally with container compose for development purposes"
 
 		# stop and remove any running container and build/run the container from the source code
-		build_deploy_container "$(get_array_val "${arg_array}" "container_compose_file_path")"
+		build_deploy_container_compose "$(get_array_val "${arg_array}" "container_compose_file_path")"
 
 		# declare the function arguments
 		declare -A FUNC_ARGS=(

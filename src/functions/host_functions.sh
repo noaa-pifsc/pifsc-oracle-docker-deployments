@@ -29,7 +29,7 @@ function host_deploy_container_elev_privs ()
 
 	# build and run the sqlplus container
 	echo "build and run the sqlplus container"
-	build_deploy_container "$(get_array_val "${arg_array}" "container_compose_file_path")"
+	build_deploy_container_compose "$(get_array_val "${arg_array}" "container_compose_file_path")"
 }
 
 # function to deploy the database container and execute the container script
