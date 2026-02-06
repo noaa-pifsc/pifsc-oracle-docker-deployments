@@ -110,7 +110,7 @@ function host_deploy_container ()
 	# define the absolute path to the deployment script that will run as ${container_account_name}.
 	local script_path=$(get_array_val "${arg_array}" "container_host_scripts_path")"/"$(get_array_val "${arg_array}" "host_script_name")
 	
-	# store the values of the variables used in local variables
+	# store the values of the variables used in the sudo su call into local variables
 	local env_vars_block=$(get_array_val "${arg_array}" "env_vars_block")
 	local config_data_var_name=$(get_array_val "${arg_array}" "config_data_var_name")
 

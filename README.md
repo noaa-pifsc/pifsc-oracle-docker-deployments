@@ -7,6 +7,9 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
     -   Version 1.2 (git tag: pifsc_container_database_deployment_v1.2)
+    -   Submodules:
+        -   Container Deployment Scripts (CDS): 
+            -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Deployment-Scripts
 -   [Docker Oracle Deployment Diagram](./diagrams/container_database_deployment_diagram.drawio.png)
     -   [Docker Oracle Deployment Diagram Source File](./diagrams/container_database_deployment_diagram.drawio)
 
@@ -18,7 +21,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 -   Windows/Linux machine serving as the local client
     -   Git Bash
     -   OpenSSH is setup to work with CAC authentication
-    -   OpenSSH is configured to specify the username in the ~/.ssh/config file for each docker host (e.g. pifsc-dev-docker-01-as for the dev docker host)
+    -   OpenSSH is configured to specify the username in the ~/.ssh/config file for each docker host (e.g. docker-dev for the dev docker host)
         -   The ForwardAgent feature is enabled to allow the git repositories to be cloned on the docker host
 
 ## Data System Prerequisites
