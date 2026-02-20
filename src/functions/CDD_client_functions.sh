@@ -71,9 +71,15 @@ function client_execute_deploy_database ()
 	# store the function array argument
 	local arg_array="${1}"
 
-	# input validation
-    if [[ -z "$(get_array_val "${arg_array}" "parent_root_folder")" || -z "$(get_array_val "${arg_array}" "ssh_env_vars")" || -z "$(get_array_val "${arg_array}" "container_deploy_dest")" || -z "$(get_array_val "${arg_array}" "container_hostname")" || -z "$(get_array_val "${arg_array}" "container_host_project_path")" || -z "$(get_array_val "${arg_array}" "container_git_url")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "container_host_scripts_path")" || -z "$(get_array_val "${arg_array}" "local_container_build_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
-        echo "ERROR: client_execute_deploy_database() requires the repository root folder, the ssh environment variables that are passed to the server bash script call, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the name of an associative array that maps the secret values passed to bash commands via STDIN, the path to the container's bash scripts folder, and the repository root folder as arguments" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: client_execute_deploy_database() function argument '${arg_array}' is not a valid associative array." >&2
+        return 1
+    fi
+
+	# input validation:
+	if ! validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "local_container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path"; then 
+        echo "ERROR: client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
 
