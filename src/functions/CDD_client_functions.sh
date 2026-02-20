@@ -101,8 +101,16 @@ function client_execute_deploy_database ()
 		# Prepare the container host by cloning the project repository
 		prepare_container_host "$(get_array_val "${arg_array}" "container_hostname")" "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "container_git_url")"
 
+		# declare the function arguments
+		local -A LOCAL_FUNC_ARGS=(
+				["container_hostname"]="$(get_array_val "${arg_array}" "container_hostname")"
+				["passed_stdin_content"]="${!config_data_var_name}"
+				["cmd"]="$(get_array_val "${arg_array}" "ssh_env_vars") bash $(get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
+			)
+
+
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
-		exec_remote_cmd_with_stdin "$(get_array_val "${arg_array}" "container_hostname")" "${!config_data_var_name}" "$(get_array_val "${arg_array}" "ssh_env_vars") bash $(get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
+		exec_remote_cmd "LOCAL_FUNC_ARGS"
 
 		# unset the configuration now that the ssh call has completed
 		unset_config_data "$(get_array_val "${arg_array}" "config_data_var_name")"
