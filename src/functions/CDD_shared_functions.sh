@@ -78,5 +78,5 @@ function shutdown_cleanup_container ()
 	unset_config_data "${config_data_var_name}"
 
 	# when the deployment has been completed, shutdown the container
- 	shutdown_container "${container_compose_file_path}"
+ 	shutdown_container_compose "${container_compose_file_path}"
 }
