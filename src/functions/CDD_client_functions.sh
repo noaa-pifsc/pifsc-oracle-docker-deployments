@@ -112,6 +112,8 @@ function client_execute_deploy_database ()
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
 		exec_remote_cmd "LOCAL_FUNC_ARGS"
 
+		echo "unset the configuration variable after executing remote script via ssh"
+
 		# unset the configuration now that the ssh call has completed
 		unset_config_data "$(get_array_val "${arg_array}" "config_data_var_name")"
 
