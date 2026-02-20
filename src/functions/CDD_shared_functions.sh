@@ -12,17 +12,30 @@ function execute_container_script ()
 	# store the function array argument
 	local arg_array="${1}"
 
-	if [[ -z $(get_array_val "${arg_array}" "container_scripts_path") || -z $(get_array_val "${arg_array}" "container_compose_file_path") || -z $(get_array_val "${arg_array}" "config_data_var_name") ]]; then
-        echo "ERROR: execute_container_script() requires the path to the container's bash scripts folder, the path of the container compose file, and the name of the configuration data variable as arguments" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: execute_container_script() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
+	# input validation:
+	if ! validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name"; then 
+        echo "ERROR: execute_container_script() function argument validation failed" >&2
+        return 1
+    fi
+	
+	# validate the bash variable values
+	if ! validate_required_vars	"SCRIPT_TYPE"; then
+        echo "ERROR: execute_container_script() function required bash variable validation failed" >&2
+        return 1
+	fi
+
 	# construct the full path to the script that will be executed within the container (${SCRIPT_TYPE} is passed in as an environment variable):
-	local script_path=$(get_array_val "${arg_array}" "container_scripts_path")"/container_${SCRIPT_TYPE}.sh"
+	local script_path="$(get_array_val "${arg_array}" "container_scripts_path")/container_${SCRIPT_TYPE}.sh"
 
 	# store the values of the variables used in local variables
-	local env_vars_block=$(get_array_val "${arg_array}" "env_vars_block")
-	local config_data_var_name=$(get_array_val "${arg_array}" "config_data_var_name")
+	local env_vars_block="$(get_array_val "${arg_array}" "env_vars_block")"
+	local config_data_var_name="$(get_array_val "${arg_array}" "config_data_var_name")"
 
 	echo "run the container_${SCRIPT_TYPE}.sh script from within the container to execute the corresponding automated scripts"
 
@@ -36,7 +49,7 @@ docker exec -i oracle_deploy bash -c "
 " <<< "${!config_data_var_name}"
 
 	# shutdown and cleanup the container project
-	shutdown_cleanup_container $(get_array_val "${arg_array}" "config_data_var_name") $(get_array_val "${arg_array}" "container_compose_file_path")
+	shutdown_cleanup_container "$(get_array_val "${arg_array}" "config_data_var_name")" "$(get_array_val "${arg_array}" "container_compose_file_path")"
 }
 
 
@@ -53,11 +66,11 @@ function shutdown_cleanup_container ()
 	local config_data_var_name="${1}"
 	local container_compose_file_path="${2}"
 
-	# input validation
-    if [[ -z "${config_data_var_name}" || -z "${container_compose_file_path}" ]]; then
-        echo "ERROR: shutdown_cleanup_container() requires the name of the configuration data variable and the path to the container compose file as arguments" >&2
+	# validate the bash variable values
+	if ! validate_required_vars	"config_data_var_name" "container_compose_file_path"; then
+        echo "ERROR: shutdown_cleanup_container() function required bash variable validation failed" >&2
         return 1
-    fi
+	fi
 
 	echo "shutdown the container and cleanup the container target folder"
 

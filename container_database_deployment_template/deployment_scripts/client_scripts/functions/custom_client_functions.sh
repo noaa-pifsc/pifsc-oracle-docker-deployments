@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# function that initializes the ENV_NAME variable and loads the client secret/configuration files, and process the $config_data_var_name so it can be passed to a bash script via STDIN
+# function that initializes the CONTAINER_ENV_NAME variable and loads the client secret/configuration files, and process the $config_data_var_name so it can be passed to a bash script via STDIN
 # this function accepts the following parameters: 
 # 1: current_script_name: the full path of the calling script
 # 2: (optional) the environment name (dev, test, prod)
@@ -11,8 +11,8 @@ function client_deploy_database ()
 	echo "deploy the database from the client script"
 
 	local current_script_name="${1}"
-	local env_name="${2}"
-	local deploy_dest="${3}"
+	local container_env_name="${2}"
+	local container_deploy_dest="${3}"
 	local script_type="${4}"
 
 	if [ -z "${current_script_name}" ]; then
@@ -24,7 +24,7 @@ function client_deploy_database ()
 	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# process the runtime arguments
-	client_process_runtime_arguments "${curr_dir}/../../../deployment_script_logs" "${current_script_name}" "${env_name}" "${deploy_dest}" "${script_type}"
+	client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "${current_script_name}" "${container_env_name}" "${container_deploy_dest}" "${script_type}"
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "${curr_dir}/../../container_scripts/container_${SCRIPT_TYPE}.sh" ]; then
@@ -38,7 +38,7 @@ function client_deploy_database ()
 	# declare the function arguments
 	declare -A FUNC_ARGS=(
 			["parent_root_folder"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../../../"
-			["deploy_dest"]="${DEPLOY_DEST}"
+			["container_deploy_dest"]="${CONTAINER_DEPLOY_DEST}"
 			["container_hostname"]="${CONTAINER_HOSTNAME}"
 			["env_vars_block"]="$(define_env_vars_block)"
 			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
@@ -63,10 +63,10 @@ function client_load_config_files()
 	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# load the bash variables for the runtime configuration (/container_database_deployment/deployment_scripts/config)
-	source "${curr_dir}/../../config/deploy_config.${ENV_NAME}.sh"
+	source "${curr_dir}/../../config/deploy_config.${CONTAINER_ENV_NAME}.sh"
 	
-	# load the oracle credentials into bash variables (/container_database_deployment/secrets/$ENV_NAME)
-	source "${curr_dir}/../../../secrets/${ENV_NAME}/secrets.sh"
+	# load the oracle credentials into bash variables (/container_database_deployment/secrets/$CONTAINER_ENV_NAME)
+	source "${curr_dir}/../../../secrets/${CONTAINER_ENV_NAME}/secrets.sh"
 }
 
 # function to define the ssh environment variables for the database deployment server bash script 
@@ -76,7 +76,7 @@ function client_generate_ssh_env_vars ()
 	# construct the ssh environment variables that are passed to the server bash script call based on the global bash variable values
 
 	# Example:
-	# echo "SCRIPT_TYPE=\"${SCRIPT_TYPE}\" DB_HOST=\"${DB_HOST}\" DB_SERVICE_NAME=\"${DB_SERVICE_NAME}\" ENV_NAME=\"${ENV_NAME}\""
+	# echo "SCRIPT_TYPE=\"${SCRIPT_TYPE}\" DB_HOST=\"${DB_HOST}\" DB_SERVICE_NAME=\"${DB_SERVICE_NAME}\" CONTAINER_ENV_NAME=\"${CONTAINER_ENV_NAME}\""
 	
 	######## Environment Variable String Placeholder - END ########
 }

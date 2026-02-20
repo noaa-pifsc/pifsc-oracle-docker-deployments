@@ -21,28 +21,28 @@ function set_script_type_var ()
 # this function accepts the following runtime arguments:
 # 1: deployment script logs path
 # 2: calling script path
-# 3: (optional) ENV_NAME
-# 4: (optional) DEPLOY_DEST
+# 3: (optional) CONTAINER_ENV_NAME
+# 4: (optional) CONTAINER_DEPLOY_DEST
 # 5: (optional) SCRIPT_TYPE
 function client_process_runtime_arguments ()
 {
 	local script_log_path="${1}"
 	local current_script_name="${2}"
-	local env_name="${3}"
-	local deploy_dest="${4}"
+	local container_env_name="${3}"
+	local container_deploy_dest="${4}"
 	local script_type="${5}"
 
-	# input validation
-    if [[ -z "${script_log_path}" || -z "${current_script_name}" ]]; then
-        echo "ERROR: client_process_runtime_arguments() requires the deployment script logs path and calling script path as arguments" >&2
+	# validate the bash variable values
+	if ! validate_required_vars	"script_log_path" "current_script_name"; then
+        echo "ERROR: client_process_runtime_arguments() function required bash variable validation failed" >&2
         return 1
-    fi
+	fi
 
 	# initialize the deployment script
 	initialize_deployment_script "${script_log_path}" "${current_script_name}"
 
 	# set the environment and deployment destination variable values
-	set_env_deployment_vars "${env_name}" "${deploy_dest}"
+	set_env_deployment_vars "${container_env_name}" "${container_deploy_dest}"
 	
 	# set the script type variable value
 	set_script_type_var "${script_type}"
@@ -51,7 +51,7 @@ function client_process_runtime_arguments ()
 
 # this function prepares and executes the client deployment scripts
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
-# deploy_dest: deployment destination (local, server)
+# container_deploy_dest: deployment destination (local, server)
 # ssh_env_vars: the ssh environment variables that are passed to the server bash script call
 # container_hostname: container hostname to connect to
 # container_host_project_path: the container source directory on the container host
@@ -72,7 +72,7 @@ function client_execute_deploy_database ()
 	local arg_array="${1}"
 
 	# input validation
-    if [[ -z "$(get_array_val "${arg_array}" "parent_root_folder")" || -z "$(get_array_val "${arg_array}" "ssh_env_vars")" || -z "$(get_array_val "${arg_array}" "deploy_dest")" || -z "$(get_array_val "${arg_array}" "container_hostname")" || -z "$(get_array_val "${arg_array}" "container_host_project_path")" || -z "$(get_array_val "${arg_array}" "container_git_url")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "container_host_scripts_path")" || -z "$(get_array_val "${arg_array}" "local_container_build_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
+    if [[ -z "$(get_array_val "${arg_array}" "parent_root_folder")" || -z "$(get_array_val "${arg_array}" "ssh_env_vars")" || -z "$(get_array_val "${arg_array}" "container_deploy_dest")" || -z "$(get_array_val "${arg_array}" "container_hostname")" || -z "$(get_array_val "${arg_array}" "container_host_project_path")" || -z "$(get_array_val "${arg_array}" "container_git_url")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "container_host_scripts_path")" || -z "$(get_array_val "${arg_array}" "local_container_build_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
         echo "ERROR: client_execute_deploy_database() requires the repository root folder, the ssh environment variables that are passed to the server bash script call, the deployment destination, the container hostname to connect to, the container source directory on the container host, git url for the container project's repository, name of the configuration data variable, the path to the folder where the host bash scripts are contained, the local container build folder path (/container_database_deployment), the path of the container compose file (relative to the container build folder path), the name of an associative array that maps the secret values passed to bash commands via STDIN, the path to the container's bash scripts folder, and the repository root folder as arguments" >&2
         return 1
     fi
@@ -86,8 +86,8 @@ function client_execute_deploy_database ()
 	process_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
 
 
-	# Check if the DEPLOY_DEST variable is "server" 
-	if [[ "$(get_array_val "${arg_array}" "deploy_dest")" == "server" ]]; then
+	# Check if the CONTAINER_DEPLOY_DEST variable is "server" 
+	if [[ "$(get_array_val "${arg_array}" "container_deploy_dest")" == "server" ]]; then
 
 		# this is a server deployment
 		echo "deploy the database deployment container to the server"

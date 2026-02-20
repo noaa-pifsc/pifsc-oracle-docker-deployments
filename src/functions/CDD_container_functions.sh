@@ -16,8 +16,8 @@ function container_initialize_script ()
 	local secret_mapping_var_name="${3}"
 	
 	# input validation
-    if [[ -z "${container_sql_directory}" || -z "${secret_mapping_var_name}" ]]; then
-        echo "ERROR: container_initialize_script() requires the full path to the designated SQL directory within the container and the name of an associative array that maps the secret values passed to bash commands via STDIN as arguments" >&2
+	if ! validate_required_vars	"container_sql_directory" "secret_mapping_var_name"; then
+        echo "ERROR: container_initialize_script() function required bash variable validation failed" >&2
         return 1
     fi
 
@@ -37,9 +37,9 @@ function container_cleanup_variables ()
 {
 	local secret_mapping_var_name="${1}"
 
-	# input validation
-    if [[ -z "${secret_mapping_var_name}" ]]; then
-        echo "ERROR: container_cleanup_variables() requires the name of an associative array that maps the secret values passed to bash commands via STDIN as an argument" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${secret_mapping_var_name}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: container_cleanup_variables() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
         return 1
     fi
 

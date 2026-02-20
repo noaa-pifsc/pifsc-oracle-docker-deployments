@@ -13,7 +13,7 @@ echo "deploy version 2.0 of the DB"
 
 # deploy version 2.0 of the DB
 sqlplus -s /nolog <<EOF
-@./automated_deployments/deploy_${ENV_NAME}_db_v2.0.sql ${DB_CONN_STRING}
+@./automated_deployments/deploy_${CONTAINER_ENV_NAME}_db_v2.0.sql ${DB_CONN_STRING}
 EOF
 
 echo "load the production data"
@@ -29,7 +29,7 @@ EOF
 echo "deploy version 2.0 of the apex app"
 
 sqlplus -s /nolog <<EOF
-@./automated_deployments/deploy_apex_${ENV_NAME}_v2.0.sql ${DB_APP_CONN_STRING}
+@./automated_deployments/deploy_apex_${CONTAINER_ENV_NAME}_v2.0.sql ${DB_APP_CONN_STRING}
 EOF
 
 # cleanup the container variables now that the script has finished running

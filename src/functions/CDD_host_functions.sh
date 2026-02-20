@@ -12,9 +12,15 @@ function host_deploy_container_elev_privs ()
 	# store the function array argument
 	local arg_array="${1}"
 
-	# input validation
-    if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" ]]; then
-        echo "ERROR: host_deploy_container_elev_privs() requires the full path to the container source directory, the path to the container compose file, the name of the configuration data variable, the name of an associative array that maps the secret values passed to bash commands via STDIN, and the full path of the calling script as arguments" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: host_deploy_container_elev_privs() function argument '${arg_array}' is not a valid associative array." >&2
+        return 1
+    fi
+
+	# input validation:
+	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "current_script_name" ; then 
+        echo "ERROR: host_deploy_container_elev_privs() function argument validation failed" >&2
         return 1
     fi
 
@@ -46,9 +52,15 @@ function host_deploy_database_execute_container_script()
 	# store the function array argument
 	local arg_array="${1}"
 
-	# input validation
-    if [[ -z "$(get_array_val "${arg_array}" "container_host_source_path")" || -z "$(get_array_val "${arg_array}" "container_compose_file_path")" || -z "$(get_array_val "${arg_array}" "secret_mapping_var_name")" || -z "$(get_array_val "${arg_array}" "config_data_var_name")" || -z "$(get_array_val "${arg_array}" "current_script_name")" || -z "$(get_array_val "${arg_array}" "container_scripts_path")" ]]; then
-        echo "ERROR: host_deploy_database_execute_container_script() requires the full path to the container source directory, the path to the container compose file, the name of the configuration data variable, the name of an associative array that maps the secret values passed to bash commands via STDIN, the full path of the calling script, and the path to the container's bash scripts folder as arguments" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: host_deploy_database_execute_container_script() function argument '${arg_array}' is not a valid associative array." >&2
+        return 1
+    fi
+
+	# input validation:
+	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "current_script_name" "container_scripts_path"; then 
+        echo "ERROR: host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
 
@@ -91,28 +103,34 @@ function host_deploy_container ()
 	# store the function array argument
 	local arg_array="${1}"
 
-	# input validation
-    if [[ -z $(get_array_val "${arg_array}" "current_script_name") || -z $(get_array_val "${arg_array}" "parent_root_folder") || -z $(get_array_val "${arg_array}" "secret_mapping_var_name") || -z $(get_array_val "${arg_array}" "config_data_var_name") || -z $(get_array_val "${arg_array}" "container_host_project_path") || -z $(get_array_val "${arg_array}" "container_account_name") || -z $(get_array_val "${arg_array}" "container_host_scripts_path") || -z $(get_array_val "${arg_array}" "host_script_name") ]]; then
-        echo "ERROR: host_deploy_container() requires the full path of the calling script, the repository root folder, the name of the associative array containing the secret names and corresponding bash variables, the name of the configuration data variable, the container source directory on the container host, the name of a container privileged user account that can run container commands, the path to the folder where the host bash scripts are contained, and name of the host script that is executed to deploy the container as arguments" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: host_deploy_container() function argument '${arg_array}' is not a valid associative array." >&2
+        return 1
+    fi
+
+	# input validation:
+	if ! validate_required_array_vals "${arg_array}" "current_script_name" "parent_root_folder" "secret_mapping_var_name" "config_data_var_name" "container_host_project_path" "container_account_name" "container_host_scripts_path" "host_script_name"; then 
+        echo "ERROR: host_deploy_container() function argument validation failed" >&2
         return 1
     fi
 
 	# initialize the container environment variables
-	initialize_container_env_var $(get_array_val "${arg_array}" "current_script_name")
+	initialize_container_env_var "$(get_array_val "${arg_array}" "current_script_name")"
 
 	# convert the line endings for all .sh and .env files in the parent folder
-	convert_dos2unix $(get_array_val "${arg_array}" "parent_root_folder")
+	convert_dos2unix "$(get_array_val "${arg_array}" "parent_root_folder")"
 
 	# process the stdin configuration data: parse and store in variables, construct the formatted CONFIG_DATA variable
-	process_stdin_config_data $(get_array_val "${arg_array}" "secret_mapping_var_name") $(get_array_val "${arg_array}" "config_data_var_name")
+	process_stdin_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
 
 	# build/run the container
 	# define the absolute path to the deployment script that will run as ${container_account_name}.
-	local script_path=$(get_array_val "${arg_array}" "container_host_scripts_path")"/"$(get_array_val "${arg_array}" "host_script_name")
+	local script_path="$(get_array_val "${arg_array}" "container_host_scripts_path")"/"$(get_array_val "${arg_array}" "host_script_name")"
 	
 	# store the values of the variables used in the sudo su call into local variables
-	local env_vars_block=$(get_array_val "${arg_array}" "env_vars_block")
-	local config_data_var_name=$(get_array_val "${arg_array}" "config_data_var_name")
+	local env_vars_block="$(get_array_val "${arg_array}" "env_vars_block")"
+	local config_data_var_name="$(get_array_val "${arg_array}" "config_data_var_name")"
 
 # Run the deployment script and pass in the key/value pairs stored in $CONFIG_DATA to stdin.
 # The outer heredoc (<<EOF) sends commands to 'sudo su - ${container_account_name}'.
@@ -127,7 +145,7 @@ function host_deploy_container ()
 # on the \$CONFIG_DATA content, ensuring that special characters (like literal '$')
 # are preserved exactly as defined.
 # set the environment variable values 
-sudo su - $(get_array_val "${arg_array}" "container_account_name") <<EOF
+sudo su - "$(get_array_val "${arg_array}" "container_account_name")" <<EOF
 # Set the environment variables in the new shell.
 ${env_vars_block}
 
@@ -137,5 +155,5 @@ CREDEND
 EOF
 
 	# cleanup the container source folder
-	cleanup_container_source_folder $(get_array_val "${arg_array}" "container_host_project_path") $(get_array_val "${arg_array}" "config_data_var_name")
+	cleanup_container_source_folder "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "config_data_var_name")"
 }

@@ -16,7 +16,7 @@ function define_env_vars_block()
 
 	# Example:
 	# 	local env_vars_block="
-	# export ENV_NAME='${ENV_NAME}'
+	# export CONTAINER_ENV_NAME='${CONTAINER_ENV_NAME}'
 	# export SCRIPT_TYPE='${SCRIPT_TYPE}'
 	# export DB_HOST='${DB_HOST}'
 	# export DB_SERVICE_NAME='${DB_SERVICE_NAME}'
