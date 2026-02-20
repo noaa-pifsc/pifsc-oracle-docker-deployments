@@ -77,6 +77,8 @@ function client_execute_deploy_database ()
         return 1
     fi
 
+	echo "client_execute_deploy_database() function arguments: $(dump_array_vals "${arg_array}")"
+
 	# input validation:
 	if ! validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "local_container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path"; then 
         echo "ERROR: client_execute_deploy_database() function argument validation failed" >&2
@@ -108,7 +110,6 @@ function client_execute_deploy_database ()
 				["cmd"]="$(get_array_val "${arg_array}" "ssh_env_vars") bash $(get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
 			)
 
-
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
 		exec_remote_cmd "LOCAL_FUNC_ARGS"
 
@@ -130,7 +131,7 @@ function client_execute_deploy_database ()
 		build_deploy_container_compose "$(get_array_val "${arg_array}" "container_compose_file_path")"
 
 		# declare the function arguments
-		declare -A FUNC_ARGS=(
+		local -A LOCAL_FUNC_ARGS=(
 				["container_scripts_path"]="$(get_array_val "${arg_array}" "container_scripts_path")"
 				["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
 				["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
@@ -138,7 +139,7 @@ function client_execute_deploy_database ()
 			)
 
 		# execute the corresponding container scripts and shutdown the container
-		execute_container_script "FUNC_ARGS"
+		execute_container_script "LOCAL_FUNC_ARGS"
 
 		echo "the local container deployment script has finished executing"
 
