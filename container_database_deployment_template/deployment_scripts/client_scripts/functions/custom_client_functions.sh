@@ -2,7 +2,7 @@
 
 # function that initializes the CONTAINER_ENV_NAME variable and loads the client secret/configuration files, and process the $config_data_var_name so it can be passed to a bash script via STDIN
 # this function accepts the following parameters: 
-# 1: current_script_name: the full path of the calling script
+# 1: calling_script_path: the full path of the calling script
 # 2: (optional) the environment name (dev, test, prod)
 # 3: (optional) deployment destination (local, server)
 # 4: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
@@ -10,12 +10,12 @@ function client_deploy_database ()
 {
 	echo "deploy the database from the client script"
 
-	local current_script_name="${1}"
+	local calling_script_path="${1}"
 	local container_env_name="${2}"
 	local container_deploy_dest="${3}"
 	local script_type="${4}"
 
-	if [ -z "${current_script_name}" ]; then
+	if [ -z "${calling_script_path}" ]; then
 		echo "ERROR: for client_deploy_database() the current script name parameter is required"
 		return 1
 	fi
@@ -24,7 +24,7 @@ function client_deploy_database ()
 	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# process the runtime arguments
-	client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "${current_script_name}" "${container_env_name}" "${container_deploy_dest}" "${script_type}"
+	client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "${calling_script_path}" "${container_env_name}" "${container_deploy_dest}" "${script_type}"
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "${curr_dir}/../../container_scripts/container_${SCRIPT_TYPE}.sh" ]; then

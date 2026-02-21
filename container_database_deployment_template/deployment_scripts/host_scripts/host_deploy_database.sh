@@ -5,7 +5,7 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_
 
 # declare the function arguments
 declare -A FUNC_ARGS=(
-		["current_script_name"]="${0}"
+		["calling_script_path"]="${0}"
 		["parent_root_folder"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../../"
 		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 		["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"

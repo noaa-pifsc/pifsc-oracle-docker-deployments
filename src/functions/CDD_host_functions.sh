@@ -6,7 +6,7 @@
 # container_compose_file_path: the path of the container compose file (relative to the container_database_deployment source directory)
 # secret_mapping_var_name: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # config_data_var_name: name of the configuration data variable
-# current_script_name: the full path of the calling script
+# calling_script_path: the full path of the calling script
 function host_deploy_container_elev_privs ()
 {
 	# store the function array argument
@@ -19,13 +19,13 @@ function host_deploy_container_elev_privs ()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "current_script_name" ; then 
+	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "calling_script_path" ; then 
         echo "ERROR: host_deploy_container_elev_privs() function argument validation failed" >&2
         return 1
     fi
 
 	# initialize the container environment variables
-	initialize_container_env_var "$(get_array_val "${arg_array}" "current_script_name")"
+	initialize_container_env_var "$(get_array_val "${arg_array}" "calling_script_path")"
 
 	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
 	process_stdin_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
@@ -44,7 +44,7 @@ function host_deploy_container_elev_privs ()
 # container_compose_file_path: the path of the container compose file (relative to the container_database_deployment source directory)
 # secret_mapping_var_name: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # config_data_var_name: name of the configuration data variable
-# current_script_name: the full path of the calling script
+# calling_script_path: the full path of the calling script
 # container_scripts_path: the path to the container's bash scripts folder
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 function host_deploy_database_execute_container_script()
@@ -59,14 +59,14 @@ function host_deploy_database_execute_container_script()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "current_script_name" "container_scripts_path"; then 
+	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "calling_script_path" "container_scripts_path"; then 
         echo "ERROR: host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
 
 	# declare the function arguments
 	local -A DEPLOY_FUNC_ARGS=(
-			["current_script_name"]="$(get_array_val "${arg_array}" "current_script_name")"
+			["calling_script_path"]="$(get_array_val "${arg_array}" "calling_script_path")"
 			["container_host_source_path"]="$(get_array_val "${arg_array}" "container_host_source_path")"
 			["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
 			["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
@@ -89,7 +89,7 @@ function host_deploy_database_execute_container_script()
 }
 
 # function to initialize and run the database deployment container on the host machine. This function accepts the following parameters as elements in the specified array name (arg_array):
-# current_script_name: the full path of the calling script
+# calling_script_path: the full path of the calling script
 # parent_root_folder: the repository root folder (used to convert all .sh files to use linux-style line endings for compatibility purposes)
 # secret_mapping_var_name: the name of the associative array containing the secret names and corresponding bash variables
 # config_data_var_name: name of the configuration data variable
@@ -110,13 +110,13 @@ function host_deploy_container ()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "current_script_name" "parent_root_folder" "secret_mapping_var_name" "config_data_var_name" "container_host_project_path" "container_account_name" "container_host_scripts_path" "host_script_name"; then 
+	if ! validate_required_array_vals "${arg_array}" "calling_script_path" "parent_root_folder" "secret_mapping_var_name" "config_data_var_name" "container_host_project_path" "container_account_name" "container_host_scripts_path" "host_script_name"; then 
         echo "ERROR: host_deploy_container() function argument validation failed" >&2
         return 1
     fi
 
 	# initialize the container environment variables
-	initialize_container_env_var "$(get_array_val "${arg_array}" "current_script_name")"
+	initialize_container_env_var "$(get_array_val "${arg_array}" "calling_script_path")"
 
 	# convert the line endings for all .sh and .env files in the parent folder
 	convert_dos2unix "$(get_array_val "${arg_array}" "parent_root_folder")"

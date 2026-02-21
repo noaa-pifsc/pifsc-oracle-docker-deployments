@@ -27,19 +27,19 @@ function set_script_type_var ()
 function client_process_runtime_arguments ()
 {
 	local script_log_path="${1}"
-	local current_script_name="${2}"
+	local calling_script_path="${2}"
 	local container_env_name="${3}"
 	local container_deploy_dest="${4}"
 	local script_type="${5}"
 
 	# validate the bash variable values
-	if ! validate_required_vars	"script_log_path" "current_script_name"; then
+	if ! validate_required_vars	"script_log_path" "calling_script_path"; then
         echo "ERROR: client_process_runtime_arguments() function required bash variable validation failed" >&2
         return 1
 	fi
 
 	# initialize the deployment script
-	initialize_deployment_script "${script_log_path}" "${current_script_name}"
+	initialize_deployment_script "${script_log_path}" "${calling_script_path}"
 
 	# set the environment and deployment destination variable values
 	set_env_deployment_vars "${container_env_name}" "${container_deploy_dest}"
