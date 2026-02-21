@@ -12,6 +12,13 @@ function define_env_vars_block()
 {
 
 	######## Environment Variable Block Placeholder - START ########
+	# validate the bash variable values
+	# Example:
+#	if ! validate_required_vars	"CONTAINER_ENV_NAME" "SCRIPT_TYPE" "DB_HOST" "DB_SERVICE_NAME"; then
+#        echo "ERROR: define_env_vars_block() function required bash variable validation failed" >&2
+#        return 1
+#	fi
+
 	# construct a string with each bash variable to be passed to the bash script that is being executed on the host or container, each variable declaration should be on a separate line for readability purposes.
 
 	# Example:

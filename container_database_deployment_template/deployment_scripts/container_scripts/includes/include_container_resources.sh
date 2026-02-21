@@ -15,5 +15,6 @@ source "${CURR_DIR}/../../config/custom_container_config.sh"
 # include the CDD/CDS shared/container functions
 source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_container_resources.sh"
 
-# include the custom container functions
+# include the container functions
 source "${CURR_DIR}/../functions/custom_container_functions.sh"
+source "${CURR_DIR}/../functions/container_functions.sh"

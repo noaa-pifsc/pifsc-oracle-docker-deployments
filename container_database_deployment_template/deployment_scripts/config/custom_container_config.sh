@@ -34,6 +34,8 @@
 	# define the container's root SQL folder where the sqlplus commands will be sent from
 	# Example: CONTAINER_ROOT_SQL_PATH="${CONTAINER_ROOT_PATH}/SQL"
 	CONTAINER_ROOT_SQL_PATH="[CONTAINER_ROOT_SQL_PATH]"
+	# define the deployment script logs folder
+	DEPLOYMENT_SCRIPT_LOGS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../deployment_script_logs"	
 
 ##### Container Project Configuration Variables: #####
 

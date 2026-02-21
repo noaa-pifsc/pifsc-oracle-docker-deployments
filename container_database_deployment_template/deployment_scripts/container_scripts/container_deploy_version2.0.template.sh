@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# change to the directory the script is running in
-cd "$(dirname "$(realpath "$0")")"
-
-# include the container functions
-source ./includes/include_container_resources.sh
+# include the client functions
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_container_resources.sh"
 
 # initialize the container
 container_initialize "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}"
@@ -14,15 +11,6 @@ echo "deploy version 2.0 of the DB"
 # deploy version 2.0 of the DB
 sqlplus -s /nolog <<EOF
 @./automated_deployments/deploy_${CONTAINER_ENV_NAME}_db_v2.0.sql ${DB_CONN_STRING}
-EOF
-
-echo "load the production data"
-
-# load the production data
-sqlplus -s /nolog <<EOF
-CONNECT ${DB_CONN_STRING}
-@queries/special/clone_data_from_production_pt1.sql
-@queries/special/clone_data_from_production_pt2.sql
 EOF
 
 

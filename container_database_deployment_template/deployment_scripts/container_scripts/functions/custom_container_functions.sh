@@ -6,9 +6,18 @@
 # container_generate_connection_strings
 function container_generate_connection_strings ()
 {
-	# construct connection strings (enclose the passwords in quotation characters in case there are special characters including "@")
 
 	######## Database Connection Placeholder - START ########
+	# validate the bash variable values
+	# Example:
+#	if ! validate_required_vars	"ORACLE_DB_USER" "ORACLE_DB_PASS" "DB_HOST" "DB_SERVICE_NAME" "ORACLE_DB_APP_USER" "ORACLE_DB_APP_PASS"; then
+#        echo "ERROR: container_generate_connection_strings() function required bash variable validation failed" >&2
+#        return 1
+#	fi
+
+	# construct connection strings (enclose the passwords in quotation characters in case there are special characters including "@")
+
+
 	# define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts 
 
 	# Examples: 
@@ -34,34 +43,4 @@ function container_unset_connection_strings()
 
 	######## Database Connection Placeholder - END ########
 
-}
-
-# function to initialize the container by parsing the configuration data, changing the directory to the container SQL directory, and generating the database connection scripts. Input validation is handled by container_initialize_script()
-# this function accepts 3 parameters: 
-# 1: the full script path name that was executed
-# 2: the full path to the designated SQL folder within the container
-# 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
-# Example Usage: 
-# container_initialize "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR"
-function container_initialize()
-{
-	# initialize the container scripts
-	container_initialize_script "${1}" "${2}" "${3}"
-
-	# generate the database connection strings so they can be used to execute the SQLPlus scripts
-	container_generate_connection_strings
-}
-
-
-# function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
-# 1: the name of an associative array that maps the secret values passed to bash commands via STDIN. Input validation is handled by container_cleanup_variables()
-# Example Usage: 
-# container_cleanup "SECRET_MAPPING_ARR"
-function container_cleanup ()
-{
-	# unset bash variables specified by STDIN
-	container_cleanup_variables "${1}"
-
-	# unset the connection string variables
-	container_unset_connection_strings
 }
