@@ -36,7 +36,7 @@ function client_deploy_database ()
 	client_load_config_files
 
 	# declare the function arguments
-	local -A LOCAL_FUNC_ARGS=(
+	local -A LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS=(
 			["parent_root_folder"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../../../"
 			["container_deploy_dest"]="${CONTAINER_DEPLOY_DEST}"
 			["container_hostname"]="${CONTAINER_HOSTNAME}"
@@ -53,7 +53,7 @@ function client_deploy_database ()
 		)
 
 	# prepare and execute the corresponding deployment script:
-	client_execute_deploy_database "LOCAL_FUNC_ARGS"
+	client_execute_deploy_database "LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS"
 }
 
 # function to load the client configuration files (secrets and environment server configuration)

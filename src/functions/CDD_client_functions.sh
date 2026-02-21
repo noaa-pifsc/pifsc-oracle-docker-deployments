@@ -104,14 +104,14 @@ function client_execute_deploy_database ()
 		prepare_container_host "$(get_array_val "${arg_array}" "container_hostname")" "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "container_git_url")"
 
 		# declare the function arguments
-		local -A LOCAL_FUNC_ARGS=(
+		local -A LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS=(
 				["container_hostname"]="$(get_array_val "${arg_array}" "container_hostname")"
 				["passed_stdin_content"]="${!config_data_var_name}"
 				["cmd"]="$(get_array_val "${arg_array}" "ssh_env_vars") bash $(get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
 			)
 
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
-		exec_remote_cmd "LOCAL_FUNC_ARGS"
+		exec_remote_cmd "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
 
 		echo "unset the configuration variable after executing remote script via ssh: $(get_array_val "${arg_array}" "config_data_var_name")"
 
@@ -134,7 +134,7 @@ function client_execute_deploy_database ()
 		build_deploy_container_compose "$(get_array_val "${arg_array}" "container_compose_file_path")"
 
 		# declare the function arguments
-		local -A LOCAL_FUNC_ARGS=(
+		local -A LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS=(
 				["container_scripts_path"]="$(get_array_val "${arg_array}" "container_scripts_path")"
 				["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
 				["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
@@ -142,7 +142,7 @@ function client_execute_deploy_database ()
 			)
 
 		# execute the corresponding container scripts and shutdown the container
-		execute_container_script "LOCAL_FUNC_ARGS"
+		execute_container_script "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
 
 		echo "the local container deployment script has finished executing"
 
