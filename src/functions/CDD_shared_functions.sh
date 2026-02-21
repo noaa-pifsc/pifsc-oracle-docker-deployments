@@ -61,8 +61,6 @@ docker exec -i oracle_deploy bash -c "
 # shutdown_cleanup_container "CONFIG_DATA" "./docker-compose.yml" 
 function shutdown_cleanup_container ()
 {
-	echo "running shutdown_cleanup_container()"
-	
 	local config_data_var_name="${1}"
 	local container_compose_file_path="${2}"
 
@@ -71,8 +69,6 @@ function shutdown_cleanup_container ()
         echo "ERROR: shutdown_cleanup_container() function required bash variable validation failed" >&2
         return 1
 	fi
-
-	echo "shutdown the container and cleanup the container target folder"
 
 	# unset the variable named $config_data_var_name
 	unset_config_data "${config_data_var_name}"
