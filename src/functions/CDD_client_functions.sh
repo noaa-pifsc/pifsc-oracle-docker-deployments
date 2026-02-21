@@ -77,8 +77,6 @@ function client_execute_deploy_database ()
         return 1
     fi
 
-	echo "client_execute_deploy_database() function arguments: $(dump_array_vals "${arg_array}")"
-
 	# input validation:
 	if ! validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "local_container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path"; then 
         echo "ERROR: client_execute_deploy_database() function argument validation failed" >&2
@@ -113,11 +111,6 @@ function client_execute_deploy_database ()
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
 		exec_remote_cmd "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
 
-		echo "unset the configuration variable after executing remote script via ssh: $(get_array_val "${arg_array}" "config_data_var_name")"
-
-
-		echo "after running exec_remote_cmd() arg_array function arguments: $(dump_array_vals "${arg_array}")"
-
 		# unset the configuration now that the ssh call has completed
 		unset_config_data "$(get_array_val "${arg_array}" "config_data_var_name")"
 
@@ -126,9 +119,6 @@ function client_execute_deploy_database ()
 		
 		# change directory into the container folder that contains the Dockerfile and .yml files (/container_database_deployment)
 		cd "$(get_array_val "${arg_array}" "local_container_build_path")"
-
-		# this is a mounted directory deployment
-		echo "deploy the database deployment container locally with container compose for development purposes"
 
 		# stop and remove any running container and build/run the container from the source code
 		build_deploy_container_compose "$(get_array_val "${arg_array}" "container_compose_file_path")"

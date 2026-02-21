@@ -154,8 +154,6 @@ ${!config_data_var_name}
 CREDEND
 EOF
 
-	echo "clean up the configuration data variable and source folder after the container has finished running"
-
 	# cleanup the container source folder
 	cleanup_container_source_folder "$(get_array_val "${arg_array}" "container_host_project_path")" "$(get_array_val "${arg_array}" "config_data_var_name")"
 }
