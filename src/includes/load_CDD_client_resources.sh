@@ -10,7 +10,7 @@ source "${CDD_INCL_DIR}/../functions/CDD_client_functions.sh"
 source "${CDD_INCL_DIR}/../functions/CDD_shared_functions.sh"
 
 # source the CDD configuration
-source "${CDD_INCL_DIR}/../config/container_config.sh"
+source "${CDD_INCL_DIR}/../config/CDD_container_config.sh"
 
 # determine CDS submodule root folder (CDD/modules/CDS)
 CDS_DIR="${CDD_INCL_DIR}/../../modules/CDS"
