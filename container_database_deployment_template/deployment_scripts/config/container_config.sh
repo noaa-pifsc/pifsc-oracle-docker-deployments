@@ -13,10 +13,16 @@
 	# determine where the repository root path based on the configuration file location
 	REPO_ROOT_PATH="${CUSTOM_CONFIG_DIR}/../../../"
 
-##### Container Configuration Variables: #####
+	# define the container source directory that will be created on the container host by cloning the project repository
+	CONTAINER_HOST_PROJECT_PATH="/tmp/${CONTAINER_PROJECT_FOLDER}"
 
-	# define the container's root folder where the source files are copied
-	CONTAINER_ROOT_PATH="/usr/src/database_deploy"
+	# define the container source directory that contains the container source files (e.g. Dockerfile, docker-compose.yml)
+	CONTAINER_HOST_SOURCE_PATH="${CONTAINER_HOST_PROJECT_PATH}/container_database_deployment"
+
+	# define the path to the folder where the host bash scripts are contained
+	CONTAINER_HOST_SCRIPTS_PATH="${CONTAINER_HOST_PROJECT_PATH}/container_database_deployment/deployment_scripts/host_scripts"
+
+##### Container Configuration Variables: #####
 
 	# define the deployment script logs folder
 	DEPLOYMENT_SCRIPT_LOGS="${CUSTOM_CONFIG_DIR}/../../deployment_script_logs"	
