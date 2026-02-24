@@ -10,6 +10,7 @@
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # include the container configuration variables
+source "${CURR_DIR}/../../config/container_config.sh"
 source "${CURR_DIR}/../../config/custom_container_config.sh"
 
 # include the CDD/CDS shared/container functions

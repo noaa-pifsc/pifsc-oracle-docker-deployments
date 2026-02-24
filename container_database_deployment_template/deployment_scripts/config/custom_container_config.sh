@@ -20,22 +20,11 @@
 	# Example: CONTAINER_GIT_URL="git@github.com/my-great-organization/my-great-project.git"
 	CONTAINER_GIT_URL="[CONTAINER_GIT_URL]"
 
-	# determine current folder path (container_database_deployment/deployment_scripts/config), this will not change across data systems
-	CUSTOM_CONFIG_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-	# determine where the designated container subfolder in the local filesystem is (/container_database_deployment), this will not change across data systems:
-	LOCAL_CONTAINER_BUILD_PATH="${CUSTOM_CONFIG_DIR}/../../"
-
 ##### Container Configuration Variables: #####
-
-	# define the container's root folder where the source files are copied, this should not change unless the Dockerfile's COPY statement is changed, these must remain in sync to work properly 
-	CONTAINER_ROOT_PATH="/usr/src/database_deploy"
 
 	# define the container's root SQL folder where the sqlplus commands will be sent from
 	# Example: CONTAINER_ROOT_SQL_PATH="${CONTAINER_ROOT_PATH}/SQL"
 	CONTAINER_ROOT_SQL_PATH="[CONTAINER_ROOT_SQL_PATH]"
-	# define the deployment script logs folder
-	DEPLOYMENT_SCRIPT_LOGS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../deployment_script_logs"	
 
 ##### Container Project Configuration Variables: #####
 

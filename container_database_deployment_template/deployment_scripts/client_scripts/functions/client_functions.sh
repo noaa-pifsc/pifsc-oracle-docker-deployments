@@ -48,7 +48,7 @@ function client_deploy_database ()
 
 	# declare the function arguments
 	local -A LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS=(
-			["parent_root_folder"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../../../"
+			["parent_root_folder"]="${REPO_ROOT_PATH}"
 			["container_deploy_dest"]="${CONTAINER_DEPLOY_DEST}"
 			["container_hostname"]="${CONTAINER_HOSTNAME}"
 			["env_vars_block"]="$(define_env_vars_block)"
