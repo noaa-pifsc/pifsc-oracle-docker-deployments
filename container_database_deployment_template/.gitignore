@@ -9,4 +9,4 @@ deployment_scripts/config/deploy_config.test.sh
 deployment_scripts/config/deploy_config.prod.sh
 
 # prevent deployment logs from being saved in the repository
-deployment_scripts/deploy_script_logs/*.log
+deployment_script_logs/*.log
