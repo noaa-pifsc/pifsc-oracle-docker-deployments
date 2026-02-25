@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+# host_deploy_database_elev_privs.sh:
+# this host script runs as the $CONTAINER_ACCOUNT_NAME to build and run 
+# the container and execute a specified script from within the container
+#-----------------------------------------------------------------------------
+
 # include the host functions
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_host_resources.sh"
 
