@@ -5,6 +5,7 @@
 # container_compose_file_path: the path of the container compose file
 # config_data_var_name: name of the configuration data variable
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
+# container_name: the name of the container that will have the database deployment script executed for it
 function execute_container_script ()
 {
 	echo "running execute_container_script()"
@@ -19,7 +20,7 @@ function execute_container_script ()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name"; then 
+	if ! validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name" "container_name"; then 
         echo "ERROR: execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -40,7 +41,7 @@ function execute_container_script ()
 	echo "run the container_${SCRIPT_TYPE}.sh script from within the container to execute the corresponding automated scripts"
 
 # open a bash session into the running container and run the appropriate container deployment script (based on $SCRIPT_TYPE) and provide the value of the variable identified by $config_data_var_name via stdin
-docker exec -i oracle_deploy bash -c "
+docker exec -i "$(get_array_val "${arg_array}" "container_name")" bash -c "
 	# specify the environment variables that are defined in the calling script:
 	${env_vars_block}
 	

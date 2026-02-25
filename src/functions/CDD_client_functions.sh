@@ -64,6 +64,7 @@ function client_process_runtime_arguments ()
 # container_scripts_path: the path to the container's bash scripts folder
 # parent_root_folder: the repository root folder (used to convert all .sh files to use linux-style line endings for compatibility purposes)
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
+# container_name: the name of the container that will have the database deployment script executed for it
 # Example Usage:
 #   client_execute_deploy_database "FUNC_ARGS"
 function client_execute_deploy_database ()
@@ -78,7 +79,7 @@ function client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "local_container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path"; then 
+	if ! validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "local_container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name"; then 
         echo "ERROR: client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
@@ -129,6 +130,7 @@ function client_execute_deploy_database ()
 				["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
 				["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
 				["env_vars_block"]="$(get_array_val "${arg_array}" "env_vars_block")"
+				["container_name"]="$(get_array_val "${arg_array}" "container_name")"
 			)
 
 		# execute the corresponding container scripts and shutdown the container

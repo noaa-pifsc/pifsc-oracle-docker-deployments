@@ -47,6 +47,7 @@ function host_deploy_container_elev_privs ()
 # calling_script_path: the full path of the calling script
 # container_scripts_path: the path to the container's bash scripts folder
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
+# container_name: the name of the container that will have the database deployment script executed for it
 function host_deploy_database_execute_container_script()
 {
 	# store the function array argument
@@ -59,7 +60,7 @@ function host_deploy_database_execute_container_script()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "calling_script_path" "container_scripts_path"; then 
+	if ! validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "calling_script_path" "container_scripts_path" "container_name"; then 
         echo "ERROR: host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -82,6 +83,7 @@ function host_deploy_database_execute_container_script()
 			["container_compose_file_path"]="$(get_array_val "${arg_array}" "container_compose_file_path")"
 			["config_data_var_name"]="$(get_array_val "${arg_array}" "config_data_var_name")"
 			["env_vars_block"]="$(get_array_val "${arg_array}" "env_vars_block")"
+			["container_name"]="$(get_array_val "${arg_array}" "container_name")"
 		)
 
 	# execute the container script 
