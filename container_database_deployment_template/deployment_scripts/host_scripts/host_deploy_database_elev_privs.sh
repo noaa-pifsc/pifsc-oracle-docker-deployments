@@ -18,6 +18,7 @@ declare -A FUNC_ARGS=(
 		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 		["container_compose_file_path"]="${CONTAINER_COMPOSE_FILE_PATH}"
 		["container_host_source_path"]="${CONTAINER_HOST_SOURCE_PATH}"
+		["container_name"]="${PROJECT_CONTAINER_NAME}"
 	)
 
 # execute the scripts from within the container with the specified function arguments:

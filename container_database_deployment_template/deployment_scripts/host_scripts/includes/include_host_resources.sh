@@ -9,6 +9,9 @@
 # determine current folder path (container_database_deployment/deployment_scripts/host_scripts/includes)
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# load the environment variables
+source "${CURR_DIR}/../../../.env"
+
 # include the CDD/CDS shared/host functions
 source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_host_resources.sh"
 

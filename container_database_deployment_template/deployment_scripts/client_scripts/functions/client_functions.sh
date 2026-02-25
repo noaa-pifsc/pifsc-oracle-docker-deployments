@@ -26,7 +26,7 @@ function client_deploy_database ()
     fi
 
 	# validate the bash variable values
-	if ! validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH"; then
+	if ! validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME"; then
         echo "ERROR: client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -61,6 +61,7 @@ function client_deploy_database ()
 			["local_container_build_path"]="${LOCAL_CONTAINER_BUILD_PATH}"
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 			["ssh_env_vars"]="$(client_generate_ssh_env_vars)"
+			["container_name"]="${PROJECT_CONTAINER_NAME}"
 		)
 
 	# prepare and execute the corresponding deployment script:

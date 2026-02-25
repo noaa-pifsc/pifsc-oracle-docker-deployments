@@ -10,3 +10,6 @@ services:
       options:
         max-size: "100m"
         max-file: "1"
+networks:
+  default:
+    name: ${PROJECT_CONTAINER_NAME}_default
