@@ -27,22 +27,3 @@ function container_initialize_script ()
 	# change the current directory to the designated SQL folder where the SQLPlus scripts can be executed using relative paths
 	cd "${container_sql_directory}"
 }
-
-
-# function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
-# 1: the name of an associative array that maps the secret values passed to bash commands via STDIN
-# Example Usage:  
-# container_cleanup_variables "SECRET_MAPPING_ARR"
-function container_cleanup_variables ()
-{
-	local secret_mapping_var_name="${1}"
-
-    # Safety check: ensure the argument is a valid array
-    if [[ "$(declare -p "${secret_mapping_var_name}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: container_cleanup_variables() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
-        return 1
-    fi
-
-	# unset bash variables specified by STDIN
-	generic_unset_config_variables "${secret_mapping_var_name}"
-}
