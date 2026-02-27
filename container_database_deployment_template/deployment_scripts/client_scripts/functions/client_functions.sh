@@ -5,7 +5,7 @@
 # calling_script_path: the full path of the calling script
 # container_env_name: (optional) the environment name (dev, test, prod)
 # container_deploy_dest: (optional) deployment destination (local, server)
-# script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
+# container_script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
 function client_deploy_database ()
 {
 	echo "deploy the database from the client script"
@@ -35,11 +35,11 @@ function client_deploy_database ()
 	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# process the runtime arguments
-	client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "$(get_array_val "${arg_array}" "calling_script_path")" "$(get_array_val "${arg_array}" "container_env_name")" "$(get_array_val "${arg_array}" "container_deploy_dest")" "$(get_array_val "${arg_array}" "script_type")"
+	client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "$(get_array_val "${arg_array}" "calling_script_path")" "$(get_array_val "${arg_array}" "container_env_name")" "$(get_array_val "${arg_array}" "container_deploy_dest")" "$(get_array_val "${arg_array}" "container_script_type")"
 
 	# validate that the corresponding container script exists:
-	if [ ! -f "${curr_dir}/../../container_scripts/container_${SCRIPT_TYPE}.sh" ]; then
-		echo "ERROR: the script type definition (script type: ${SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $curr_dir/../../container_scripts/container_${SCRIPT_TYPE}.sh"
+	if [ ! -f "${curr_dir}/../../container_scripts/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
+		echo "ERROR: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $curr_dir/../../container_scripts/container_${CONTAINER_SCRIPT_TYPE}.sh"
 		return 1
 	fi
 

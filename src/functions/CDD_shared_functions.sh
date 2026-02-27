@@ -26,21 +26,21 @@ function execute_container_script ()
     fi
 	
 	# validate the bash variable values
-	if ! validate_required_vars	"SCRIPT_TYPE"; then
+	if ! validate_required_vars	"CONTAINER_SCRIPT_TYPE"; then
         echo "ERROR: execute_container_script() function required bash variable validation failed" >&2
         return 1
 	fi
 
-	# construct the full path to the script that will be executed within the container (${SCRIPT_TYPE} is passed in as an environment variable):
-	local script_path="$(get_array_val "${arg_array}" "container_scripts_path")/container_${SCRIPT_TYPE}.sh"
+	# construct the full path to the script that will be executed within the container (${CONTAINER_SCRIPT_TYPE} is passed in as an environment variable):
+	local script_path="$(get_array_val "${arg_array}" "container_scripts_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
 
 	# store the values of the variables used in local variables
 	local env_vars_block="$(get_array_val "${arg_array}" "env_vars_block")"
 	local config_data_var_name="$(get_array_val "${arg_array}" "config_data_var_name")"
 
-	echo "run the container_${SCRIPT_TYPE}.sh script from within the container to execute the corresponding automated scripts"
+	echo "run the container_${CONTAINER_SCRIPT_TYPE}.sh script from within the container to execute the corresponding automated scripts"
 
-# open a bash session into the running container and run the appropriate container deployment script (based on $SCRIPT_TYPE) and provide the value of the variable identified by $config_data_var_name via stdin
+# open a bash session into the running container and run the appropriate container deployment script (based on $CONTAINER_SCRIPT_TYPE) and provide the value of the variable identified by $config_data_var_name via stdin
 docker exec -i "$(get_array_val "${arg_array}" "container_name")" bash -c "
 	# specify the environment variables that are defined in the calling script:
 	${env_vars_block}

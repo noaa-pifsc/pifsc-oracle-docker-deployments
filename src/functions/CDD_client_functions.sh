@@ -1,51 +1,58 @@
 #!/bin/bash
 
-# this function initializes the SCRIPT_TYPE variable for use in the script.
+# this function initializes the CONTAINER_SCRIPT_TYPE variable for use in the script.
 # this function accepts an optional parameter: the script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
 # Example Usage:  
-#   set_script_type_var "$1"
+#   set_container_script_type_var "$1"
 #   or with no arguments to trigger prompts:
-#   set_script_type_var
-function set_script_type_var ()
+#   set_container_script_type_var
+function set_container_script_type_var ()
 {
     # Calls the helper with its specific parameters
     set_validated_var \
-        "SCRIPT_TYPE" \
+        "CONTAINER_SCRIPT_TYPE" \
         "Enter destination (name of the database deployment script type with the suggested naming convention of (deploy|upgrade|rollback)_version[0-9]+\.[0-9]+)" \
         "[a-zA-Z0-9_\.]+" \
-        "the name of container script with the naming convention container_[SCRIPT_TYPE].sh" \
+        "the name of container script with the naming convention container_[CONTAINER_SCRIPT_TYPE].sh" \
         "${1}"
 }
 
 # function that initializes the client deployment script and processes the client runtime arguments and prompts for any missing values
-# this function accepts the following runtime arguments:
-# 1: deployment script logs path
-# 2: calling script path
-# 3: (optional) CONTAINER_ENV_NAME
-# 4: (optional) CONTAINER_DEPLOY_DEST
-# 5: (optional) SCRIPT_TYPE
+# This function accepts the following parameters as elements in the specified array name (arg_array): 
+# calling_script_path: the full path of the calling script
+# script_log_path: the full path to the folder that deployment logs will be saved to
+# container_env_name: (optional) the environment name (dev, test, prod)
+# container_deploy_dest: (optional) deployment destination (local, server)
+# container_script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
+# client_repository_root_path: the client repository root path that will have dos2unix executed for it to ensure linux compatible line endings
 function client_process_runtime_arguments ()
 {
-	local script_log_path="${1}"
-	local calling_script_path="${2}"
-	local container_env_name="${3}"
-	local container_deploy_dest="${4}"
-	local script_type="${5}"
+	# store the function array argument
+	local arg_array="${1}"
 
-	# validate the bash variable values
-	if ! validate_required_vars	"script_log_path" "calling_script_path"; then
-        echo "ERROR: client_process_runtime_arguments() function required bash variable validation failed" >&2
+    # Safety check: ensure the argument is a valid array
+    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: client_process_runtime_arguments() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
-	fi
+    fi
+
+	# input validation:
+	if ! validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path"; then 
+        echo "ERROR: client_process_runtime_arguments() function argument validation failed" >&2
+        return 1
+    fi
 
 	# initialize the deployment script
-	initialize_deployment_script "${script_log_path}" "${calling_script_path}"
+	initialize_deployment_script "$(get_array_val "${arg_array}" "script_log_path")" "$(get_array_val "${arg_array}" "calling_script_path")" 
 
 	# set the environment and deployment destination variable values
-	set_env_deployment_vars "${container_env_name}" "${container_deploy_dest}"
+	set_env_deployment_vars "$(get_array_val "${arg_array}" "container_env_name")" "$(get_array_val "${arg_array}" "container_deploy_dest")"
 	
 	# set the script type variable value
-	set_script_type_var "${script_type}"
+	set_container_script_type_var "$(get_array_val "${arg_array}" "container_script_type")"
+
+	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
+	convert_dos2unix "$(get_array_val "${arg_array}" "client_repository_root_path")"
 }
 
 
@@ -86,12 +93,8 @@ function client_execute_deploy_database ()
 
 	local config_data_var_name="$(get_array_val "${arg_array}" "config_data_var_name")"
 
-	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
-	convert_dos2unix "$(get_array_val "${arg_array}" "parent_root_folder")"
-
 	# process the configuration data
 	process_config_data "$(get_array_val "${arg_array}" "secret_mapping_var_name")" "$(get_array_val "${arg_array}" "config_data_var_name")"
-
 
 	# Check if the CONTAINER_DEPLOY_DEST variable is "server" 
 	if [[ "$(get_array_val "${arg_array}" "container_deploy_dest")" == "server" ]]; then
@@ -111,9 +114,6 @@ function client_execute_deploy_database ()
 
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
 		exec_remote_cmd "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
-
-		# unset the configuration now that the ssh call has completed
-		unset_config_data "$(get_array_val "${arg_array}" "config_data_var_name")"
 
 	else
 		# this is a local deployment scenario:
@@ -137,6 +137,8 @@ function client_execute_deploy_database ()
 		execute_container_script "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
 
 		echo "the local container deployment script has finished executing"
-
 	fi
+
+	# unset the configuration now that the ssh call has completed
+	unset_config_data "$(get_array_val "${arg_array}" "config_data_var_name")"
 }
