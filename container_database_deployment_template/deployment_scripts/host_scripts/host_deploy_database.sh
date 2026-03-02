@@ -19,8 +19,8 @@ declare -A FUNC_ARGS=(
 		["env_vars_block"]="$(define_env_vars_block)"
 		["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 		["calling_script_path"]="${0}"
-		["process_stdin_config_data"]="yes"
+		["cds_process_stdin_config_data"]="yes"
 	)
 
 # initialize and build/run the container on the host machine with the specified function arguments:
-host_deploy_container "FUNC_ARGS"
+cds_host_deploy_container "FUNC_ARGS"

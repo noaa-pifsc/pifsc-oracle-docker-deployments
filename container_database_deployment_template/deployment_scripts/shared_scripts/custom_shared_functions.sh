@@ -14,7 +14,7 @@ function define_env_vars_block()
 	######## Environment Variable Block Placeholder - START ########
 	# validate the bash variable values
 	# Example:
-#	if ! validate_required_vars	"CONTAINER_ENV_NAME" "CONTAINER_SCRIPT_TYPE" "DB_HOST" "DB_SERVICE_NAME"; then
+#	if ! cds_validate_required_vars	"CONTAINER_ENV_NAME" "CONTAINER_SCRIPT_TYPE" "DB_HOST" "DB_SERVICE_NAME"; then
 #        echo "ERROR: define_env_vars_block() function required bash variable validation failed" >&2
 #        return 1
 #	fi

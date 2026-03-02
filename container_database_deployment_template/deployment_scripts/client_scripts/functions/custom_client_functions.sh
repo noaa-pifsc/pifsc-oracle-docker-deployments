@@ -6,7 +6,7 @@ function client_generate_ssh_env_vars ()
 	######## Environment Variable String Placeholder - START ########
 	# validate the bash variable values
 	# Example:
-# 	if ! validate_required_vars	"CONTAINER_SCRIPT_TYPE" "DB_HOST" "DB_SERVICE_NAME" "CONTAINER_ENV_NAME"; then
+# 	if ! cds_validate_required_vars	"CONTAINER_SCRIPT_TYPE" "DB_HOST" "DB_SERVICE_NAME" "CONTAINER_ENV_NAME"; then
 #        echo "ERROR: client_generate_ssh_env_vars() function required bash variable validation failed" >&2
 #        return 1
 #	fi

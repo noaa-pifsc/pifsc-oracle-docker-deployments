@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# function to initialize the container by parsing the configuration data, changing the directory to the container SQL directory, and generating the database connection scripts. Input validation is handled by container_initialize_script()
+# function to initialize the container by parsing the configuration data, changing the directory to the container SQL directory, and generating the database connection scripts. Input validation is handled by cdd_container_initialize_script()
 # this function accepts 3 parameters: 
 # 1: the full script path name that was executed
 # 2: the full path to the designated SQL folder within the container
@@ -14,7 +14,7 @@ function container_initialize()
 	local secret_mapping_var_name="${3}"
 
 	# input validation
-	if ! validate_required_vars	"calling_script_path" "container_root_sql_path"; then
+	if ! cds_validate_required_vars	"calling_script_path" "container_root_sql_path"; then
         echo "ERROR: container_initialize() function required bash variable validation failed" >&2
         return 1
     fi
@@ -26,7 +26,7 @@ function container_initialize()
     fi
 
 	# initialize the container scripts
-	container_initialize_script "${calling_script_path}" "${container_root_sql_path}" "${secret_mapping_var_name}"
+	cdd_container_initialize_script "${calling_script_path}" "${container_root_sql_path}" "${secret_mapping_var_name}"
 
 	# generate the database connection strings so they can be used to execute the SQLPlus scripts
 	container_generate_connection_strings
@@ -47,7 +47,7 @@ function container_cleanup ()
     fi
 
 	# unset bash variables specified by STDIN
-	generic_unset_config_variables "${secret_mapping_var_name}"
+	cds_generic_unset_config_variables "${secret_mapping_var_name}"
 
 	# unset the connection string variables
 	container_unset_connection_strings

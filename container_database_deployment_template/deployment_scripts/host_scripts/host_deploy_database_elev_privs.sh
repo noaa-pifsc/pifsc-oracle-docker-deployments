@@ -22,4 +22,4 @@ declare -A FUNC_ARGS=(
 	)
 
 # execute the scripts from within the container with the specified function arguments:
-host_deploy_database_execute_container_script "FUNC_ARGS" 
+cdd_host_deploy_database_execute_container_script "FUNC_ARGS" 

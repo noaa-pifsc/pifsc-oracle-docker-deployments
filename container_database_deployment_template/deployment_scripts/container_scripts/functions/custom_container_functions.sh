@@ -10,7 +10,7 @@ function container_generate_connection_strings ()
 	######## Database Connection Placeholder - START ########
 	# validate the bash variable values
 	# Example:
-#	if ! validate_required_vars	"ORACLE_DB_USER" "ORACLE_DB_PASS" "DB_HOST" "DB_SERVICE_NAME" "ORACLE_DB_APP_USER" "ORACLE_DB_APP_PASS"; then
+#	if ! cds_validate_required_vars	"ORACLE_DB_USER" "ORACLE_DB_PASS" "DB_HOST" "DB_SERVICE_NAME" "ORACLE_DB_APP_USER" "ORACLE_DB_APP_PASS"; then
 #        echo "ERROR: container_generate_connection_strings() function required bash variable validation failed" >&2
 #        return 1
 #	fi

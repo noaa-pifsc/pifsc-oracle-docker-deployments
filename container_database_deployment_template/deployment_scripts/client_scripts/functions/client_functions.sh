@@ -20,13 +20,13 @@ function client_deploy_database ()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "calling_script_path"; then 
+	if ! cds_validate_required_array_vals "${arg_array}" "calling_script_path"; then 
         echo "ERROR: client_deploy_database() function argument validation failed" >&2
         return 1
     fi
 
 	# validate the bash variable values
-	if ! validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME"; then
+	if ! cds_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME"; then
         echo "ERROR: client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -35,7 +35,7 @@ function client_deploy_database ()
 	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# process the runtime arguments
-	client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "$(get_array_val "${arg_array}" "calling_script_path")" "$(get_array_val "${arg_array}" "container_env_name")" "$(get_array_val "${arg_array}" "container_deploy_dest")" "$(get_array_val "${arg_array}" "container_script_type")"
+	cdd_client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "$(cds_get_array_val "${arg_array}" "calling_script_path")" "$(cds_get_array_val "${arg_array}" "container_env_name")" "$(cds_get_array_val "${arg_array}" "container_deploy_dest")" "$(cds_get_array_val "${arg_array}" "container_script_type")"
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "${curr_dir}/../../container_scripts/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
@@ -65,14 +65,14 @@ function client_deploy_database ()
 		)
 
 	# prepare and execute the corresponding deployment script:
-	client_execute_deploy_database "LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS"
+	cdd_client_execute_deploy_database "LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS"
 }
 
 # function to load the client configuration files (secrets and environment server configuration)
 function client_load_config_files()
 {
 	# validate the bash variable values
-	if ! validate_required_vars	"CONTAINER_ENV_NAME"; then
+	if ! cds_validate_required_vars	"CONTAINER_ENV_NAME"; then
         echo "ERROR: client_load_config_files() function required bash variable validation failed" >&2
         return 1
 	fi
