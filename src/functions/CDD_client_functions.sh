@@ -25,6 +25,7 @@ function set_container_script_type_var ()
 # container_deploy_dest: (optional) deployment destination (local, server)
 # container_script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
 # client_repository_root_path: the client repository root path that will have dos2unix executed for it to ensure linux compatible line endings
+# container_script_path: the script path for the container scripts
 function client_process_runtime_arguments ()
 {
 	# store the function array argument
@@ -37,7 +38,7 @@ function client_process_runtime_arguments ()
     fi
 
 	# input validation:
-	if ! validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path"; then 
+	if ! validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path" "container_script_path"; then 
         echo "ERROR: client_process_runtime_arguments() function argument validation failed" >&2
         return 1
     fi
@@ -53,6 +54,13 @@ function client_process_runtime_arguments ()
 
 	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
 	convert_dos2unix "$(get_array_val "${arg_array}" "client_repository_root_path")"
+
+	# validate that the corresponding container script exists:
+	if [ ! -f "$(get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
+		echo "ERROR: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $(get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
+		return 1
+	fi
+
 }
 
 
