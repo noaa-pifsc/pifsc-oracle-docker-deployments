@@ -43,24 +43,26 @@ function cdd_client_process_runtime_arguments ()
         return 1
     fi
 
-	# initialize the deployment script
-	cds_initialize_deployment_script "$(cds_get_array_val "${arg_array}" "script_log_path")" "$(cds_get_array_val "${arg_array}" "calling_script_path")" 
+	# declare the function arguments for cds_client_process_runtime_arguments()
+	local -A local_client_process_runtime_arguments=(
+			["script_log_path"]="$(cds_get_array_val "${arg_array}" "script_log_path")"
+			["calling_script_path"]="$(cds_get_array_val "${arg_array}" "calling_script_path")"
+			["container_env_name"]="$(cds_get_array_val "${arg_array}" "container_env_name")"
+			["container_deploy_dest"]="$(cds_get_array_val "${arg_array}" "container_deploy_dest")"
+			["client_repository_root_path"]="$(cds_get_array_val "${arg_array}" "client_repository_root_path")"
+		)
 
-	# set the environment and deployment destination variable values
-	cds_set_env_deployment_vars "$(cds_get_array_val "${arg_array}" "container_env_name")" "$(cds_get_array_val "${arg_array}" "container_deploy_dest")"
-	
+	# process the runtime arguments
+	cds_client_process_runtime_arguments "local_client_process_runtime_arguments"
+
 	# set the script type variable value
 	cdd_set_container_script_type_var "$(cds_get_array_val "${arg_array}" "container_script_type")"
-
-	# recursively convert the line endings for all .sh files in the root folder of the repository (/)
-	cds_convert_dos2unix "$(cds_get_array_val "${arg_array}" "client_repository_root_path")"
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "$(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
 		echo "ERROR: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
 		return 1
 	fi
-
 }
 
 # this function prepares and executes the client deployment scripts
