@@ -32,7 +32,7 @@ function client_deploy_database ()
 	fi
 
 	# declare the function arguments for cdd_client_process_runtime_arguments()
-	local -A LOCAL_RUNTIME_ARGS=(
+	local -A local_runtime_args=(
 			["script_log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
 			["calling_script_path"]="$(cds_get_array_val "${arg_array}" "calling_script_path")"
 			["container_env_name"]="$(cds_get_array_val "${arg_array}" "container_env_name")"
@@ -43,13 +43,13 @@ function client_deploy_database ()
 		)
 
 	# process the runtime arguments
-	cdd_client_process_runtime_arguments "LOCAL_RUNTIME_ARGS"
+	cdd_client_process_runtime_arguments "local_runtime_args"
 
 	# load the client secrets and server configuration files
 	client_load_secret_config_files
 
 	# declare the function arguments
-	local -A LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS=(
+	local -A local_client_deploy_database_func_args=(
 			["parent_root_folder"]="${REPO_ROOT_PATH}"
 			["container_deploy_dest"]="${CONTAINER_DEPLOY_DEST}"
 			["container_hostname"]="${CONTAINER_HOSTNAME}"
@@ -67,7 +67,7 @@ function client_deploy_database ()
 		)
 
 	# prepare and execute the corresponding deployment script:
-	cdd_client_execute_deploy_database "LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS"
+	cdd_client_execute_deploy_database "local_client_deploy_database_func_args"
 }
 
 # function to load the client configuration files (secrets and environment server configuration)

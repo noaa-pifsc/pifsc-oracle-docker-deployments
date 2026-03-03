@@ -30,12 +30,16 @@ function cdd_host_deploy_container ()
 	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
 	cds_process_stdin_config_data "$(cds_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 
-	# change to the container container directory
-	cd "$(cds_get_array_val "${arg_array}" "container_host_source_path")"
+	# construct the argument array for cds_build_deploy_container_compose()
+	local -A local_build_deploy_container_compose_args=(
+		["compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+		["container_build_image"]="yes"
+		["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_host_source_path")"
+		["container_image_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+	)
 
-	# build and run the sqlplus container
-	echo "build and run the sqlplus container"
-	cds_build_deploy_container_compose "$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+	# stop and remove any running container and build/run the container from the source code
+	cds_build_deploy_container_compose "local_build_deploy_container_compose_args"
 }
 
 # function to deploy the database container and execute the container script
@@ -66,7 +70,7 @@ function cdd_host_deploy_database_execute_container_script()
     fi
 
 	# declare the function arguments
-	local -A DEPLOY_FUNC_ARGS=(
+	local -A deploy_container_args=(
 			["calling_script_path"]="$(cds_get_array_val "${arg_array}" "calling_script_path")"
 			["container_host_source_path"]="$(cds_get_array_val "${arg_array}" "container_host_source_path")"
 			["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
@@ -75,10 +79,10 @@ function cdd_host_deploy_database_execute_container_script()
 		)
 
 	# deploy the container to the host server
-	cdd_host_deploy_container "DEPLOY_FUNC_ARGS"
+	cdd_host_deploy_container "deploy_container_args"
 	
 	# declare the function arguments
-	local -A EXEC_FUNC_ARGS=(
+	local -A local_client_execute_deploy_database_args=(
 			["container_scripts_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")"
 			["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
 			["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
@@ -87,5 +91,5 @@ function cdd_host_deploy_database_execute_container_script()
 		)
 
 	# execute the container script 
-	cdd_execute_container_script "EXEC_FUNC_ARGS"
+	cdd_execute_container_script "local_client_execute_deploy_database_args"
 }

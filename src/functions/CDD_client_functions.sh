@@ -115,35 +115,41 @@ function cdd_client_execute_deploy_database ()
 		cds_prepare_container_host "$(cds_get_array_val "${arg_array}" "container_hostname")" "$(cds_get_array_val "${arg_array}" "container_host_project_path")" "$(cds_get_array_val "${arg_array}" "container_git_url")"
 
 		# declare the function arguments
-		local -A LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS=(
+		local -A local_client_execute_deploy_database_args=(
 				["container_hostname"]="$(cds_get_array_val "${arg_array}" "container_hostname")"
 				["passed_stdin_content"]="${!config_data_var_name}"
 				["cmd"]="$(cds_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
 			)
 
 		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
-		cds_exec_remote_cmd "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
+		cds_exec_remote_cmd "local_client_execute_deploy_database_args"
 
 	else
 		# this is a local deployment scenario:
-		
-		# change directory into the container folder that contains the Dockerfile and .yml files (/container_database_deployment)
-		cd "$(cds_get_array_val "${arg_array}" "local_container_build_path")"
+
+		# construct the argument array for cds_build_deploy_container_compose()
+		local -A local_build_deploy_container_compose_args=(
+			["compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+			["container_build_image"]="yes"
+			["container_build_path"]="$(cds_get_array_val "${arg_array}" "local_container_build_path")"
+			["container_image_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+		)
 
 		# stop and remove any running container and build/run the container from the source code
-		cds_build_deploy_container_compose "$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+		cds_build_deploy_container_compose "local_build_deploy_container_compose_args"
 
 		# declare the function arguments
-		local -A LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS=(
+		local -A local_client_execute_deploy_database_args=(
 				["container_scripts_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")"
 				["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
 				["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 				["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
 				["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+				["local_container_build_path"]="$(cds_get_array_val "${arg_array}" "local_container_build_path")"
 			)
 
 		# execute the corresponding container scripts and shutdown the container
-		cdd_execute_container_script "LOCAL_CLIENT_EXECUTE_DEPLOY_DATABASE_ARGS"
+		cdd_execute_container_script "local_client_execute_deploy_database_args"
 
 		echo "the local container deployment script has finished executing"
 	fi

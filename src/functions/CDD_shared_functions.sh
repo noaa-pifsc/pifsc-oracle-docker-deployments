@@ -6,10 +6,9 @@
 # config_data_var_name: name of the configuration data variable
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
+# container_build_path: the local container build folder path (/container_database_deployment)
 function cdd_execute_container_script ()
 {
-	echo "running cdd_execute_container_script()"
-	
 	# store the function array argument
 	local arg_array="${1}"
 
@@ -20,7 +19,7 @@ function cdd_execute_container_script ()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name" "container_name"; then 
+	if ! cds_validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name" "container_name" "container_build_path"; then 
         echo "ERROR: cdd_execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -31,49 +30,17 @@ function cdd_execute_container_script ()
         return 1
 	fi
 
-	# construct the full path to the script that will be executed within the container (${CONTAINER_SCRIPT_TYPE} is passed in as an environment variable):
-	local script_path="$(cds_get_array_val "${arg_array}" "container_scripts_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
+	# construct arguments for the cds_execute_container_script() function
+	local -A execute_container_script_args=(
+			["script_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
+			["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
+			["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
+			["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+		)
 
-	# store the values of the variables used in local variables
-	local env_vars_block="$(cds_get_array_val "${arg_array}" "env_vars_block")"
-	local config_data_var_name="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
-
-	echo "run the container_${CONTAINER_SCRIPT_TYPE}.sh script from within the container to execute the corresponding automated scripts"
-
-# open a bash session into the running container and run the appropriate container deployment script (based on $CONTAINER_SCRIPT_TYPE) and provide the value of the variable identified by $config_data_var_name via stdin
-docker exec -i "$(cds_get_array_val "${arg_array}" "container_name")" bash -c "
-	# specify the environment variables that are defined in the calling script:
-	${env_vars_block}
-	
-	# Execute the target script, which will inherit the variables above.
-	bash '${script_path}'
-" <<< "${!config_data_var_name}"
+	# execute the script within the specified container
+	cds_execute_container_script "execute_container_script_args"
 
 	# shutdown and cleanup the container project
-	cdd_shutdown_cleanup_container "$(cds_get_array_val "${arg_array}" "config_data_var_name")" "$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
-}
-
-
-
-# function to shutdown the container and cleanup the container target folder after the container scripts have been executed. This function is run to shutdown the container. This function accepts 2 parameters:
-# 1: the name of the configuration data variable used to store the STDIN data
-# 2: the path of the container compose file (relative to the container_database_deployment source directory - see container_host_source_path in cdd_host_deploy_container())
-# Example Usage: 
-# cdd_shutdown_cleanup_container "CONFIG_DATA" "./docker-compose.yml" 
-function cdd_shutdown_cleanup_container ()
-{
-	local config_data_var_name="${1}"
-	local container_compose_file_path="${2}"
-
-	# validate the bash variable values
-	if ! cds_validate_required_vars	"config_data_var_name" "container_compose_file_path"; then
-        echo "ERROR: cdd_shutdown_cleanup_container() function required bash variable validation failed" >&2
-        return 1
-	fi
-
-	# unset the variable named $config_data_var_name
-	cds_unset_config_data "${config_data_var_name}"
-
-	# when the deployment has been completed, shutdown the container
- 	cds_shutdown_container_compose "${container_compose_file_path}"
+	cds_shutdown_cleanup_container_compose "$(cds_get_array_val "${arg_array}" "config_data_var_name")" "$(cds_get_array_val "${arg_array}" "container_compose_file_path")" "$(cds_get_array_val "${arg_array}" "container_build_path")"
 }
