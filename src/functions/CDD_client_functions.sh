@@ -74,7 +74,7 @@ function cdd_client_process_runtime_arguments ()
 # container_git_url: git url for the container project's repository
 # config_data_var_name: name of the configuration data variable
 # container_host_scripts_path: the path to the folder where the host bash scripts are contained
-# local_container_build_path: the local container build folder path (/container_database_deployment)
+# container_build_path: the local container build folder path (/container_database_deployment)
 # container_compose_file_path: the path of the container compose file (relative to the container build folder path)
 # secret_mapping_var_name: the name of the associative array containing the secret names and corresponding bash variables
 # container_scripts_path: the path to the container's bash scripts folder
@@ -95,7 +95,7 @@ function cdd_client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "local_container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name"; then 
+	if ! cds_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name"; then 
         echo "ERROR: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
@@ -131,7 +131,7 @@ function cdd_client_execute_deploy_database ()
 		local -A local_build_deploy_container_compose_args=(
 			["compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
 			["container_build_image"]="yes"
-			["container_build_path"]="$(cds_get_array_val "${arg_array}" "local_container_build_path")"
+			["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
 			["container_image_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
 		)
 
@@ -145,7 +145,7 @@ function cdd_client_execute_deploy_database ()
 				["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 				["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
 				["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
-				["container_build_path"]="$(cds_get_array_val "${arg_array}" "local_container_build_path")"
+				["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
 			)
 
 		# execute the corresponding container scripts and shutdown the container
