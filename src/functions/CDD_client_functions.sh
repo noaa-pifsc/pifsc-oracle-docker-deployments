@@ -63,7 +63,6 @@ function cdd_client_process_runtime_arguments ()
 
 }
 
-
 # this function prepares and executes the client deployment scripts
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
 # container_deploy_dest: deployment destination (local, server)

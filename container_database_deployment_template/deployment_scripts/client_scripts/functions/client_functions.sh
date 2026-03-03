@@ -44,7 +44,7 @@ function client_deploy_database ()
 	fi
 
 	# load the client secrets and server configuration files
-	client_load_config_files
+	client_load_secret_config_files
 
 	# declare the function arguments
 	local -A LOCAL_CLIENT_DEPLOY_DATABASE_FUNC_ARGS=(
@@ -69,11 +69,11 @@ function client_deploy_database ()
 }
 
 # function to load the client configuration files (secrets and environment server configuration)
-function client_load_config_files()
+function client_load_secret_config_files()
 {
 	# validate the bash variable values
 	if ! cds_validate_required_vars	"CONTAINER_ENV_NAME"; then
-        echo "ERROR: client_load_config_files() function required bash variable validation failed" >&2
+        echo "ERROR: client_load_secret_config_files() function required bash variable validation failed" >&2
         return 1
 	fi
 
