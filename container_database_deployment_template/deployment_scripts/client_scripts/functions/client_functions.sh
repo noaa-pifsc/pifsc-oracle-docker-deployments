@@ -26,22 +26,24 @@ function client_deploy_database ()
     fi
 
 	# validate the bash variable values
-	if ! cds_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME"; then
+	if ! cds_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
         echo "ERROR: client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
 
-	# determine current folder path (/container_database_deployment/deployment_scripts/client_scripts/functions)
-	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+	# declare the function arguments for cdd_client_process_runtime_arguments()
+	local -A LOCAL_RUNTIME_ARGS=(
+			["script_log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
+			["calling_script_path"]="$(cds_get_array_val "${arg_array}" "calling_script_path")"
+			["container_env_name"]="$(cds_get_array_val "${arg_array}" "container_env_name")"
+			["container_deploy_dest"]="$(cds_get_array_val "${arg_array}" "container_deploy_dest")"
+			["container_script_type"]="$(cds_get_array_val "${arg_array}" "container_script_type")"
+			["client_repository_root_path"]="${REPO_ROOT_PATH}"
+			["container_script_path"]="${LOCAL_CONTAINER_SCRIPTS_PATH}"
+		)
 
 	# process the runtime arguments
-	cdd_client_process_runtime_arguments "${DEPLOYMENT_SCRIPT_LOGS}" "$(cds_get_array_val "${arg_array}" "calling_script_path")" "$(cds_get_array_val "${arg_array}" "container_env_name")" "$(cds_get_array_val "${arg_array}" "container_deploy_dest")" "$(cds_get_array_val "${arg_array}" "container_script_type")"
-
-	# validate that the corresponding container script exists:
-	if [ ! -f "${curr_dir}/../../container_scripts/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
-		echo "ERROR: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $curr_dir/../../container_scripts/container_${CONTAINER_SCRIPT_TYPE}.sh"
-		return 1
-	fi
+	cdd_client_process_runtime_arguments "LOCAL_RUNTIME_ARGS"
 
 	# load the client secrets and server configuration files
 	client_load_secret_config_files

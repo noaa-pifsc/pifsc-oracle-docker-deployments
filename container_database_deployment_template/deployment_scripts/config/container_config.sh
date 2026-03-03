@@ -26,3 +26,6 @@
 
 	# define the deployment script logs folder
 	DEPLOYMENT_SCRIPT_LOGS="${CUSTOM_CONFIG_DIR}/../../deployment_script_logs"	
+
+	# define the container scripts path based on the configuration file's path
+	LOCAL_CONTAINER_SCRIPTS_PATH="${CUSTOM_CONFIG_DIR}/../container_scripts"	
