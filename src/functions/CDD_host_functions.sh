@@ -72,8 +72,6 @@ function cdd_host_deploy_database_execute_container_script()
         return 1
     fi
 
-	echo "The value of arg_array is: $(cds_dump_array_vals "${arg_array}")"
-
 	# declare the function arguments
 	local -A deploy_container_args=(
 			["calling_script_path"]="$(cds_get_array_val "${arg_array}" "calling_script_path")"
