@@ -145,7 +145,7 @@ function cdd_client_execute_deploy_database ()
 				["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 				["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
 				["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
-				["local_container_build_path"]="$(cds_get_array_val "${arg_array}" "local_container_build_path")"
+				["container_build_path"]="$(cds_get_array_val "${arg_array}" "local_container_build_path")"
 			)
 
 		# execute the corresponding container scripts and shutdown the container

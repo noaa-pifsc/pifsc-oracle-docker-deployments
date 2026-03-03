@@ -19,6 +19,7 @@ declare -A FUNC_ARGS=(
 		["container_compose_file_path"]="${CONTAINER_COMPOSE_FILE_PATH}"
 		["container_host_source_path"]="${CONTAINER_HOST_SOURCE_PATH}"
 		["container_name"]="${PROJECT_CONTAINER_NAME}"
+		["container_build_path"]="${LOCAL_CONTAINER_BUILD_PATH}"
 	)
 
 # execute the scripts from within the container with the specified function arguments:

@@ -52,8 +52,11 @@ function cdd_host_deploy_container ()
 # container_scripts_path: the path to the container's bash scripts folder
 # env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
+# container_build_path: the full path to the directory where the docker source files are located
 function cdd_host_deploy_database_execute_container_script()
 {
+	echo "running cdd_host_deploy_database_execute_container_script()"
+
 	# store the function array argument
 	local arg_array="${1}"
 
@@ -64,10 +67,12 @@ function cdd_host_deploy_database_execute_container_script()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "calling_script_path" "container_scripts_path" "container_name"; then 
+	if ! cds_validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "calling_script_path" "container_scripts_path" "container_name" "container_build_path"; then 
         echo "ERROR: cdd_host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
+
+	echo "The value of arg_array is: $(cds_dump_array_vals "${arg_array}")"
 
 	# declare the function arguments
 	local -A deploy_container_args=(
@@ -88,6 +93,7 @@ function cdd_host_deploy_database_execute_container_script()
 			["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 			["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
 			["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+			["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
 		)
 
 	# execute the container script 
