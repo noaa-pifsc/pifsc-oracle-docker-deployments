@@ -12,7 +12,7 @@ function cdd_execute_container_script ()
 	# store the function array argument
 	local arg_array="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: cdd_execute_container_script() function argument '${arg_array}' is not a valid associative array." >&2
         return 1

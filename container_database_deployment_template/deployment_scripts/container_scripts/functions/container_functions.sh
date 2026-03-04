@@ -19,7 +19,7 @@ function container_initialize()
         return 1
     fi
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${secret_mapping_var_name}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: container_cleanup() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
         return 1
@@ -40,7 +40,7 @@ function container_cleanup ()
 {
 	local secret_mapping_var_name="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${secret_mapping_var_name}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: container_cleanup() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
         return 1

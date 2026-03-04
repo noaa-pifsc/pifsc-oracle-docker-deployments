@@ -13,7 +13,7 @@ function client_deploy_database ()
 	# store the function array argument
 	local arg_array="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: client_deploy_database() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
@@ -26,7 +26,7 @@ function client_deploy_database ()
     fi
 
 	# validate the bash variable values
-	if ! cds_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "LOCAL_CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
+	if ! cds_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
         echo "ERROR: client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -60,7 +60,7 @@ function client_deploy_database ()
 			["container_git_url"]="${CONTAINER_GIT_URL}"
 			["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
 			["container_host_scripts_path"]="${CONTAINER_HOST_SCRIPTS_PATH}"
-			["local_container_build_path"]="${LOCAL_CONTAINER_BUILD_PATH}"
+			["container_build_path"]="${CONTAINER_BUILD_PATH}"
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 			["ssh_env_vars"]="$(client_generate_ssh_env_vars)"
 			["container_name"]="${PROJECT_CONTAINER_NAME}"

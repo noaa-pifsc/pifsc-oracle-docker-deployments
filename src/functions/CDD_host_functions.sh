@@ -12,7 +12,7 @@ function cdd_host_deploy_container ()
 	# store the function array argument
 	local arg_array="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: cdd_host_deploy_container() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
@@ -55,12 +55,10 @@ function cdd_host_deploy_container ()
 # container_build_path: the full path to the directory where the docker source files are located
 function cdd_host_deploy_database_execute_container_script()
 {
-	echo "running cdd_host_deploy_database_execute_container_script()"
-
 	# store the function array argument
 	local arg_array="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: cdd_host_deploy_database_execute_container_script() function argument '${arg_array}' is not a valid associative array." >&2
         return 1

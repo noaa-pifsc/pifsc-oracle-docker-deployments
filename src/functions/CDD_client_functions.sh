@@ -31,7 +31,7 @@ function cdd_client_process_runtime_arguments ()
 	# store the function array argument
 	local arg_array="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: cdd_client_process_runtime_arguments() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
@@ -88,7 +88,7 @@ function cdd_client_execute_deploy_database ()
 	# store the function array argument
 	local arg_array="${1}"
 
-    # Safety check: ensure the argument is a valid array
+    # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
         echo "Error: cdd_client_execute_deploy_database() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
