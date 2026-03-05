@@ -100,11 +100,6 @@ function cdd_client_execute_deploy_database ()
         return 1
     fi
 
-	local config_data_var_name="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
-
-	# process the configuration data
-	cds_process_config_data "$(cds_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_get_array_val "${arg_array}" "config_data_var_name")"
-
 	# Check if the CONTAINER_DEPLOY_DEST variable is "server" 
 	if [[ "$(cds_get_array_val "${arg_array}" "container_deploy_dest")" == "server" ]]; then
 
@@ -117,28 +112,35 @@ function cdd_client_execute_deploy_database ()
 		# declare the function arguments
 		local -A local_client_execute_deploy_database_args=(
 				["container_hostname"]="$(cds_get_array_val "${arg_array}" "container_hostname")"
-				["passed_stdin_content"]="${!config_data_var_name}"
-				["cmd"]="$(cds_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
-			)
 
-		# execute the container deployment script on the host server and specify the sensitive values as stdin and the configuration values as environment variables
-		cds_exec_remote_cmd "local_client_execute_deploy_database_args"
+				["container_host_project_path"]="$(cds_get_array_val "${arg_array}" "container_host_project_path")"
+				["container_git_url"]="$(cds_get_array_val "${arg_array}" "container_git_url")"
+				["remote_ssh_cmd"]="$(cds_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
+
+				["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
+				["secret_mapping_var_name"]="$(cds_get_array_val "${arg_array}" "secret_mapping_var_name")"
+				["parse_config_data"]="yes"
+
+			)
+		
+		cds_client_execute_remote_deployment "local_client_execute_deploy_database_args"
 
 	else
 		# this is a local deployment scenario:
 
 		# construct the argument array for cds_build_deploy_container_compose()
 		local -A local_build_deploy_container_compose_args=(
-			["compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+			["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
 			["container_build_image"]="yes"
 			["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
 			["container_image_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+			["export_secrets"]="no"
 		)
 
 		# stop and remove any running container and build/run the container from the source code
-		cds_build_deploy_container_compose "local_build_deploy_container_compose_args"
+		cds_client_deploy_local_compose "local_build_deploy_container_compose_args"
 
-		# declare the function arguments
+		# declare the function arguments for executing the container script using cdd_execute_container_script()
 		local -A local_client_execute_deploy_database_args=(
 				["container_scripts_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")"
 				["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
@@ -153,7 +155,4 @@ function cdd_client_execute_deploy_database ()
 
 		echo "the local container deployment script has finished executing"
 	fi
-
-	# unset the configuration now that the ssh call has completed
-	cds_unset_config_data "$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 }

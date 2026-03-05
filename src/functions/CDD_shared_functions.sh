@@ -30,6 +30,9 @@ function cdd_execute_container_script ()
         return 1
 	fi
 
+	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down using cds_shutdown_cleanup_container_compose(), even on crash/abort:
+	trap 'cds_shutdown_cleanup_container_compose "$(cds_get_array_val "'"${arg_array}"'" "config_data_var_name")" "$(cds_get_array_val "'"${arg_array}"'" "container_compose_file_path")" "$(cds_get_array_val "'"${arg_array}"'" "container_build_path")"' EXIT
+
 	# construct arguments for the cds_execute_container_script() function
 	local -A execute_container_script_args=(
 			["script_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
@@ -40,7 +43,4 @@ function cdd_execute_container_script ()
 
 	# execute the script within the specified container
 	cds_execute_container_script "execute_container_script_args"
-
-	# shutdown and cleanup the container project
-	cds_shutdown_cleanup_container_compose "$(cds_get_array_val "${arg_array}" "config_data_var_name")" "$(cds_get_array_val "${arg_array}" "container_compose_file_path")" "$(cds_get_array_val "${arg_array}" "container_build_path")"
 }
