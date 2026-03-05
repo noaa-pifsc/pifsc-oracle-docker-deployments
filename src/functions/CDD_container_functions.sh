@@ -23,13 +23,13 @@ function cdd_container_initialize_script ()
         return 1
     fi
 
-	# Declare the scoped variables for sensitive data processing
+	# Declare the scoped variable for sensitive data processing
 	local RAW_STDIN=""
 
 	# read the raw STDIN passed securely via the pipeline
 	if [[ ! -t 0 ]]; then RAW_STDIN=$(cat); fi
 
-	# parse strictly into the caller's local associative array
+	# parse the RAW_STDIN into the calling function's local associative array
 	cds_generic_parse_config_data "${secret_mapping_var_name}" "${output_parsed_secrets_var_name}" <<< "${RAW_STDIN}"
 
 	# change the current directory to the designated SQL folder where the SQLPlus scripts can be executed using relative paths
