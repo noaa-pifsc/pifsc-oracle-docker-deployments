@@ -106,9 +106,6 @@ function cdd_client_execute_deploy_database ()
 		# this is a server deployment
 		echo "deploy the database deployment container to the server"
 
-		# Prepare the container host by cloning the project repository
-		cds_prepare_container_host "$(cds_get_array_val "${arg_array}" "container_hostname")" "$(cds_get_array_val "${arg_array}" "container_host_project_path")" "$(cds_get_array_val "${arg_array}" "container_git_url")"
-
 		# declare the function arguments
 		local -A local_client_execute_deploy_database_args=(
 				["container_hostname"]="$(cds_get_array_val "${arg_array}" "container_hostname")"
