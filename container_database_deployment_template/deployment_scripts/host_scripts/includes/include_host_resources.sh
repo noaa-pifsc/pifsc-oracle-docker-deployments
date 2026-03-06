@@ -16,6 +16,7 @@ source "${CURR_DIR}/../../../.env"
 source "${CURR_DIR}/../../../../modules/CDD/src/includes/load_CDD_host_resources.sh"
 
 # include the container configuration variables
+source "${CURR_DIR}/../../config/initial_container_config.sh"
 source "${CURR_DIR}/../../config/custom_container_config.sh"
 source "${CURR_DIR}/../../config/container_config.sh"
 
