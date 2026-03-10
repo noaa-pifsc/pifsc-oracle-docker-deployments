@@ -30,8 +30,13 @@ function cdd_execute_container_script ()
         return 1
 	fi
 
-	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down using cds_shutdown_cleanup_container_compose(), even on crash/abort:
-	trap 'cds_shutdown_cleanup_container_compose "$(cds_get_array_val "'"${arg_array}"'" "config_data_var_name")" "$(cds_get_array_val "'"${arg_array}"'" "container_compose_file_path")" "$(cds_get_array_val "'"${arg_array}"'" "container_build_path")"' EXIT
+	# Grab the specific array values while the local array is still in scope
+	local trap_config_data="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
+	local trap_compose_path="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+	local trap_build_path="$(cds_get_array_val "${arg_array}" "container_build_path")"
+
+	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_execute_container_script() functon is run
+	trap "cds_shutdown_cleanup_container_compose '${trap_config_data}' '${trap_compose_path}' '${trap_build_path}'" EXIT
 
 	# construct arguments for the cds_execute_container_script() function
 	local -A execute_container_script_args=(
