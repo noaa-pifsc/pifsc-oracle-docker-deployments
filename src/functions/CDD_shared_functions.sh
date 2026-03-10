@@ -20,13 +20,13 @@ function cdd_execute_container_script ()
 
 	# input validation:
 	if ! cds_validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name" "container_name" "container_build_path"; then 
-        echo "ERROR: cdd_execute_container_script() function argument validation failed" >&2
+        echo "Error: cdd_execute_container_script() function argument validation failed" >&2
         return 1
     fi
 	
 	# validate the bash variable values
 	if ! cds_validate_required_vars	"CONTAINER_SCRIPT_TYPE"; then
-        echo "ERROR: cdd_execute_container_script() function required bash variable validation failed" >&2
+        echo "Error: cdd_execute_container_script() function required bash variable validation failed" >&2
         return 1
 	fi
 

@@ -21,13 +21,13 @@ function client_deploy_database ()
 
 	# input validation:
 	if ! cds_validate_required_array_vals "${arg_array}" "calling_script_path"; then 
-        echo "ERROR: client_deploy_database() function argument validation failed" >&2
+        echo "Error: client_deploy_database() function argument validation failed" >&2
         return 1
     fi
 
 	# validate the bash variable values
 	if ! cds_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
-        echo "ERROR: client_deploy_database() function required bash variable validation failed" >&2
+        echo "Error: client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
 
@@ -75,7 +75,7 @@ function client_load_secret_config_files()
 {
 	# validate the bash variable values
 	if ! cds_validate_required_vars	"CONTAINER_ENV_NAME"; then
-        echo "ERROR: client_load_secret_config_files() function required bash variable validation failed" >&2
+        echo "Error: client_load_secret_config_files() function required bash variable validation failed" >&2
         return 1
 	fi
 

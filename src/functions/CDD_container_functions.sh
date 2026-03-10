@@ -19,7 +19,7 @@ function cdd_container_initialize_script ()
 	
 	# input validation
 	if ! cds_validate_required_vars	"container_sql_directory" "secret_mapping_var_name" "output_parsed_secrets_var_name"; then
-        echo "ERROR: cdd_container_initialize_script() function required bash variable validation failed" >&2
+        echo "Error: cdd_container_initialize_script() function required bash variable validation failed" >&2
         return 1
     fi
 

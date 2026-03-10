@@ -16,7 +16,7 @@ function container_initialize()
 
 	# input validation
 	if ! cds_validate_required_vars	"calling_script_path" "container_root_sql_path" "secret_mapping_var_name"; then
-        echo "ERROR: container_initialize() function required bash variable validation failed" >&2
+        echo "Error: container_initialize() function required bash variable validation failed" >&2
         return 1
     fi
 

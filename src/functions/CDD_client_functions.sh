@@ -39,7 +39,7 @@ function cdd_client_process_runtime_arguments ()
 
 	# input validation:
 	if ! cds_validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path" "container_script_path"; then 
-        echo "ERROR: cdd_client_process_runtime_arguments() function argument validation failed" >&2
+        echo "Error: cdd_client_process_runtime_arguments() function argument validation failed" >&2
         return 1
     fi
 
@@ -60,7 +60,7 @@ function cdd_client_process_runtime_arguments ()
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "$(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
-		echo "ERROR: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
+		echo "Error: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
 		return 1
 	fi
 }
@@ -96,7 +96,7 @@ function cdd_client_execute_deploy_database ()
 
 	# input validation:
 	if ! cds_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name"; then 
-        echo "ERROR: cdd_client_execute_deploy_database() function argument validation failed" >&2
+        echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
 
@@ -136,6 +136,9 @@ function cdd_client_execute_deploy_database ()
 
 		# stop and remove any running container and build/run the container from the source code
 		cds_client_deploy_local_compose "local_build_deploy_container_compose_args"
+
+		# process the configuration data to pass securely via STDIN and clear the floating global bash variables
+		cds_process_config_data "$(cds_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_get_array_val "${arg_array}" "config_data_var_name")"
 
 		# declare the function arguments for executing the container script using cdd_execute_container_script()
 		local -A local_client_execute_deploy_database_args=(

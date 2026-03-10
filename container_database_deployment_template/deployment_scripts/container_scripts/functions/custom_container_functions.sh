@@ -12,7 +12,7 @@ function container_generate_connection_strings ()
 
 	# input validation
 	if ! cds_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME"; then
-        echo "ERROR: container_generate_connection_strings() function required bash variable validation failed" >&2
+        echo "Error: container_generate_connection_strings() function required bash variable validation failed" >&2
         return 1
     fi 
 
@@ -35,7 +35,7 @@ function container_generate_connection_strings ()
 	# validate that the required secret keys exist safely within the securely parsed array
 	# Example:
 	# if ! cds_validate_required_array_vals "${parsed_secrets_arr_name}" "ORACLE_DB_USER" "ORACLE_DB_PASS" "ORACLE_DB_APP_USER" "ORACLE_DB_APP_PASS"; then
-    #    echo "ERROR: container_generate_connection_strings() function required secure array validation failed" >&2
+    #    echo "Error: container_generate_connection_strings() function required secure array validation failed" >&2
     #    return 1
 	#fi
 
