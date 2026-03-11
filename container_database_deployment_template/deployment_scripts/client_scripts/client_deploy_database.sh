@@ -22,7 +22,7 @@ function main ()
 		)
 
 	# prepare and execute the deployment script
-	time client_deploy_database "func_args"
+	time proj_client_deploy_database "func_args"
 }
 
 # execute the main function with all arguments from this calling script:

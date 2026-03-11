@@ -17,7 +17,7 @@ function main()
 {
 	# declare the function arguments as a local variable
 	local -A func_args=(
-			["env_vars_block"]="$(define_env_vars_block)"
+			["env_vars_block"]="$(proj_shared_define_env_vars_block)"
 			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"\
 			["calling_script_path"]="${0}"
 			["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"

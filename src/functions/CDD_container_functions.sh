@@ -11,14 +11,14 @@
 function cdd_container_initialize_script ()
 {
 	# retrieve the current script name that was originally invoked
-	cds_get_script_name_from_path "${1}"
+	cds_shared_get_script_name_from_path "${1}"
 
 	local container_sql_directory="${2}"
 	local secret_mapping_var_name="${3}"
 	local output_parsed_secrets_var_name="${4}"
 	
 	# input validation
-	if ! cds_validate_required_vars	"container_sql_directory" "secret_mapping_var_name" "output_parsed_secrets_var_name"; then
+	if ! cds_shared_validate_required_vars	"container_sql_directory" "secret_mapping_var_name" "output_parsed_secrets_var_name"; then
         echo "Error: cdd_container_initialize_script() function required bash variable validation failed" >&2
         return 1
     fi
@@ -30,7 +30,7 @@ function cdd_container_initialize_script ()
 	if [[ ! -t 0 ]]; then RAW_STDIN=$(cat); fi
 
 	# parse the RAW_STDIN into the calling function's local associative array
-	cds_generic_parse_config_data "${secret_mapping_var_name}" "${output_parsed_secrets_var_name}" <<< "${RAW_STDIN}"
+	cds_shared_parse_config_data "${secret_mapping_var_name}" "${output_parsed_secrets_var_name}" <<< "${RAW_STDIN}"
 
 	# change the current directory to the designated SQL folder where the SQLPlus scripts can be executed using relative paths
 	cd "${container_sql_directory}"

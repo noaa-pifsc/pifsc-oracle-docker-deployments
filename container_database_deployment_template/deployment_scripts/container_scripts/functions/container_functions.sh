@@ -7,22 +7,22 @@
 # 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # 4-n: an arbitrary number of variable names to output the connection strings to (passed to project-specific generator)
 # Example Usage: 
-# container_initialize "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR" "DB_CONN_STRING" "DB_GIM_CONN_STRING" "DB_RIA_CONN_STRING"
-function container_initialize()
+# proj_container_initialize "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR" "DB_CONN_STRING" "DB_GIM_CONN_STRING" "DB_RIA_CONN_STRING"
+function proj_container_initialize()
 {
 	local calling_script_path="${1}"
 	local container_root_sql_path="${2}"
 	local secret_mapping_var_name="${3}"
 
 	# input validation
-	if ! cds_validate_required_vars	"calling_script_path" "container_root_sql_path" "secret_mapping_var_name"; then
-        echo "Error: container_initialize() function required bash variable validation failed" >&2
+	if ! cds_shared_validate_required_vars	"calling_script_path" "container_root_sql_path" "secret_mapping_var_name"; then
+        echo "Error: proj_container_initialize() function required bash variable validation failed" >&2
         return 1
     fi
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${secret_mapping_var_name}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: container_initialize() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
+        echo "Error: proj_container_initialize() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
         return 1
     fi
 
@@ -36,23 +36,23 @@ function container_initialize()
 	cdd_container_initialize_script "${calling_script_path}" "${container_root_sql_path}" "${secret_mapping_var_name}" "LOCAL_SECRETS_ARR" || return 1
 
 	# pass the secure array and any remaining arguments ($@) dynamically to the project-specific connection string generator
-	container_generate_connection_strings "LOCAL_SECRETS_ARR" "$@" || return 1
+	proj_container_generate_connection_strings "LOCAL_SECRETS_ARR" "$@" || return 1
 }
 
 # function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
 # 1: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # Example Usage: 
-# container_cleanup "SECRET_MAPPING_ARR"
-function container_cleanup ()
+# proj_container_cleanup "SECRET_MAPPING_ARR"
+function proj_container_cleanup ()
 {
 	local secret_mapping_var_name="${1}"
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${secret_mapping_var_name}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: container_cleanup() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
+        echo "Error: proj_container_cleanup() function argument '${secret_mapping_var_name}' is not a valid associative array." >&2
         return 1
     fi
 
 	# unset bash variables specified by STDIN
-	cds_generic_unset_config_variables "${secret_mapping_var_name}"
+	cds_shared_unset_config_variables "${secret_mapping_var_name}"
 }

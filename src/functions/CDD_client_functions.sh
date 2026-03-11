@@ -10,13 +10,13 @@ function cdd_set_container_script_type_var ()
     local passed_value="${2:-}"
 
 	# validate the bash variable values
-	if ! cds_validate_required_vars	"out_var_name"; then
+	if ! cds_shared_validate_required_vars	"out_var_name"; then
         echo "Error: cdd_set_container_script_type_var() function required function argument validation failed" >&2
         return 1
 	fi
 	
     # Calls the helper with its specific parameters
-    cds_set_validated_var \
+    cds_client_set_validated_var \
         "${out_var_name}" \
         "Enter destination (name of the database deployment script type with the suggested naming convention of (deploy|upgrade|rollback)_version[0-9]+\.[0-9]+)" \
         "[a-zA-Z0-9_\.]+" \
@@ -45,18 +45,18 @@ function cdd_client_process_runtime_arguments ()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path" "container_script_path"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path" "container_script_path"; then 
         echo "Error: cdd_client_process_runtime_arguments() function argument validation failed" >&2
         return 1
     fi
 
 	# declare the function arguments for cds_client_process_runtime_arguments()
 	local -A local_client_process_runtime_arguments=(
-			["script_log_path"]="$(cds_get_array_val "${arg_array}" "script_log_path")"
-			["calling_script_path"]="$(cds_get_array_val "${arg_array}" "calling_script_path")"
-			["container_env_name"]="$(cds_get_array_val "${arg_array}" "container_env_name")"
-			["container_deploy_dest"]="$(cds_get_array_val "${arg_array}" "container_deploy_dest")"
-			["client_repository_root_path"]="$(cds_get_array_val "${arg_array}" "client_repository_root_path")"
+			["script_log_path"]="$(cds_shared_get_array_val "${arg_array}" "script_log_path")"
+			["calling_script_path"]="$(cds_shared_get_array_val "${arg_array}" "calling_script_path")"
+			["container_env_name"]="$(cds_shared_get_array_val "${arg_array}" "container_env_name")"
+			["container_deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")"
+			["client_repository_root_path"]="$(cds_shared_get_array_val "${arg_array}" "client_repository_root_path")"
 		)
 
 	# process the runtime arguments
@@ -64,14 +64,14 @@ function cdd_client_process_runtime_arguments ()
 
 	# set the script type variable value into a local variable
 	local local_script_type=""
-	cdd_set_container_script_type_var "local_script_type" "$(cds_get_array_val "${arg_array}" "container_script_type")"
+	cdd_set_container_script_type_var "local_script_type" "$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
 
 	# Store the validated value back into the arguments array
-	cds_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
+	cds_shared_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
 	# validate that the corresponding container script exists:
-	if [ ! -f "$(cds_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh" ]; then
-		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: $(cds_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh"
+	if [ ! -f "$(cds_shared_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh" ]; then
+		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: $(cds_shared_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh"
 		return 1
 	fi
 }
@@ -106,27 +106,27 @@ function cdd_client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name" "container_script_type"; then 
         echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
 
 	# Check if the CONTAINER_DEPLOY_DEST variable is "server" 
-	if [[ "$(cds_get_array_val "${arg_array}" "container_deploy_dest")" == "server" ]]; then
+	if [[ "$(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")" == "server" ]]; then
 
 		# this is a server deployment
 		echo "deploy the database deployment container to the server"
 
 		# declare the function arguments
 		local -A remote_deploy_args=(
-				["container_hostname"]="$(cds_get_array_val "${arg_array}" "container_hostname")"
+				["container_hostname"]="$(cds_shared_get_array_val "${arg_array}" "container_hostname")"
 
-				["container_host_project_path"]="$(cds_get_array_val "${arg_array}" "container_host_project_path")"
-				["container_git_url"]="$(cds_get_array_val "${arg_array}" "container_git_url")"
-				["remote_ssh_cmd"]="$(cds_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
+				["container_host_project_path"]="$(cds_shared_get_array_val "${arg_array}" "container_host_project_path")"
+				["container_git_url"]="$(cds_shared_get_array_val "${arg_array}" "container_git_url")"
+				["remote_ssh_cmd"]="$(cds_shared_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_shared_get_array_val "${arg_array}" "container_host_scripts_path")/host_deploy_database.sh"
 
-				["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
-				["secret_mapping_var_name"]="$(cds_get_array_val "${arg_array}" "secret_mapping_var_name")"
+				["config_data_var_name"]="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
+				["secret_mapping_var_name"]="$(cds_shared_get_array_val "${arg_array}" "secret_mapping_var_name")"
 				["parse_config_data"]="yes"
 
 			)
@@ -136,12 +136,12 @@ function cdd_client_execute_deploy_database ()
 	else
 		# this is a local deployment scenario:
 
-		# construct the argument array for cds_build_deploy_container_compose()
+		# construct the argument array for cds_shared_build_deploy_container_compose()
 		local -A local_build_deploy_container_compose_args=(
-			["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
+			["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
 			["container_build_image"]="yes"
-			["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
-			["container_image_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+			["container_build_path"]="$(cds_shared_get_array_val "${arg_array}" "container_build_path")"
+			["container_image_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
 			["export_secrets"]="no"
 		)
 
@@ -149,17 +149,17 @@ function cdd_client_execute_deploy_database ()
 		cds_client_deploy_local_compose "local_build_deploy_container_compose_args"
 
 		# process the configuration data to pass securely via STDIN and clear the floating global bash variables
-		cds_process_config_data "$(cds_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_get_array_val "${arg_array}" "config_data_var_name")"
+		cds_shared_process_config_data "$(cds_shared_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
 
 		# declare the function arguments for executing the container script using cdd_execute_container_script()
 		local -A local_client_execute_deploy_database_args=(
-				["container_scripts_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")"
-				["container_compose_file_path"]="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
-				["config_data_var_name"]="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
-				["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
-				["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
-				["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
-				["container_script_type"]="$(cds_get_array_val "${arg_array}" "container_script_type")"
+				["container_scripts_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")"
+				["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
+				["config_data_var_name"]="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
+				["env_vars_block"]="$(cds_shared_get_array_val "${arg_array}" "env_vars_block")"
+				["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
+				["container_build_path"]="$(cds_shared_get_array_val "${arg_array}" "container_build_path")"
+				["container_script_type"]="$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
 			)
 
 		# execute the corresponding container scripts and shutdown the container

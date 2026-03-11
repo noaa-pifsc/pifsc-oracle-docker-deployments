@@ -18,7 +18,7 @@ function main()
 	local DB_APP_CONN_STRING=""
 
 	# initialize the container and securely pass the local SECURE_SECRETS_ARR array to be populated with the parsed secret variables
-	container_initialize "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}" "SECURE_SECRETS_ARR" "DB_CONN_STRING" "DB_APP_CONN_STRING" || return 1
+	proj_container_initialize "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}" "SECURE_SECRETS_ARR" "DB_CONN_STRING" "DB_APP_CONN_STRING" || return 1
 
 # Example for version 2.0 of the DB:
 # echo "deploy version 2.0 of the DB"
@@ -35,7 +35,7 @@ function main()
 # EOF
 
 	# cleanup the container variables now that the script has finished running
-	container_cleanup "${SECRET_MAPPING_VAR_NAME}"
+	proj_container_cleanup "${SECRET_MAPPING_VAR_NAME}"
 
 ######## Container Database Deployment Placeholder - END ########
 

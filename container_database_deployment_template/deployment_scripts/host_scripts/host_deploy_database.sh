@@ -22,10 +22,10 @@ function main ()
 			["container_host_source_path"]="${CONTAINER_HOST_PROJECT_PATH}"
 			["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
 			["deploy_script_path"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/host_deploy_database_elev_privs.sh"
-			["env_vars_block"]="$(define_env_vars_block)"
+			["env_vars_block"]="$(proj_shared_define_env_vars_block)"
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 			["calling_script_path"]="${0}"
-			["cds_process_stdin_config_data"]="yes"
+			["cds_host_process_stdin_config_data"]="yes"
 		)
 
 	echo "calling cds_host_deploy_container()"

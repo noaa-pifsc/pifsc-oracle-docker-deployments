@@ -19,7 +19,7 @@ function cdd_execute_container_script ()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name" "container_name" "container_build_path" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "container_scripts_path" "container_compose_file_path" "config_data_var_name" "container_name" "container_build_path" "container_script_type"; then 
         echo "Error: cdd_execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -27,21 +27,21 @@ function cdd_execute_container_script ()
 	# store the script type value while still in scope
 	
 	# Grab the specific array values while the local array is still in scope
-	local trap_config_data="$(cds_get_array_val "${arg_array}" "config_data_var_name")"
-	local trap_compose_path="$(cds_get_array_val "${arg_array}" "container_compose_file_path")"
-	local trap_build_path="$(cds_get_array_val "${arg_array}" "container_build_path")"
+	local trap_config_data="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
+	local trap_compose_path="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
+	local trap_build_path="$(cds_shared_get_array_val "${arg_array}" "container_build_path")"
 
-	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_execute_container_script() functon is run
-	trap "cds_shutdown_cleanup_container_compose '${trap_config_data}' '${trap_compose_path}' '${trap_build_path}'" EXIT
+	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_shared_execute_container_script() functon is run
+	trap "cds_shared_shutdown_cleanup_container_compose '${trap_config_data}' '${trap_compose_path}' '${trap_build_path}'" EXIT
 
-	# construct arguments for the cds_execute_container_script() function
+	# construct arguments for the cds_shared_execute_container_script() function
 	local -A execute_container_script_args=(
-			["script_path"]="$(cds_get_array_val "${arg_array}" "container_scripts_path")/container_$(cds_get_array_val "${arg_array}" "container_script_type").sh"
+			["script_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")/container_$(cds_shared_get_array_val "${arg_array}" "container_script_type").sh"
 			["config_data_var_name"]="${trap_config_data}"
-			["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
-			["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
+			["env_vars_block"]="$(cds_shared_get_array_val "${arg_array}" "env_vars_block")"
+			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
 		)
 
 	# execute the script within the specified container
-	cds_execute_container_script "execute_container_script_args"
+	cds_shared_execute_container_script "execute_container_script_args"
 }
