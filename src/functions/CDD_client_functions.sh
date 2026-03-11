@@ -64,7 +64,7 @@ function cdd_client_process_runtime_arguments ()
 
 	# set the script type variable value into a local variable
 	local local_script_type=""
-	cdd_set_container_script_type_var "${local_script_type}" "$(cds_get_array_val "${arg_array}" "container_script_type")"
+	cdd_set_container_script_type_var "local_script_type" "$(cds_get_array_val "${arg_array}" "container_script_type")"
 
 	# Store the validated value back into the arguments array
 	cds_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
