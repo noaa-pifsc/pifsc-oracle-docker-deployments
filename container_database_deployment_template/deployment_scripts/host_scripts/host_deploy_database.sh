@@ -25,7 +25,7 @@ function main ()
 			["env_vars_block"]="$(proj_shared_define_env_vars_block)"
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 			["calling_script_path"]="${0}"
-			["cds_host_process_stdin_config_data"]="yes"
+			["process_stdin_config_data"]="yes"
 		)
 
 	echo "calling cds_host_deploy_container()"
