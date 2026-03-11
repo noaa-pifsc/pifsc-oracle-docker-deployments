@@ -1,20 +1,27 @@
 #!/bin/bash
 
-# this function initializes the CONTAINER_SCRIPT_TYPE variable for use in the script.
-# this function accepts an optional parameter: the script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
-# Example Usage:  
-#   cdd_set_container_script_type_var "$1"
-#   or with no arguments to trigger prompts:
-#   cdd_set_container_script_type_var
+# this function initializes a local variable that will contain the container script type value for use in the script.
+# this function accepts the following parameters:
+# 1: out_var_name (the name of the local variable where the validated script type value will be stored)
+# 2: passed_value (optional: the script type value passed from the caller)
 function cdd_set_container_script_type_var ()
 {
+    local out_var_name="${1}"
+    local passed_value="${2:-}"
+
+	# validate the bash variable values
+	if ! cds_validate_required_vars	"out_var_name"; then
+        echo "Error: cdd_set_container_script_type_var() function required function argument validation failed" >&2
+        return 1
+	fi
+	
     # Calls the helper with its specific parameters
     cds_set_validated_var \
-        "CONTAINER_SCRIPT_TYPE" \
+        "${out_var_name}" \
         "Enter destination (name of the database deployment script type with the suggested naming convention of (deploy|upgrade|rollback)_version[0-9]+\.[0-9]+)" \
         "[a-zA-Z0-9_\.]+" \
-        "the name of container script with the naming convention container_[CONTAINER_SCRIPT_TYPE].sh" \
-        "${1}"
+        "the name of database deployment script type with the suggested naming convention of (deploy|upgrade|rollback)_version[0-9]+\.[0-9]+)" \
+        "${passed_value}"
 }
 
 # function that initializes the client deployment script and processes the client runtime arguments and prompts for any missing values
@@ -55,12 +62,16 @@ function cdd_client_process_runtime_arguments ()
 	# process the runtime arguments
 	cds_client_process_runtime_arguments "local_client_process_runtime_arguments"
 
-	# set the script type variable value
-	cdd_set_container_script_type_var "$(cds_get_array_val "${arg_array}" "container_script_type")"
+	# set the script type variable value into a local variable
+	local local_script_type=""
+	cdd_set_container_script_type_var "${local_script_type}" "$(cds_get_array_val "${arg_array}" "container_script_type")"
+
+	# Store the validated value back into the arguments array
+	cds_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
 	# validate that the corresponding container script exists:
-	if [ ! -f "$(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh" ]; then
-		echo "Error: the script type definition (script type: ${CONTAINER_SCRIPT_TYPE}) argument's corresponding container deployment file does not exist: $(cds_get_array_val "${arg_array}" "container_script_path")/container_${CONTAINER_SCRIPT_TYPE}.sh"
+	if [ ! -f "$(cds_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh" ]; then
+		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: $(cds_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh"
 		return 1
 	fi
 }
@@ -95,7 +106,7 @@ function cdd_client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! cds_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name"; then 
+	if ! cds_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "container_deploy_dest" "container_hostname" "container_host_project_path" "container_git_url" "config_data_var_name" "container_host_scripts_path" "container_build_path" "container_compose_file_path" "secret_mapping_var_name" "container_scripts_path" "container_name" "container_script_type"; then 
         echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
@@ -107,7 +118,7 @@ function cdd_client_execute_deploy_database ()
 		echo "deploy the database deployment container to the server"
 
 		# declare the function arguments
-		local -A local_client_execute_deploy_database_args=(
+		local -A remote_deploy_args=(
 				["container_hostname"]="$(cds_get_array_val "${arg_array}" "container_hostname")"
 
 				["container_host_project_path"]="$(cds_get_array_val "${arg_array}" "container_host_project_path")"
@@ -120,7 +131,7 @@ function cdd_client_execute_deploy_database ()
 
 			)
 		
-		cds_client_execute_remote_deployment "local_client_execute_deploy_database_args"
+		cds_client_execute_remote_deployment "remote_deploy_args"
 
 	else
 		# this is a local deployment scenario:
@@ -148,6 +159,7 @@ function cdd_client_execute_deploy_database ()
 				["env_vars_block"]="$(cds_get_array_val "${arg_array}" "env_vars_block")"
 				["container_name"]="$(cds_get_array_val "${arg_array}" "container_name")"
 				["container_build_path"]="$(cds_get_array_val "${arg_array}" "container_build_path")"
+				["container_script_type"]="$(cds_get_array_val "${arg_array}" "container_script_type")"
 			)
 
 		# execute the corresponding container scripts and shutdown the container

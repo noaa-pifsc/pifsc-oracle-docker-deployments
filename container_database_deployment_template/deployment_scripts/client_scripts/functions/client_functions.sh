@@ -71,10 +71,14 @@ function client_deploy_database ()
 }
 
 # function to load the client configuration files (secrets and environment server configuration)
+# the function accepts one argument:
+# 1: The container environment name (dev, test, prod)
 function client_load_secret_config_files()
 {
+	local $local_env_name="${1}"
+
 	# validate the bash variable values
-	if ! cds_validate_required_vars	"CONTAINER_ENV_NAME"; then
+	if ! cds_validate_required_vars	"local_env_name"; then
         echo "Error: client_load_secret_config_files() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -83,8 +87,8 @@ function client_load_secret_config_files()
 	local curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# load the bash variables for the runtime configuration (/container_database_deployment/deployment_scripts/config)
-	source "${curr_dir}/../../config/deploy_config.${CONTAINER_ENV_NAME}.sh"
+	source "${curr_dir}/../../config/deploy_config.${local_env_name}.sh"
 	
-	# load the oracle credentials into bash variables (/container_database_deployment/secrets/$CONTAINER_ENV_NAME)
-	source "${curr_dir}/../../../secrets/${CONTAINER_ENV_NAME}/secrets.sh"
+	# load the oracle credentials into bash variables (/container_database_deployment/secrets/$local_env_name)
+	source "${curr_dir}/../../../secrets/${local_env_name}/secrets.sh"
 }
