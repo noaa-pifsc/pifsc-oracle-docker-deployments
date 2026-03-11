@@ -137,7 +137,7 @@ function cdd_client_execute_deploy_database ()
 		# this is a local deployment scenario:
 
 		# construct the argument array for cds_shared_build_deploy_container_compose()
-		local -A local_build_deploy_container_compose_args=(
+		local -A compose_args=(
 			["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
 			["container_build_image"]="yes"
 			["container_build_path"]="$(cds_shared_get_array_val "${arg_array}" "container_build_path")"
@@ -146,13 +146,13 @@ function cdd_client_execute_deploy_database ()
 		)
 
 		# stop and remove any running container and build/run the container from the source code
-		cds_client_deploy_local_compose "local_build_deploy_container_compose_args"
+		cds_client_deploy_local_compose "compose_args"
 
 		# process the configuration data to pass securely via STDIN and clear the floating global bash variables
 		cds_shared_process_config_data "$(cds_shared_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
 
 		# declare the function arguments for executing the container script using cdd_execute_container_script()
-		local -A local_client_execute_deploy_database_args=(
+		local -A execute_args=(
 				["container_scripts_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")"
 				["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
 				["config_data_var_name"]="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
@@ -163,7 +163,7 @@ function cdd_client_execute_deploy_database ()
 			)
 
 		# execute the corresponding container scripts and shutdown the container
-		cdd_execute_container_script "local_client_execute_deploy_database_args"
+		cdd_execute_container_script "execute_args"
 
 		echo "the local container deployment script has finished executing"
 	fi

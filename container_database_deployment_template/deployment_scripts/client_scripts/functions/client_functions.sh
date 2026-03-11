@@ -49,7 +49,7 @@ function proj_client_deploy_database ()
 	proj_client_load_secrets
 
 	# declare the function arguments
-	local -A local_client_deploy_database_func_args=(
+	local -A deploy_args=(
 			["parent_root_folder"]="${REPO_ROOT_PATH}"
 			["container_deploy_dest"]="${CONTAINER_DEPLOY_DEST}"
 			["container_hostname"]="${CONTAINER_HOSTNAME}"
@@ -67,7 +67,7 @@ function proj_client_deploy_database ()
 		)
 
 	# prepare and execute the corresponding deployment script:
-	cdd_client_execute_deploy_database "local_client_deploy_database_func_args"
+	cdd_client_execute_deploy_database "deploy_args"
 }
 
 # function to load the client configuration files (secrets and environment server configuration)
