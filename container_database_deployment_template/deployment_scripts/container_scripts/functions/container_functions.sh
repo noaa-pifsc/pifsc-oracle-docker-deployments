@@ -30,13 +30,13 @@ function proj_container_initialize()
 	shift 3
 
 	# declare the strictly scoped array to safely catch the secrets
-	local -A LOCAL_SECRETS_ARR=()
+	local -A local_secrets_arr=()
 
 	# call the pure CDD core to initialize and populate the secure array
-	cdd_container_initialize_script "${calling_script_path}" "${container_root_sql_path}" "${secret_mapping_var_name}" "LOCAL_SECRETS_ARR" || return 1
+	cdd_container_initialize_script "${calling_script_path}" "${container_root_sql_path}" "${secret_mapping_var_name}" "local_secrets_arr" || return 1
 
 	# pass the secure array and any remaining arguments ($@) dynamically to the project-specific connection string generator
-	proj_container_generate_connection_strings "LOCAL_SECRETS_ARR" "$@" || return 1
+	proj_container_generate_connection_strings "local_secrets_arr" "$@" || return 1
 }
 
 # function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:

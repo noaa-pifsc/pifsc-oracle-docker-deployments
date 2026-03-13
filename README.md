@@ -35,15 +35,18 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 -   For the production docker and database instances the abbreviation used is "prod" 
 
 ## Naming Conventions
-The function naming convention follows the [namespace]_[scope]_[action] format, allowing developers to instantly identify the module a function belongs to and the execution environment where it is designed to run.
--   Namespace: cdd_
--   Execution Scopes: 
-    -   client_: Executes on the developer workstation, CI/CD runner, or jumpbox.
-    -   host_: Executes on the remote Docker host server.
-    -   container_: Executes natively inside the spun-up database container.
-    -   shared_: Utilities utilized across multiple execution scopes.
--   Resources: 
-    -   [CDS naming conventions](./modules/CDS/README.md#cds-naming-conventions)
+-   ### Functions
+    -   The function naming convention follows the [namespace]_[scope]_[action] format, allowing developers to instantly identify the module a function belongs to and the execution environment where it is designed to run.
+    -   Namespace: cdd_
+    -   Execution Scopes: 
+        -   client_: Executes on the developer workstation, CI/CD runner, or jumpbox.
+        -   host_: Executes on the remote Docker host server.
+        -   container_: Executes natively inside the spun-up database container.
+        -   shared_: Utilities utilized across multiple execution scopes.
+    -   Resources: 
+        -   [CDS function naming conventions](./modules/CDS/README.md#functions)
+-   ### Variables
+    -   The CDD follows the defined [CDS variable naming conventions](./modules/CDS/README.md#variables)
 
 ## CDD Implementation Procedure
 -   \*Note: A working example of this Deployment Process for an Oracle/APEX data system is available in the [PIFSC Resource Inventory (PRI)](https://github.com/noaa-pifsc/PIFSC-Resource-Inventory) ([Documentation](https://github.com/noaa-pifsc/PIFSC-Resource-Inventory/blob/master/container_database_deployment/docs/Oracle%20Docker%20Deployment%20Process.md)).
@@ -55,17 +58,12 @@ The function naming convention follows the [namespace]_[scope]_[action] format, 
         -   [.env](./container_database_deployment_template/.env):
             -   Replace the [PROJECT_CONTAINER_NAME] placeholder to specify a unique container name based on the project, if two containers run with the same name there will be a conflict and they won't be able to run concurrently.
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
-            -   [shared_scripts/custom_shared_functions.sh](./container_database_deployment_template/deployment_scripts/shared_scripts/custom_shared_functions.sh):
-                -   Update proj_shared_define_env_vars_block()  to validate the required bash variable values and define the list of environment variables that are passed to bash scripts as arguments when they are executed (examples are provided)
-            -   [client_scripts/functions/custom_client_functions.sh](./container_database_deployment_template/deployment_scripts/client_scripts/functions/custom_client_functions.sh):
-                -   Update proj_client_generate_ssh_env_vars() to validate the required bash variable values and construct the string of ssh environment variables for the database deployment server bash script (examples are provided)
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
                 -   Update proj_container_generate_connection_strings() to validate the required bash variable values and define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
-                    -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.${CONTAINER_ENV_NAME}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
-                -   Update container_unset_connection_strings() to unset each of the connection string variables defined in proj_container_generate_connection_strings() to ensure the credentials are not left available in the given bash/ssh session
+                    -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.${container_env_name}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
             -   [container_scripts](./container_database_deployment_template/deployment_scripts/container_scripts):
-                -   Create a new .sh file for each database deployment/upgrade/rollback script implemented in the data system project in the format container_${CONTAINER_SCRIPT_TYPE}.sh where ${CONTAINER_SCRIPT_TYPE} is provided by the user at runtime when the [client_scripts/proj_client_deploy_database.sh](./container_database_deployment_template/deployment_scripts/client_scripts/proj_client_deploy_database.sh) script is executed
-                    -   [container_deploy_version2.0.template.sh](./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_version2.0.template.sh) is provided as an example of a container database deployment script with a ${CONTAINER_SCRIPT_TYPE} value of "deploy_version2.0" so it can be copied and renamed based on the ${CONTAINER_SCRIPT_TYPE} value and to remove the ".template"
+                -   Create a new .sh file for each database deployment/upgrade/rollback script implemented in the data system project in the format container_${container_script_type}.sh where ${container_script_type} is provided by the user at runtime when the [client_scripts/proj_client_deploy_database.sh](./container_database_deployment_template/deployment_scripts/client_scripts/proj_client_deploy_database.sh) script is executed
+                    -   [container_deploy_version2.0.template.sh](./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_version2.0.template.sh) is provided as an example of a container database deployment script with a ${container_script_type} value of "deploy_version2.0" so it can be copied and renamed based on the ${container_script_type} value and to remove the ".template"
             -   [config/custom_container_config.sh](./container_database_deployment_template/deployment_scripts/config/custom_container_config.sh):
                 -   Update the global bash variable declarations based on the specific data system being implemented, each one has comments and an example.  In some cases the variable declaration has a placeholder enclosed by brackets that are intended to be replaced with appropriate values for the given data system:
                     -   SECRET_MAPPING_ARR is a special variable that is used to send the database credentials between bash scripts, each array element value needs to correspond with a global bash variable declaration in the corresponding secrets.sh file

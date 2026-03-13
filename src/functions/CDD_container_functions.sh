@@ -7,7 +7,7 @@
 # 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # 4: the name of the output associative array where parsed secrets will be safely stored (scoped to the calling function).
 # Example Usage:  
-# cdd_container_initialize_script "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR" "PARSED_SECRETS_ARR"
+# cdd_container_initialize_script "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR" "parsed_secrets_arr"
 function cdd_container_initialize_script ()
 {
 	# retrieve the current script name that was originally invoked
