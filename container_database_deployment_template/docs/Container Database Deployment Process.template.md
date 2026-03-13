@@ -16,6 +16,21 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
 ## Database Instances
 -    See [CDD Database Instances](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#database-instances)
 
+## Naming Conventions
+-   ### Functions:
+    -   The function naming convention follows the [namespace]_[scope]_[action] format, allowing developers to instantly identify the module a function belongs to and the execution environment where it is designed to run.
+    -   Namespace: proj_
+    -   Execution Scopes: 
+        -   client_: Executes on the developer workstation, CI/CD runner, or jumpbox before handing off to the CDD framework.
+        -   container_: Executes inside the container to dynamically map localized secrets to connection strings.
+        -   shared_: Utilities utilized across multiple execution scopes.
+    -   See [CDD Function Naming Conventions](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#functions)
+-   ### Variables
+    -   This project follows the defined [CDD variable naming conventions](./modules/CDD/README.md#variables)
+
+## Security Features
+-   See [CDD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#security-features)
+
 ## Setup
 -    See [CDD Setup](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#setup)
 

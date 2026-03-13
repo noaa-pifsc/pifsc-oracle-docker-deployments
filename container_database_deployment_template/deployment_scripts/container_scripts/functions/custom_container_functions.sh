@@ -5,7 +5,7 @@
 # 1: the name of the secure array containing the parsed secrets
 # 2-n: the names of the variables to output the connection strings to
 # Usage:
-# proj_container_generate_connection_strings "SECURE_SECRETS_ARR" "DB_CONN_STRING" "DB_GIM_CONN_STRING" "DB_RIA_CONN_STRING"
+# proj_container_generate_connection_strings "SECURE_SECRETS_ARR" "db_conn_string" "db_gim_conn_string" "db_ria_conn_string"
 function proj_container_generate_connection_strings ()
 {
 	local parsed_secrets_arr_name="${1}"
@@ -17,8 +17,8 @@ function proj_container_generate_connection_strings ()
     fi 
 
     # validation check: ensure the argument is a valid array
-    if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: proj_container_generate_connection_strings() function argument '${arg_array}' is not a valid associative array." >&2
+    if [[ "$(declare -p "${parsed_secrets_arr_name}" 2>/dev/null)" != "declare -A"* ]]; then
+        echo "Error: proj_container_generate_connection_strings() function argument '${parsed_secrets_arr_name}' is not a valid associative array." >&2
         return 1
     fi
 
@@ -41,14 +41,14 @@ function proj_container_generate_connection_strings ()
 
 	# Create namerefs to safely assign values to the caller's local variables
 	# Examples:
-	# local -n data_conn="${out_data_conn_ref}"
-	# local -n app_conn="${out_app_conn_ref}"
+	# local -n data_conn_ref="${out_data_conn_ref}"
+	# local -n app_conn_ref="${out_app_conn_ref}"
 
 
 	# construct connection strings securely (enclose the passwords in quotation characters in case there are special characters)
 	# Examples: 
-	# data_conn="${secrets_arr[ORACLE_DB_USER]}/\"${secrets_arr[ORACLE_DB_PASS]}\"@${DB_HOST}/${DB_SERVICE_NAME}"
-	# app_conn="${secrets_arr[ORACLE_DB_APP_USER]}/\"${secrets_arr[ORACLE_DB_APP_PASS]}\"@${DB_HOST}/${DB_SERVICE_NAME}"
+	# data_conn_ref="${secrets_arr[ORACLE_DB_USER]}/\"${secrets_arr[ORACLE_DB_PASS]}\"@${DB_HOST}/${DB_SERVICE_NAME}"
+	# app_conn_ref="${secrets_arr[ORACLE_DB_APP_USER]}/\"${secrets_arr[ORACLE_DB_APP_PASS]}\"@${DB_HOST}/${DB_SERVICE_NAME}"
 	######## Database Connection Placeholder - END ########
 }
 }

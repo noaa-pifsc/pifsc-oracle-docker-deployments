@@ -7,7 +7,7 @@
 # 3: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # 4-n: an arbitrary number of variable names to output the connection strings to (passed to project-specific generator)
 # Example Usage: 
-# proj_container_initialize "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR" "DB_CONN_STRING" "DB_GIM_CONN_STRING" "DB_RIA_CONN_STRING"
+# proj_container_initialize "$0" "/usr/src/oracle_deploy/SQL" "SECRET_MAPPING_ARR" "db_conn_string" "db_gim_conn_string" "db_ria_conn_string"
 function proj_container_initialize()
 {
 	local calling_script_path="${1}"

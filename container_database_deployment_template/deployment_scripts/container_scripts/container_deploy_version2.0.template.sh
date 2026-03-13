@@ -17,13 +17,13 @@ function main()
 	local db_conn_string=""
 	local db_app_conn_string=""
 
-	# initialize the container and securely pass the local SECURE_SECRETS_ARR array to be populated with the parsed secret variables
-	proj_container_initialize "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}" "SECURE_SECRETS_ARR" "db_conn_string" "db_app_conn_string" || return 1
+	# initialize the container and securely pass the database connection strings to be populated by the function
+# Example for separate database and application schema credentials:
+# proj_container_initialize "${0}" "${CONTAINER_ROOT_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}" "db_conn_string" "db_app_conn_string" || return 1
 
 # Example for version 2.0 of the DB:
 # echo "deploy version 2.0 of the DB"
 
-# deploy version 2.0 of the DB
 #sqlplus -s /nolog <<EOF
 #@./automated_deployments/deploy_${CONTAINER_ENV_NAME}_db_v2.0.sql ${db_conn_string}
 # EOF
@@ -34,10 +34,11 @@ function main()
 # @./automated_deployments/deploy_apex_${CONTAINER_ENV_NAME}_v2.0.sql ${db_app_conn_string}
 # EOF
 
+######## Container Database Deployment Placeholder - END ########
+
+
 	# cleanup the container variables now that the script has finished running
 	proj_container_cleanup "${SECRET_MAPPING_VAR_NAME}"
-
-######## Container Database Deployment Placeholder - END ########
 
 	echo "The deployment script finished running"
 }

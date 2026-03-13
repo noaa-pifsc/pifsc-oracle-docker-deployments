@@ -22,13 +22,13 @@ function main ()
 			["container_host_source_path"]="${CONTAINER_HOST_PROJECT_PATH}"
 			["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
 			["deploy_script_path"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/host_deploy_database_elev_privs.sh"
-			["env_vars_block"]="$(proj_shared_define_env_vars_block)"
+			["env_vars_block"]="$(proj_shared_define_env_vars_block "${CONTAINER_ENV_NAME}" "${CONTAINER_SCRIPT_TYPE}")"
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 			["calling_script_path"]="${0}"
 			["process_stdin_config_data"]="yes"
 		)
 
-	echo "calling cds_host_deploy_container()"
+#	echo "calling cds_host_deploy_container() with the function arguments: $(cds_shared_dump_array_vals "func_args")"
 	
 	# initialize and build/run the container on the host machine with the specified function arguments:
 	cds_host_deploy_container "func_args"
