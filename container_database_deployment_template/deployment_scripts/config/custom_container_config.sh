@@ -8,10 +8,6 @@
 	# Example: CONTAINER_ACCOUNT_NAME="docker-user"
 	CONTAINER_ACCOUNT_NAME="[CONTAINER_ACCOUNT_NAME]"
 
-	# declare a variable for the path of the container compose file
-	# Example: CONTAINER_COMPOSE_FILE_PATH="docker-compose.yml"
-	CONTAINER_COMPOSE_FILE_PATH="[CONTAINER_COMPOSE_FILE_PATH]"
-
 	# define the project folder name
 	# Example: CONTAINER_PROJECT_FOLDER="my-project-name"
 	CONTAINER_PROJECT_FOLDER="[CONTAINER_PROJECT_FOLDER]"

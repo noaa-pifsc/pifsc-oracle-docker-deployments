@@ -5,7 +5,7 @@
 # 1: the name of the secure array containing the parsed secrets
 # 2-n: the names of the variables to output the connection strings to
 # Usage:
-# proj_container_generate_connection_strings "SECURE_SECRETS_ARR" "db_conn_string" "db_gim_conn_string" "db_ria_conn_string"
+# proj_container_generate_connection_strings "SECURE_SECRETS_ARR" "db_conn_string" "app_conn_string"
 function proj_container_generate_connection_strings ()
 {
 	local parsed_secrets_arr_name="${1}"
