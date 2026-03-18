@@ -26,7 +26,6 @@ function cdd_set_container_script_type_var ()
 
 # function that initializes the client deployment script and processes the client runtime arguments and prompts for any missing values
 # This function accepts the following parameters as elements in the specified array name (arg_array): 
-# calling_script_path: the full path of the calling script
 # script_log_path: the full path to the folder that deployment logs will be saved to
 # container_env_name: (optional) the environment name (dev, test, prod)
 # container_deploy_dest: (optional) deployment destination (local, server)
@@ -45,7 +44,7 @@ function cdd_client_process_runtime_arguments ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "calling_script_path" "script_log_path" "client_repository_root_path" "container_script_path"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "script_log_path" "client_repository_root_path" "container_script_path"; then 
         echo "Error: cdd_client_process_runtime_arguments() function argument validation failed" >&2
         return 1
     fi
@@ -53,7 +52,6 @@ function cdd_client_process_runtime_arguments ()
 	# declare the function arguments for cds_client_process_runtime_arguments()
 	local -A local_client_process_runtime_arguments=(
 			["script_log_path"]="$(cds_shared_get_array_val "${arg_array}" "script_log_path")"
-			["calling_script_path"]="$(cds_shared_get_array_val "${arg_array}" "calling_script_path")"
 			["container_env_name"]="$(cds_shared_get_array_val "${arg_array}" "container_env_name")"
 			["container_deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")"
 			["client_repository_root_path"]="$(cds_shared_get_array_val "${arg_array}" "client_repository_root_path")"
