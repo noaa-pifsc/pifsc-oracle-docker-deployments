@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# function to run the oracle database scripts within the running container. This function accepts the following parameters as elements in the specified array name  (arg_array):
+# function to run the database scripts within the running container. This function accepts the following parameters as elements in the specified array name  (arg_array):
 # container_scripts_path: the path to the container's bash scripts folder
 # container_compose_file_path: the path of the container compose file
 # config_data_var_name: name of the configuration data variable

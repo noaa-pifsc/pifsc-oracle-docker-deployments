@@ -54,7 +54,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
     -   Copy the [container_database_deployment_template](./container_database_deployment_template) to the root repository folder of the data system repository and rename it to container_database_deployment
     -   Update the corresponding files in the data system repository based on the following guidance:
         -   [.dockerignore](./container_database_deployment_template/.dockerignore): 
-            -   Update to include/exclude folders as appropriate to build the docker image, by default the Dockerfile will copy everything from the data system repository's root folder to the /usr/src/oracle_deploy folder within the image (examples are provided)
+            -   Update to include/exclude folders as appropriate to build the docker image, by default the Dockerfile will copy everything from the data system repository's root folder to the /usr/src/database_deploy folder within the image (examples are provided)
         -   [.env](./container_database_deployment_template/.env):
             -   Replace the [PROJECT_CONTAINER_NAME] placeholder to specify a unique container name based on the project, if two containers run with the same name there will be a conflict and they won't be able to run concurrently.
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
