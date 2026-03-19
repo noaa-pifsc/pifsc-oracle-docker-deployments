@@ -49,16 +49,8 @@ function cdd_client_process_runtime_arguments ()
         return 1
     fi
 
-	# declare the function arguments for cds_client_process_runtime_arguments()
-	local -A local_client_process_runtime_arguments=(
-			["script_log_path"]="$(cds_shared_get_array_val "${arg_array}" "script_log_path")"
-			["container_env_name"]="$(cds_shared_get_array_val "${arg_array}" "container_env_name")"
-			["container_deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")"
-			["client_repository_root_path"]="$(cds_shared_get_array_val "${arg_array}" "client_repository_root_path")"
-		)
-
-	# process the runtime arguments
-	cds_client_process_runtime_arguments "local_client_process_runtime_arguments"
+	# process the runtime arguments using the arg_array variable that was passed as an argument
+	cds_client_process_runtime_arguments "${arg_array}"
 
 	# set the script type variable value into a local variable
 	local local_script_type=""
@@ -154,19 +146,8 @@ function cdd_client_execute_deploy_database ()
 		# process the configuration data to pass securely via STDIN and clear the floating global bash variables
 		cds_shared_process_config_data "$(cds_shared_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
 
-		# declare the function arguments for executing the container script using cdd_execute_container_script()
-		local -A execute_args=(
-				["container_scripts_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")"
-				["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
-				["config_data_var_name"]="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
-				["env_vars_block"]="$(cds_shared_get_array_val "${arg_array}" "env_vars_block")"
-				["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
-				["container_build_path"]="$(cds_shared_get_array_val "${arg_array}" "container_build_path")"
-				["container_script_type"]="$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
-			)
-
 		# execute the corresponding container scripts and shutdown the container
-		cdd_execute_container_script "execute_args"
+		cdd_execute_container_script "${arg_array}"
 
 		echo "the local container deployment script has finished executing"
 	fi
