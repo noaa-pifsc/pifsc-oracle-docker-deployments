@@ -3,7 +3,7 @@ services:
     build:
       context: ..
       dockerfile: container_database_deployment/Dockerfile
-    image: pifsc/${COMPOSE_PROJECT_NAME}:latest
+    image: pifsc/${PROJECT_CONTAINER_NAME}:latest
     logging:
       driver: "json-file"
       options:
@@ -11,4 +11,4 @@ services:
         max-file: "1"
 networks:
   default:
-    name: ${COMPOSE_PROJECT_NAME}_default
+    name: ${PROJECT_CONTAINER_NAME}_default
