@@ -67,7 +67,10 @@ function cdd_client_process_runtime_arguments ()
 	# Store the validated value back into the arguments array
 	cds_shared_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
-	echo "The runtime arguments are: container_env_name: $(cds_shared_get_array_val "${arg_array}" "container_env_name")\ncontainer_deploy_dest: $(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")\ncontainer_script_type: ${local_script_type}"
+	echo "The runtime arguments are:"
+	echo "container_env_name: $(cds_shared_get_array_val "${arg_array}" "container_env_name")"
+	echo "container_deploy_dest: $(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")"
+	echo "container_script_type: ${local_script_type}"
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "$(cds_shared_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh" ]; then
