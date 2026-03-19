@@ -24,7 +24,7 @@ function main()
 			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
 			["container_compose_file_path"]="${CONTAINER_COMPOSE_FILE_PATH}"
 			["container_host_source_path"]="${CONTAINER_HOST_SOURCE_PATH}"
-			["container_name"]="${COMPOSE_PROJECT_NAME}"
+			["container_name"]="${PROJECT_CONTAINER_NAME}"
 			["container_build_path"]="${CONTAINER_BUILD_PATH}"
 			["container_script_type"]="${CONTAINER_SCRIPT_TYPE}"
 		)
