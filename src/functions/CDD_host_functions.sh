@@ -2,10 +2,10 @@
 
 # function to initialize the container target folder (where the container project will be built/run) and build/run the container using an account with elevated privileges.  This function is run to build and run the container.  
 # This function accepts the following parameters as elements in the specified array name  (arg_array):
-# container_host_source_path: the full path to the container source directory
-# container_compose_file_path: the path of the container compose file (relative to the container_database_deployment source directory)
-# secret_mapping_var_name: the name of an associative array that maps the secret values passed to bash commands via STDIN
-# config_data_var_name: name of the configuration data variable
+# source_path: the full path to the container source directory
+# compose_path: the path of the container compose file (relative to the container_database_deployment source directory)
+# secret_map: the name of an associative array that maps the secret values passed to bash commands via STDIN
+# config_var: name of the configuration data variable
 function cdd_host_deploy_container ()
 {
 	# store the function array argument
@@ -18,20 +18,20 @@ function cdd_host_deploy_container ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var"; then 
         echo "Error: cdd_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
 
-	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_data_var_name
-	cds_host_process_stdin_config_data "$(cds_shared_get_array_val "${arg_array}" "secret_mapping_var_name")" "$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
+	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $config_var
+	cds_host_process_stdin_config_data "$(cds_shared_get_array_val "${arg_array}" "secret_map")" "$(cds_shared_get_array_val "${arg_array}" "config_var")"
 
 	# construct the argument array for cds_shared_build_deploy_container_compose()
 	local -A local_build_deploy_container_compose_args=(
-		["compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
-		["container_build_image"]="yes"
-		["container_build_path"]="$(cds_shared_get_array_val "${arg_array}" "container_host_source_path")"
-		["container_image_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
+		["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
+		["build_image"]="yes"
+		["build_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
+		["image_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
 	)
 
 	# stop and remove any running container and build/run the container from the source code
@@ -40,14 +40,14 @@ function cdd_host_deploy_container ()
 
 # function to deploy the database container and execute the container script
 # This function accepts the following parameters as elements in the specified array name  (arg_array):
-# container_host_source_path: the full path to the container source directory
-# container_compose_file_path: the path of the container compose file (relative to the container_database_deployment source directory)
-# secret_mapping_var_name: the name of an associative array that maps the secret values passed to bash commands via STDIN
-# config_data_var_name: name of the configuration data variable
+# source_path: the full path to the container source directory
+# compose_path: the path of the container compose file (relative to the container_database_deployment source directory)
+# secret_map: the name of an associative array that maps the secret values passed to bash commands via STDIN
+# config_var: name of the configuration data variable
 # container_scripts_path: the path to the container's bash scripts folder
-# env_vars_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
+# env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
-# container_build_path: the full path to the directory where the docker source files are located
+# build_path: the full path to the directory where the docker source files are located
 function cdd_host_deploy_database_execute_container_script()
 {
 	# store the function array argument
@@ -60,17 +60,17 @@ function cdd_host_deploy_database_execute_container_script()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "container_host_source_path" "container_compose_file_path" "secret_mapping_var_name" "config_data_var_name" "container_scripts_path" "container_name" "container_build_path" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var" "container_scripts_path" "container_name" "build_path" "container_script_type"; then 
         echo "Error: cdd_host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
 
 	# declare the function arguments
 	local -A deploy_container_args=(
-			["container_host_source_path"]="$(cds_shared_get_array_val "${arg_array}" "container_host_source_path")"
-			["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
-			["config_data_var_name"]="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
-			["secret_mapping_var_name"]="$(cds_shared_get_array_val "${arg_array}" "secret_mapping_var_name")"
+			["source_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
+			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
+			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
+			["secret_map"]="$(cds_shared_get_array_val "${arg_array}" "secret_map")"
 		)
 
 	# deploy the container to the host server
@@ -79,11 +79,11 @@ function cdd_host_deploy_database_execute_container_script()
 	# declare the function arguments
 	local -A local_client_execute_deploy_database_args=(
 			["container_scripts_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")"
-			["container_compose_file_path"]="$(cds_shared_get_array_val "${arg_array}" "container_compose_file_path")"
-			["config_data_var_name"]="$(cds_shared_get_array_val "${arg_array}" "config_data_var_name")"
-			["env_vars_block"]="$(cds_shared_get_array_val "${arg_array}" "env_vars_block")"
+			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
+			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
+			["env_block"]="$(cds_shared_get_array_val "${arg_array}" "env_block")"
 			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
-			["container_build_path"]="$(cds_shared_get_array_val "${arg_array}" "container_build_path")"
+			["build_path"]="$(cds_shared_get_array_val "${arg_array}" "build_path")"
 			["container_script_type"]="$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
 		)
 
