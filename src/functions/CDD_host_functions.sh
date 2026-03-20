@@ -6,6 +6,7 @@
 # compose_path: the path of the container compose file (relative to the container_database_deployment source directory)
 # secret_map: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # config_var: name of the configuration data variable
+# image_name: the name of the image that is being built (e.g. pifsc/great-project:latest)
 function cdd_host_deploy_container ()
 {
 	# store the function array argument
@@ -18,7 +19,7 @@ function cdd_host_deploy_container ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var" "image_name"; then 
         echo "Error: cdd_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
@@ -31,7 +32,7 @@ function cdd_host_deploy_container ()
 		["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
 		["build_image"]="yes"
 		["build_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
-		["image_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
+		["image_name"]="$(cds_shared_get_array_val "${arg_array}" "image_name")"
 	)
 
 	# stop and remove any running container and build/run the container from the source code
@@ -76,17 +77,6 @@ function cdd_host_deploy_database_execute_container_script()
 	# deploy the container to the host server
 	cdd_host_deploy_container "deploy_container_args"
 	
-	# declare the function arguments
-	local -A local_client_execute_deploy_database_args=(
-			["container_scripts_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")"
-			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
-			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
-			["env_block"]="$(cds_shared_get_array_val "${arg_array}" "env_block")"
-			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
-			["build_path"]="$(cds_shared_get_array_val "${arg_array}" "build_path")"
-			["container_script_type"]="$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
-		)
-
 	# execute the container script 
-	cdd_execute_container_script "local_client_execute_deploy_database_args"
+	cdd_execute_container_script "${arg_array}"
 }

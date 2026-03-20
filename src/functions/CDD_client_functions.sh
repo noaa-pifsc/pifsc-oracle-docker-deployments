@@ -87,8 +87,7 @@ function cdd_client_process_runtime_arguments ()
 # parent_root_folder: the repository root folder (used to convert all .sh files to use linux-style line endings for compatibility purposes)
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
-# Example Usage:
-#   cdd_client_execute_deploy_database "FUNC_ARGS"
+# image_name: the name of the image that is being built (e.g. pifsc/great-project:latest)
 function cdd_client_execute_deploy_database ()
 {
 	# store the function array argument
@@ -101,12 +100,12 @@ function cdd_client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "config_var" "container_host_scripts_path" "build_path" "compose_path" "secret_map" "container_scripts_path" "container_name" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "parent_root_folder" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "config_var" "container_host_scripts_path" "build_path" "compose_path" "secret_map" "container_scripts_path" "container_name" "container_script_type" "image_name"; then 
         echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
 
-	# Check if the CONTAINER_DEPLOY_DEST variable is "server" 
+	# Check if the deploy_dest variable is "server" 
 	if [[ "$(cds_shared_get_array_val "${arg_array}" "deploy_dest")" == "server" ]]; then
 
 		# this is a server deployment
@@ -135,7 +134,7 @@ function cdd_client_execute_deploy_database ()
 			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
 			["build_image"]="yes"
 			["build_path"]="$(cds_shared_get_array_val "${arg_array}" "build_path")"
-			["image_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
+			["image_name"]="$(cds_shared_get_array_val "${arg_array}" "image_name")"
 			["export_secrets"]="no"
 		)
 

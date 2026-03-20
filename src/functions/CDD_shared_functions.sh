@@ -37,7 +37,7 @@ function cdd_execute_container_script ()
 	# construct arguments for the cds_shared_execute_container_script() function
 	local -A execute_container_script_args=(
 			["script_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")/container_$(cds_shared_get_array_val "${arg_array}" "container_script_type").sh"
-			["config_var"]="${trap_config_data}"
+			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
 			["env_block"]="$(cds_shared_get_array_val "${arg_array}" "env_block")"
 			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
 		)

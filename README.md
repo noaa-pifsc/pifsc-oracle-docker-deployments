@@ -56,7 +56,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
         -   [.dockerignore](./container_database_deployment_template/.dockerignore): 
             -   Update to include/exclude folders as appropriate to build the docker image, by default the Dockerfile will copy everything from the data system repository's root folder to the /usr/src/database_deploy folder within the image (examples are provided)
         -   [.env](./container_database_deployment_template/.env):
-            -   Replace the [PROJECT_CONTAINER_NAME] placeholder to specify a unique container name based on the project, if two containers run with the same name there will be a conflict and they won't be able to run concurrently.
+            -   Replace the [CONTAINER_NAME] placeholder to specify a unique container name based on the project, if two containers run with the same name there will be a conflict and they won't be able to run concurrently.
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
                 -   Update proj_container_generate_connection_strings() to validate the required bash variable values and define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
