@@ -31,7 +31,7 @@ function cdd_set_container_script_type_var ()
 # deploy_dest: (optional) deployment destination (local, server)
 # container_script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
 # repo_root: the client repository root path that will have dos2unix executed for it to ensure linux compatible line endings
-# container_script_path: the script path for the container scripts
+# container_scripts_path: the script path for the container scripts
 function cdd_client_process_runtime_arguments ()
 {
 	# store the function array argument
@@ -44,7 +44,7 @@ function cdd_client_process_runtime_arguments ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "log_path" "repo_root" "container_script_path"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "log_path" "repo_root" "container_scripts_path"; then 
         echo "Error: cdd_client_process_runtime_arguments() function argument validation failed" >&2
         return 1
     fi
@@ -65,8 +65,8 @@ function cdd_client_process_runtime_arguments ()
 	echo "container_script_type: ${local_script_type}"
 
 	# validate that the corresponding container script exists:
-	if [ ! -f "$(cds_shared_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh" ]; then
-		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: $(cds_shared_get_array_val "${arg_array}" "container_script_path")/container_${local_script_type}.sh"
+	if [ ! -f "$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")/container_${local_script_type}.sh" ]; then
+		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: $(cds_shared_get_array_val "${arg_array}" "container_scripts_path")/container_${local_script_type}.sh"
 		return 1
 	fi
 }

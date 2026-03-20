@@ -5,10 +5,10 @@
 ##### Container Configuration Variables: #####
 
 	# define the container's root folder where the source files are copied
-	CONTAINER_ROOT_PATH="/usr/src/database_deploy"
+	ROOT_PATH="/usr/src/database_deploy"
 
 	# define the path to the container's bash scripts folder
-	CONTAINER_SCRIPTS_PATH="${CONTAINER_ROOT_PATH}/container_database_deployment/deployment_scripts/container_scripts"
+	CONTAINER_SCRIPTS_PATH="${ROOT_PATH}/container_database_deployment/deployment_scripts/container_scripts"
 
 ##### Container Project Configuration Variables: #####
 
