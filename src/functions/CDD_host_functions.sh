@@ -45,7 +45,7 @@ function cdd_host_deploy_container ()
 # compose_path: the path of the container compose file (relative to the container_database_deployment source directory)
 # secret_map: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # config_var: name of the configuration data variable
-# scripts_path: the path to the container's bash scripts folder
+# container_scripts_path: the path to the container's bash scripts folder
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
 # build_path: the full path to the directory where the docker source files are located
@@ -63,7 +63,7 @@ function cdd_host_deploy_database_execute_container_script()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var" "scripts_path" "container_name" "build_path" "container_script_type" "image_name"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var" "container_scripts_path" "container_name" "build_path" "container_script_type" "image_name"; then 
         echo "Error: cdd_host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
