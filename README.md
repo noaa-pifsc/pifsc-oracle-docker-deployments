@@ -100,14 +100,14 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
         -   Script Type (e.g. deploy_version1.5 to deploy version 1.5 of the database to a blank schema by calling the container_deploy_version1.5.sh container deployment script)
             -   This value is saved in $CONTAINER_SCRIPT_TYPE and provided to subsequent scripts to specify which automated container database deployment script is executed
     -   A log file for each client script execution is saved in [deployment_script_logs](./container_database_deployment_template/deployment_script_logs) and is named client_deploy_database.sh.$(date +%Y%m%d_%H%M%S).log based on the date/time the script is executed.  This file will include the output from the remote host and container scripts
-    -   (shown as step 2 in the diagram) The client script will clone the data system repository ($CONTAINER_GIT_URL) to the designated folder ($CONTAINER_HOST_PROJECT_PATH) in docker host via ssh.
+    -   (shown as step 2 in the diagram) The client script will clone the data system repository ($GIT_URL) to the designated folder ($HOST_SOURCE_PATH) in docker host via ssh.
     -   (shown as step 3 in the diagram) The client script executes the [host_deploy_database.sh](./container_database_deployment_template/deployment_scripts/host_scripts/host_deploy_database.sh) script on the docker host via ssh
         -   When initiate_container.sh runs on the remote host it changes the permissions on the designated source directory to allow the designated docker account (this is the account allowed to build/run containers) to read the files.
-            -   (shown as step 4 in the diagram) The [host_deploy_database_elev_privs.sh](./container_database_deployment_template/deployment_scripts/host_scripts/host_deploy_database_elev_privs.sh) script is executed as the designated docker account ($CONTAINER_ACCOUNT_NAME) on the remote host
+            -   (shown as step 4 in the diagram) The [host_deploy_database_elev_privs.sh](./container_database_deployment_template/deployment_scripts/host_scripts/host_deploy_database_elev_privs.sh) script is executed as the designated docker account ($CONTAINER_PRIV_USER) on the remote host
                 -   The script builds/runs the container
                 -   (shown as step 5 in the diagram) The script executes the corresponding bash script within the running container (container_$CONTAINER_SCRIPT_TYPE.sh - e.g. ./container_database_deployment_template/deployment_scripts/container_scripts/container_deploy_versionx.x.sh] will deploy version x.x of the database and APEX app to a blank database).
                     -   (shown as step 6 in the diagram) The bash container script runs a series of SQLPlus scripts that are managed within the corresponding data system repository that perform the processes on the database based on the use case and database environment.  
-            -   The docker source files are removed from $CONTAINER_HOST_PROJECT_PATH
+            -   The docker source files are removed from $HOST_SOURCE_PATH
 
 ## Security Features
 The CDD module handles the specific complexities of database containers, connection strings, and sqlplus scripts. Its security posture focuses on the container execution scope and lifecycle management.
