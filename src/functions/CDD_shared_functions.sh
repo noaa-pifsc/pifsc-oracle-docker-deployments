@@ -7,6 +7,7 @@
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
 # build_path: the local container build folder path (/container_database_deployment)
+# container_script_type: script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6)
 function cdd_execute_container_script ()
 {
 	# store the function array argument
@@ -27,12 +28,12 @@ function cdd_execute_container_script ()
 	# store the script type value while still in scope
 	
 	# Grab the specific array values while the local array is still in scope
-	local trap_config_data="$(cds_shared_get_array_val "${arg_array}" "config_var")"
+	local trap_config_var="$(cds_shared_get_array_val "${arg_array}" "config_var")"
 	local trap_compose_path="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
 	local trap_build_path="$(cds_shared_get_array_val "${arg_array}" "build_path")"
 
 	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_shared_execute_container_script() functon is run
-	trap "cds_shared_shutdown_cleanup_container_compose '${trap_config_data}' '${trap_compose_path}' '${trap_build_path}'" EXIT
+	trap "cds_shared_shutdown_cleanup_container_compose '${trap_config_var}' '${trap_compose_path}' '${trap_build_path}'" EXIT
 
 	# construct arguments for the cds_shared_execute_container_script() function
 	local -A execute_container_script_args=(
