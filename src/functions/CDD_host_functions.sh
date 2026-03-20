@@ -49,6 +49,7 @@ function cdd_host_deploy_container ()
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
 # build_path: the full path to the directory where the docker source files are located
+# image_name: the name of the image that is being built (e.g. pifsc/great-project:latest)
 function cdd_host_deploy_database_execute_container_script()
 {
 	# store the function array argument
@@ -61,7 +62,7 @@ function cdd_host_deploy_database_execute_container_script()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var" "container_scripts_path" "container_name" "build_path" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "config_var" "container_scripts_path" "container_name" "build_path" "container_script_type" "image_name"; then 
         echo "Error: cdd_host_deploy_database_execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -72,6 +73,7 @@ function cdd_host_deploy_database_execute_container_script()
 			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
 			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
 			["secret_map"]="$(cds_shared_get_array_val "${arg_array}" "secret_map")"
+			["image_name"]="$(cds_shared_get_array_val "${arg_array}" "image_name")"
 		)
 
 	# deploy the container to the host server
