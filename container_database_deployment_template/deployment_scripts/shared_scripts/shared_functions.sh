@@ -16,8 +16,8 @@ function proj_shared_define_env_vars_block()
 	local script_type="${2}"
 
 	# echo the strictly local runtime variables natively
-	echo "export CONTAINER_ENV_NAME='${env_name}'"
-	echo "export CONTAINER_SCRIPT_TYPE='${script_type}'"
+	echo "export ENV_NAME='${env_name}'"
+	echo "export SCRIPT_TYPE='${script_type}'"
 	
 	# use the dynamic generator for the global project configuration constants
 	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME"

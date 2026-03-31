@@ -5,22 +5,26 @@
 ##### Container Host Configuration Variables: #####
 
 	# container privileged user account that can run container commands
-	# Example: CONTAINER_ACCOUNT_NAME="docker-user"
-	CONTAINER_ACCOUNT_NAME="[CONTAINER_ACCOUNT_NAME]"
+	# Example: PRIV_USER="docker-user"
+	PRIV_USER="[CONTAINER_ACCOUNT_NAME]"
 
 	# define the project folder name
-	# Example: CONTAINER_PROJECT_FOLDER="my-project-name"
-	CONTAINER_PROJECT_FOLDER="[CONTAINER_PROJECT_FOLDER]"
+	# Example: PROJECT_FOLDER="my-project-name"
+	PROJECT_FOLDER="[PROJECT_FOLDER]"
 
 	# define the container git project URL
-	# Example: CONTAINER_GIT_URL="git@github.com/my-great-organization/my-great-project.git"
-	CONTAINER_GIT_URL="[CONTAINER_GIT_URL]"
+	# Example: GIT_URL="git@github.com/my-great-organization/my-great-project.git"
+	GIT_URL="[GIT_URL]"
+
+	# define the name of the container image
+	# Example: IMAGE_NAME="pifsc/pifsc-project-name:latest"
+	IMAGE_NAME="[IMAGE_NAME]"
 
 ##### Container Configuration Variables: #####
 
 	# define the container's root SQL folder where the sqlplus commands will be sent from
-	# Example: CONTAINER_ROOT_SQL_PATH="${CONTAINER_ROOT_PATH}/SQL"
-	CONTAINER_ROOT_SQL_PATH="[CONTAINER_ROOT_SQL_PATH]"
+	# Example: CONTAINER_SQL_PATH="${CONTAINER_ROOT_PATH}/SQL"
+	CONTAINER_SQL_PATH="[CONTAINER_SQL_PATH]"
 
 ##### Container Project Configuration Variables: #####
 

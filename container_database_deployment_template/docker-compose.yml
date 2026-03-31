@@ -1,9 +1,10 @@
 services:
-  oracle_deploy:
+  database_deploy:
     build:
       context: ..
       dockerfile: container_database_deployment/Dockerfile
-    image: pifsc/${PROJECT_CONTAINER_NAME}:latest
+    image: pifsc/${CONTAINER_NAME}:latest
+    container_name: ${CONTAINER_NAME}
     logging:
       driver: "json-file"
       options:
@@ -11,4 +12,4 @@ services:
         max-file: "1"
 networks:
   default:
-    name: ${PROJECT_CONTAINER_NAME}_default
+    name: ${CONTAINER_NAME}_default

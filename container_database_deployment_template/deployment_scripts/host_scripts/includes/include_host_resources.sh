@@ -20,5 +20,6 @@ source "${CURR_DIR}/../../config/initial_container_config.sh"
 source "${CURR_DIR}/../../config/custom_container_config.sh"
 source "${CURR_DIR}/../../config/container_config.sh"
 
-# include the custom shared function definitions
+# include the custom shared/host function definitions
 source "${CURR_DIR}/../../shared_scripts/shared_functions.sh"
+source "${CURR_DIR}/../functions/host_functions.sh"

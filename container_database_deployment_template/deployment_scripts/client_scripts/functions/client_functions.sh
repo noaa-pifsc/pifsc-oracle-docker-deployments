@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# function that initializes the container_env_name variable and loads the client secret/configuration files, and process the $config_data_var_name so it can be passed to a bash script via STDIN
+# function that initializes the env_name variable and loads the client secret/configuration files, and process the $config_var so it can be passed to a bash script via STDIN
 # This function accepts the following parameters as elements in the specified array name  (arg_array):
-# calling_script_path: the full path of the calling script
-# container_env_name: (optional) the environment name (dev, test, prod)
-# container_deploy_dest: (optional) deployment destination (local, server)
+# env_name: (optional) the environment name (dev, test, prod)
+# deploy_dest: (optional) deployment destination (local, server)
 # container_script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6) 
 function proj_client_deploy_database ()
 {
@@ -19,52 +18,46 @@ function proj_client_deploy_database ()
         return 1
     fi
 
-	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "calling_script_path"; then 
-        echo "Error: proj_client_deploy_database() function argument validation failed" >&2
-        return 1
-    fi
-
 	# validate the bash variable values
-	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "CONTAINER_COMPOSE_FILE_PATH" "CONTAINER_HOST_PROJECT_PATH" "CONTAINER_GIT_URL" "CONFIG_DATA_VAR_NAME" "CONTAINER_HOST_SCRIPTS_PATH" "CONTAINER_BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "PROJECT_CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
+	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "COMPOSE_PATH" "HOST_SOURCE_PATH" "GIT_URL" "CONFIG_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
         echo "Error: proj_client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
 	
 	# declare the function arguments for cdd_client_process_runtime_arguments()
 	local -A local_runtime_args=(
-			["script_log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
-			["calling_script_path"]="$(cds_shared_get_array_val "${arg_array}" "calling_script_path")"
-			["container_env_name"]="$(cds_shared_get_array_val "${arg_array}" "container_env_name")"
-			["container_deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "container_deploy_dest")"
+			["log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
+			["env_name"]="$(cds_shared_get_array_val "${arg_array}" "env_name")"
+			["deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "deploy_dest")"
 			["container_script_type"]="$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
-			["client_repository_root_path"]="${REPO_ROOT_PATH}"
-			["container_script_path"]="${LOCAL_CONTAINER_SCRIPTS_PATH}"
+			["repo_root"]="${REPO_ROOT_PATH}"
+			["scripts_path"]="${LOCAL_CONTAINER_SCRIPTS_PATH}"
 		)
 
 	# process the runtime arguments
 	cdd_client_process_runtime_arguments "local_runtime_args"
 
 	# load the client secrets and server configuration files
-	proj_client_load_secrets "$(cds_shared_get_array_val "local_runtime_args" "container_env_name")"
+	proj_client_load_secrets "$(cds_shared_get_array_val "local_runtime_args" "env_name")"
 
 	# declare the function arguments
 	local -A deploy_args=(
 			["parent_root_folder"]="${REPO_ROOT_PATH}"
-			["container_deploy_dest"]="$(cds_shared_get_array_val "local_runtime_args" "container_deploy_dest")"
-			["container_hostname"]="${CONTAINER_HOSTNAME}"
-			["env_vars_block"]="$(proj_shared_define_env_vars_block "$(cds_shared_get_array_val "local_runtime_args" "container_env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
+			["deploy_dest"]="$(cds_shared_get_array_val "local_runtime_args" "deploy_dest")"
+			["target_host"]="${CONTAINER_HOSTNAME}"
+			["env_block"]="$(proj_shared_define_env_vars_block "$(cds_shared_get_array_val "local_runtime_args" "env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
 			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
-			["container_compose_file_path"]="${CONTAINER_COMPOSE_FILE_PATH}"
-			["container_host_project_path"]="${CONTAINER_HOST_PROJECT_PATH}"
-			["container_git_url"]="${CONTAINER_GIT_URL}"
-			["config_data_var_name"]="${CONFIG_DATA_VAR_NAME}"
-			["container_host_scripts_path"]="${CONTAINER_HOST_SCRIPTS_PATH}"
-			["container_build_path"]="${CONTAINER_BUILD_PATH}"
-			["secret_mapping_var_name"]="${SECRET_MAPPING_VAR_NAME}"
-			["ssh_env_vars"]="$(proj_client_generate_ssh_env_vars "$(cds_shared_get_array_val "local_runtime_args" "container_env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
-			["container_name"]="${PROJECT_CONTAINER_NAME}"
+			["compose_path"]="${COMPOSE_PATH}"
+			["source_path"]="${HOST_SOURCE_PATH}"
+			["git_url"]="${GIT_URL}"
+			["config_var"]="${CONFIG_DATA_VAR_NAME}"
+			["host_scripts_path"]="${HOST_SCRIPTS_PATH}"
+			["build_path"]="${BUILD_PATH}"
+			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
+			["ssh_env_vars"]="$(proj_client_generate_ssh_env_vars "$(cds_shared_get_array_val "local_runtime_args" "env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
+			["container_name"]="${CONTAINER_NAME}"
 			["container_script_type"]="$(cds_shared_get_array_val "local_runtime_args" "container_script_type")"
+			["image_name"]="${IMAGE_NAME}"
 		)
 
 #	echo "calling cdd_client_execute_deploy_database() with the function arguments: $(cds_shared_dump_array_vals "deploy_args")"
@@ -91,7 +84,7 @@ function proj_client_load_secrets()
 	# load the bash variables for the runtime configuration (/container_database_deployment/deployment_scripts/config)
 	source "${curr_dir}/../../config/deploy_config.${env_name}.sh"
 	
-	# load the oracle credentials into bash variables (/container_database_deployment/secrets/$env_name)
+	# load the database credentials into bash variables (/container_database_deployment/secrets/$env_name)
 	source "${curr_dir}/../../../secrets/${env_name}/secrets.sh"
 }
 
@@ -111,5 +104,5 @@ function proj_client_generate_ssh_env_vars ()
 	fi
 	
 	# echo the local values natively and use the dynamic generatr for the global configuration constants (DB_HOST, DB_SERVICE_NAME)
-	echo "CONTAINER_ENV_NAME=\"${env_name}\" CONTAINER_SCRIPT_TYPE=\"${script_type}\" $(cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME")"
+	echo "ENV_NAME=\"${env_name}\" SCRIPT_TYPE=\"${script_type}\" $(cds_shared_generate_ssh_env_vars_string "DB_HOST" "DB_SERVICE_NAME")"
 }
