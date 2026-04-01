@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# function to generate oracle connection strings securely into scoped local variables
-# this function accepts 4 parameters:
+# function to generate database connection strings securely into scoped local variables
+# this function accepts the following parameters:
 # 1: the name of the secure array containing the parsed secrets
 # 2-n: the names of the variables to output the connection strings to
 # Usage:
@@ -50,5 +50,4 @@ function proj_container_generate_connection_strings ()
 	# data_conn_ref="${secrets_arr[ORACLE_DB_USER]}/\"${secrets_arr[ORACLE_DB_PASS]}\"@${DB_HOST}/${DB_SERVICE_NAME}"
 	# app_conn_ref="${secrets_arr[ORACLE_DB_APP_USER]}/\"${secrets_arr[ORACLE_DB_APP_PASS]}\"@${DB_HOST}/${DB_SERVICE_NAME}"
 	######## Database Connection Placeholder - END ########
-}
 }

@@ -19,7 +19,7 @@ function main()
 
 	# initialize the container and securely pass the database connection strings to be populated by the function
 # Example for separate database and application schema credentials:
-# proj_container_initialize "${0}" "${CONTAINER_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}" "db_conn_string" "db_app_conn_string" || return 1
+# proj_container_initialize "${CONTAINER_SQL_PATH}" "${SECRET_MAPPING_VAR_NAME}" "db_conn_string" "db_app_conn_string" || return 1
 
 # Example for version 2.0 of the DB:
 # echo "deploy version 2.0 of the DB"

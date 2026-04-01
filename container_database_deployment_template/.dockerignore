@@ -5,7 +5,7 @@
 # allow-list directories (allow the directory and its contents)
 # Examples:
 # !application_code/**
-# !docker/deployment_scripts/**
+# !container_database_deployment/deployment_scripts/**
 # !SQL/**
 
 # explicitly re-ignore sensitive files that might be inside allowed folders
