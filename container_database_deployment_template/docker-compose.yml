@@ -1,0 +1,15 @@
+services:
+  database_deploy:
+    build:
+      context: ..
+      dockerfile: container_database_deployment/Dockerfile
+    image: pifsc/${CONTAINER_NAME}:latest
+    container_name: ${CONTAINER_NAME}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+networks:
+  default:
+    name: ${CONTAINER_NAME}_default
