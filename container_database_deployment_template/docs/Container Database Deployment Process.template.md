@@ -26,7 +26,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
         -   shared_: Utilities utilized across multiple execution scopes.
     -   See [CDD Function Naming Conventions](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#functions)
 -   ### Variables
-    -   This project follows the defined [CDD variable naming conventions](./modules/CDD/README.md#variables)
+    -   This project follows the defined [CDD variable naming conventions](../../modules/CDD/README.md#variables)
 
 ## Security Features
 -   See [CDD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#security-features)
