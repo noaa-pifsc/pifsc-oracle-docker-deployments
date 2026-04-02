@@ -78,7 +78,7 @@ When the PIFSC Oracle data center was moved to the cloud it was no longer feasib
         -   If there are different versions of the automated SQLPlus scripts for the different environments include the ${ENV_NAME} value in the SQLPlus script filename references to ensure the appropriate SQLPlus script is executed
 
 ## Setup
--   Clone the given git project to a directory on the local client computer
+-   Recursively clone the given git project to a directory on the local client computer
 -   Within the project repository create the necessary bash files with the database credentials in each database instance (e.g. secrets.sh in the [dev folder](./container_database_deployment_template/secrets/dev/) for the development database instance)
 	-   \*Note: There is a [secrets template](./container_database_deployment_template/secrets/secrets.template.sh) file that can be used to create the secrets.sh file for each database instance 
     -   \*Note: the actual secret files should not be committed to the repository for security purposes, a [.gitignore](./container_database_deployment_template/.gitignore) file has been added to the repository to prevent these sensitive files from being included in git.  
