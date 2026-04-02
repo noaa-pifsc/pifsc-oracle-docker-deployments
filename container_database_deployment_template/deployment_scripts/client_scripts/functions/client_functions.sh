@@ -46,7 +46,7 @@ function proj_client_deploy_database ()
 			["deploy_dest"]="$(cds_shared_get_array_val "local_runtime_args" "deploy_dest")"
 			["target_host"]="${CONTAINER_HOSTNAME}"
 			["env_block"]="$(proj_shared_define_env_vars_block "$(cds_shared_get_array_val "local_runtime_args" "env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
-			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
+			["scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 			["compose_path"]="${COMPOSE_PATH}"
 			["source_path"]="${HOST_SOURCE_PATH}"
 			["git_url"]="${GIT_URL}"

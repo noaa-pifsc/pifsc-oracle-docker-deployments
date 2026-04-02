@@ -36,7 +36,7 @@ function proj_host_deploy_container_elev_privs()
 	# declare the function arguments as a local variable
 	local -A func_args=(
 			["env_block"]="$(proj_shared_define_env_vars_block "${ENV_NAME}" "${SCRIPT_TYPE}")"
-			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
+			["scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 			["config_var"]="${CONFIG_DATA_VAR_NAME}"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 			["compose_path"]="${COMPOSE_PATH}"

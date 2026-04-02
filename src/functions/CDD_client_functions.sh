@@ -83,7 +83,7 @@ function cdd_client_process_runtime_arguments ()
 # build_path: the local container build folder path (/container_database_deployment)
 # compose_path: the path of the container compose file (relative to the container build folder path)
 # secret_map: the name of the associative array containing the secret names and corresponding bash variables
-# container_scripts_path: the path to the container's bash scripts folder
+# scripts_path: the path to the container's bash scripts folder
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
 # image_name: the name of the image that is being built (e.g. pifsc/great-project:latest)
@@ -100,7 +100,7 @@ function cdd_client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "config_var" "host_scripts_path" "build_path" "compose_path" "secret_map" "container_scripts_path" "container_name" "container_script_type" "image_name"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "config_var" "host_scripts_path" "build_path" "compose_path" "secret_map" "scripts_path" "container_name" "container_script_type" "image_name"; then 
         echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi

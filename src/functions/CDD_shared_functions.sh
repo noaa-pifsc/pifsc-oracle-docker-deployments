@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # function to run the database scripts within the running container. This function accepts the following parameters as elements in the specified array name  (arg_array):
-# container_scripts_path: the path to the container's bash scripts folder
+# scripts_path: the path to the container's bash scripts folder
 # compose_path: the path of the container compose file
 # config_var: name of the configuration data variable
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
@@ -20,7 +20,7 @@ function cdd_execute_container_script ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "container_scripts_path" "compose_path" "config_var" "container_name" "build_path" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "scripts_path" "compose_path" "config_var" "container_name" "build_path" "container_script_type"; then 
         echo "Error: cdd_execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -37,7 +37,7 @@ function cdd_execute_container_script ()
 
 	# construct arguments for the cds_shared_execute_container_script() function
 	local -A execute_container_script_args=(
-			["script_path"]="$(cds_shared_get_array_val "${arg_array}" "container_scripts_path")/container_$(cds_shared_get_array_val "${arg_array}" "container_script_type").sh"
+			["script_path"]="$(cds_shared_get_array_val "${arg_array}" "scripts_path")/container_$(cds_shared_get_array_val "${arg_array}" "container_script_type").sh"
 			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
 			["env_block"]="$(cds_shared_get_array_val "${arg_array}" "env_block")"
 			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
