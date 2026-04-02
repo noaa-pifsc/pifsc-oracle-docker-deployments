@@ -23,7 +23,7 @@
 ##### Container Configuration Variables: #####
 
 	# define the container's root SQL folder where the sqlplus commands will be sent from
-	# Example: CONTAINER_SQL_PATH="${CONTAINER_ROOT_PATH}/SQL"
+	# Example: CONTAINER_SQL_PATH="${ROOT_PATH}/SQL"
 	CONTAINER_SQL_PATH="[CONTAINER_SQL_PATH]"
 
 ##### Container Project Configuration Variables: #####
