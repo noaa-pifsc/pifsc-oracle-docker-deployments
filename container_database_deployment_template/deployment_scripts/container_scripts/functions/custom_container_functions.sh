@@ -29,7 +29,7 @@ function proj_container_generate_connection_strings ()
 	
 	# declare separate local variable for each database connection string used in database deployments
 	# Example:
-	# local out_data_conn_ref="${2}"
+	# local out_data_conn_var="${2}"
 	# local out_app_conn_ref="${3}"
 
 	# validate that the required secret keys exist safely within the securely parsed array
@@ -41,7 +41,7 @@ function proj_container_generate_connection_strings ()
 
 	# Create namerefs to safely assign values to the caller's local variables
 	# Examples:
-	# local -n data_conn_ref="${out_data_conn_ref}"
+	# local -n data_conn_ref="${out_data_conn_var}"
 	# local -n app_conn_ref="${out_app_conn_ref}"
 
 
