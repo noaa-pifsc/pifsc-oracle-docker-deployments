@@ -52,5 +52,5 @@ function proj_container_cleanup ()
     fi
 
 	# unset bash variables specified by STDIN
-	cds_shared_unset_config_variables "${secret_map}"
+	cds_shared_unset_secret_variables "${secret_map}"
 }

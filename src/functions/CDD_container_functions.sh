@@ -26,7 +26,7 @@ function cdd_container_initialize_script ()
 	if [[ ! -t 0 ]]; then raw_stdin=$(cat); fi
 
 	# parse the raw_stdin into the calling function's local associative array
-	cds_shared_parse_config_data "${secret_map}" "${output_parsed_secrets_var_name}" <<< "${raw_stdin}"
+	cds_shared_parse_secret_data "${secret_map}" "${output_parsed_secrets_var_name}" <<< "${raw_stdin}"
 
 	# change the current directory to the designated SQL folder where the SQLPlus scripts can be executed using relative paths
 	cd "${container_sql_directory}"

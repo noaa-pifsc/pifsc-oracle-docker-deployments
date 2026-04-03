@@ -3,7 +3,7 @@
 # function to run the database scripts within the running container. This function accepts the following parameters as elements in the specified array name  (arg_array):
 # scripts_path: the path to the container's bash scripts folder
 # compose_path: the path of the container compose file
-# config_var: name of the configuration data variable
+# secret_var: name of the configuration data variable
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
 # build_path: the local container build folder path (/container_database_deployment)
@@ -20,7 +20,7 @@ function cdd_execute_container_script ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "scripts_path" "compose_path" "config_var" "container_name" "build_path" "container_script_type"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "scripts_path" "compose_path" "secret_var" "container_name" "build_path" "container_script_type"; then 
         echo "Error: cdd_execute_container_script() function argument validation failed" >&2
         return 1
     fi
@@ -28,17 +28,17 @@ function cdd_execute_container_script ()
 	# store the script type value while still in scope
 	
 	# Grab the specific array values while the local array is still in scope
-	local trap_config_var="$(cds_shared_get_array_val "${arg_array}" "config_var")"
+	local trap_secret_var="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
 	local trap_compose_path="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
 	local trap_build_path="$(cds_shared_get_array_val "${arg_array}" "build_path")"
 
 	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_shared_execute_container_script() functon is run
-	trap "cds_shared_shutdown_cleanup_container_compose '${trap_config_var}' '${trap_compose_path}' '${trap_build_path}'" EXIT
+	trap "cds_shared_shutdown_cleanup_container_compose '${trap_secret_var}' '${trap_compose_path}' '${trap_build_path}'" EXIT
 
 	# construct arguments for the cds_shared_execute_container_script() function
 	local -A execute_container_script_args=(
 			["script_path"]="$(cds_shared_get_array_val "${arg_array}" "scripts_path")/container_$(cds_shared_get_array_val "${arg_array}" "container_script_type").sh"
-			["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
+			["secret_var"]="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
 			["env_block"]="$(cds_shared_get_array_val "${arg_array}" "env_block")"
 			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
 		)
