@@ -60,8 +60,6 @@ function proj_client_deploy_database ()
 			["image_name"]="${IMAGE_NAME}"
 		)
 
-#	echo "calling cdd_client_execute_deploy_database() with the function arguments: $(cds_shared_dump_array_vals "deploy_args")"
-
 	# prepare and execute the corresponding deployment script:
 	cdd_client_execute_deploy_database "deploy_args"
 }
