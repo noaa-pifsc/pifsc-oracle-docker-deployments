@@ -1,44 +1,49 @@
 # [DATA SYSTEM NAME] - Container Database Deployment Process Documentation
 
 ## Overview
-When the PIFSC Oracle data center was moved to the cloud it was no longer feasible to deploy/upgrade/rollback databases and APEX applications directly from local workstations via the PIFSC network connection.  In an effort to automate the process and move it closer to the database/application servers the [Container Database Deployment (CDD)](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/) was developed.  The CDD can be executed by running a single script on the local client that will execute a series of commands.  The [DATA SYSTEM NAME] data system implements the CDD for several use cases.
+The [Container Database Deployment (CDD)](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/) was developed to automate the execution of SQL commands on a specified database instance from within a container. When the container is within the same network the performance improvement can be substantial when compared to running the same SQL commands from the PIFSC network. The CDD can be executed by running a single script on the local client that will execute a series of commands. The [DATA SYSTEM NAME] data system implements the CDD for several use cases.
 
 ## Resources
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
 
 ## Platform Requirements
--   See [CDD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#platform-requirements)
+-   Refer to the [CDD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#platform-requirements) documentation
 
 ## Data System Prerequisites
--    See [CDD Data System Prerequisites](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#data-system-prerequisites)
+-    Refer to the [CDD Data System Prerequisites](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#data-system-prerequisites) documentation
 
 ## Database Instances
--    See [CDD Database Instances](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#database-instances)
+-    Refer to the [CDD Database Instances](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#database-instances) documentation
 
 ## Naming Conventions
 -   ### Functions:
-    -   The function naming convention follows the [namespace]_[scope]_[action] format, allowing developers to instantly identify the module a function belongs to and the execution environment where it is designed to run.
+    -   The function naming convention follows the [namespace]\_[scope]\_[action] format, allowing developers to instantly identify the module a function belongs to and the execution environment where it is designed to run.
     -   Namespace: proj_
     -   Execution Scopes: 
-        -   client_: Executes on the developer workstation, CI/CD runner, or jumpbox before handing off to the CDD framework.
-        -   container_: Executes inside the container to dynamically map localized secrets to connection strings.
+        -   client_: Executes on the developer workstation.
+        -   container_: Executes inside the container.
+        -   host_: Executes on the remote container host server.
         -   shared_: Utilities utilized across multiple execution scopes.
-    -   See [CDD Function Naming Conventions](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#functions)
+    -   Refer to the [CDD Function Naming Conventions](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#functions) documentation
 -   ### Variables
     -   This project follows the defined [CDD variable naming conventions](../../modules/CDD/README.md#variables)
 
-## Security Features
--   See [CDD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#security-features)
+## CDD Folder Structure
+-   Refer to the [CDD Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#cdd-folder-structure) documentation
+-   ### Project-Specific CDD Folder Structure
+    -   Refer to the [Project-Specific CDD Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#project-specific-cdd-folder-structure) documentation
+-   ### CDD Documentation and Source Code Folder Structure
+    -   Refer to the [CDD Documentation and Source Code Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#cdd-documentation-and-source-code-folder-structure) documentation
+
+## CDD Implementation Procedure
+-   Refer to the [CDD Implementation Procedure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#cdd-implementation-procedure) documentation
 
 ## Setup
 -    See [CDD Setup](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#setup)
 
-## Executing the Appropriate Automated Client Script
--   The [CDD Documentation](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#executing-the-appropriate-cdd-script) contains detailed information about the automated deployment process
-
-## Adding New Use Cases
--    See [CDD Adding New Use Cases](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#adding-new-use-cases)
+## Executing the CDD Script
+-   Refer to the [CDD Executing the CDD Script](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#executing-the-cdd-script) documentation
 
 ## Security Features
--   See [CDD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#security-features)
+-   Refer to the [CDD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#security-features) documentation
