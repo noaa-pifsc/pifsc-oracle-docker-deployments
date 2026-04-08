@@ -56,9 +56,10 @@ function cdd_client_process_runtime_arguments ()
 	local local_script_type=""
 	cdd_set_container_script_type_var "local_script_type" "$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
 
-	# Store the validated value back into the arguments array
+	# store the validated value back into the arguments array
 	cds_shared_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
+	# print the runtime arguments for informational purposes
 	echo "Runtime Argument Values:"
 	echo "env_name: $(cds_shared_get_array_val "${arg_array}" "env_name")"
 	echo "deploy_dest: $(cds_shared_get_array_val "${arg_array}" "deploy_dest")"

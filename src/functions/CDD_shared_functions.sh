@@ -27,12 +27,12 @@ function cdd_execute_container_script ()
 	
 	# store the script type value while still in scope
 	
-	# Grab the specific array values while the local array is still in scope
+	# store the specific array values while the local array is still in scope
 	local trap_secret_var="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
 	local trap_compose_path="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
 	local trap_build_path="$(cds_shared_get_array_val "${arg_array}" "build_path")"
 
-	# Guarantee cleanup: Register an EXIT trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_shared_execute_container_script() functon is run
+	# register an exit trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_shared_execute_container_script() functon is run
 	trap "cds_shared_shutdown_cleanup_container_compose '${trap_secret_var}' '${trap_compose_path}' '${trap_build_path}'" EXIT
 
 	# construct arguments for the cds_shared_execute_container_script() function

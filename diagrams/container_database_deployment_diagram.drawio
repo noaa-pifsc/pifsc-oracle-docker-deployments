@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.3.6">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0">
   <diagram name="Page-1" id="mX9WFPaPRQZbATmu6Zbr">
-    <mxGraphModel dx="2066" dy="1111" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
+    <mxGraphModel dx="1542" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="600" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -50,7 +50,7 @@
             <mxPoint x="580" y="570" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-12" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="3) Initiate container&lt;div&gt;(execute script)&lt;/div&gt;" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-12" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;div&gt;3) Initiate&amp;nbsp;&lt;/div&gt;&lt;div&gt;deployment script&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.0831" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -70,7 +70,7 @@
             <mxPoint x="656" y="290" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-16" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="4) Run script as&amp;nbsp;&lt;div&gt;privileged account (sudo)&lt;/div&gt;" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-16" connectable="0" parent="xqHPgo2YLqQgxxea8p6s-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;div&gt;4) Run container&amp;nbsp;&lt;/div&gt;&lt;div&gt;deployment script as&amp;nbsp;&lt;/div&gt;&lt;div&gt;privileged account (sudo)&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.5015" y="-8" as="geometry">
             <mxPoint x="-97" as="offset" />
           </mxGeometry>
@@ -100,10 +100,10 @@
             <mxPoint y="-5" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="container_${SCRIPT_TYPE}.sh" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" value="container_${container_script_type}.sh" vertex="1">
           <mxGeometry height="30" width="240" x="429.75" y="490" as="geometry" />
         </mxCell>
-        <mxCell id="xqHPgo2YLqQgxxea8p6s-23" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="OCI ${ENV_NAME} DB" vertex="1">
+        <mxCell id="xqHPgo2YLqQgxxea8p6s-23" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="OCI ${env_name} DB" vertex="1">
           <mxGeometry height="150" width="140" x="910" y="384.5" as="geometry" />
         </mxCell>
         <mxCell id="xqHPgo2YLqQgxxea8p6s-24" edge="1" parent="1" source="xqHPgo2YLqQgxxea8p6s-22" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="xqHPgo2YLqQgxxea8p6s-23" value="">

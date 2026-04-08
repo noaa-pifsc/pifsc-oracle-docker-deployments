@@ -5,8 +5,6 @@
 # 1: the full path to the designated SQL folder within the container
 # 2: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # 3: the name of the output associative array where parsed secrets will be safely stored (scoped to the calling function).
-# Example Usage:  
-# cdd_container_initialize_script "$0" "/usr/src/database_deploy/SQL" "SECRET_MAPPING_ARR" "parsed_secrets_arr"
 function cdd_container_initialize_script ()
 {
 	local container_sql_directory="${1}"
