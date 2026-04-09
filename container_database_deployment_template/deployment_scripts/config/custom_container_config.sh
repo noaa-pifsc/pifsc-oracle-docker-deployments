@@ -8,17 +8,9 @@
 	# Example: PRIV_USER="docker-user"
 	PRIV_USER="[CONTAINER_ACCOUNT_NAME]"
 
-	# define the project folder name
-	# Example: PROJECT_FOLDER="my-project-name"
-	PROJECT_FOLDER="[PROJECT_FOLDER]"
-
 	# define the container git project URL
 	# Example: GIT_URL="git@github.com/my-great-organization/my-great-project.git"
 	GIT_URL="[GIT_URL]"
-
-	# define the name of the container image
-	# Example: IMAGE_NAME="pifsc/pifsc-project-name:latest"
-	IMAGE_NAME="[IMAGE_NAME]"
 
 ##### Container Configuration Variables: #####
 
