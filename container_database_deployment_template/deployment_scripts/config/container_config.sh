@@ -5,7 +5,7 @@
 ##### Container Host Configuration Variables: #####
 
 	# define the container source directory that will be created on the container host by cloning the project repository
-	HOST_SOURCE_PATH="/tmp/${PROJECT_FOLDER}"
+	HOST_SOURCE_PATH="/tmp/${CONTAINER_NAME}"
 
 	# define the container source directory that contains the container source files (e.g. Dockerfile, docker-compose.yml)
 	SOURCE_PATH="${HOST_SOURCE_PATH}/container_database_deployment"
@@ -15,3 +15,7 @@
 
 	# declare a variable for the path of the container compose file
 	COMPOSE_PATH="${BUILD_PATH}/docker-compose.yml"	
+
+	# define the name of the container image
+	IMAGE_NAME="pifsc/${CONTAINER_NAME}:latest"
+	
