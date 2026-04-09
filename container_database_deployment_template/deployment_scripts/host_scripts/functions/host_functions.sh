@@ -4,7 +4,7 @@
 # This function accepts no parameters
 function proj_host_deploy_container()
 {
-	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "CONFIG_DATA_VAR_NAME" "ENV_NAME" "SCRIPT_TYPE" "SECRET_MAPPING_VAR_NAME"; then 
+	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "SECRET_DATA_VAR_NAME" "ENV_NAME" "SCRIPT_TYPE" "SECRET_MAPPING_VAR_NAME"; then 
         echo "Error: proj_host_deploy_container() function argument validation failed" >&2
         return 1
     fi
@@ -13,7 +13,7 @@ function proj_host_deploy_container()
 	local -A func_args=(
 			["target_user"]="${PRIV_USER}" 
 			["source_path"]="${HOST_SOURCE_PATH}"
-			["config_var"]="${CONFIG_DATA_VAR_NAME}"
+			["secret_var"]="${SECRET_DATA_VAR_NAME}"
 			["deploy_script_path"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../host_deploy_database_elev_privs.sh"
 			["env_block"]="$(proj_shared_define_env_vars_block "${ENV_NAME}" "${SCRIPT_TYPE}")"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
@@ -28,7 +28,7 @@ function proj_host_deploy_container()
 # This function accepts no parameters
 function proj_host_deploy_container_elev_privs()
 {
-	if ! cds_shared_validate_required_vars "ENV_NAME" "SCRIPT_TYPE" "CONTAINER_SCRIPTS_PATH" "CONFIG_DATA_VAR_NAME" "SECRET_MAPPING_VAR_NAME" "COMPOSE_PATH" "SOURCE_PATH" "CONTAINER_NAME" "BUILD_PATH" ; then 
+	if ! cds_shared_validate_required_vars "ENV_NAME" "SCRIPT_TYPE" "CONTAINER_SCRIPTS_PATH" "SECRET_DATA_VAR_NAME" "SECRET_MAPPING_VAR_NAME" "COMPOSE_PATH" "SOURCE_PATH" "CONTAINER_NAME" "BUILD_PATH" ; then 
         echo "Error: proj_host_deploy_container_elev_privs() function argument validation failed" >&2
         return 1
     fi
@@ -36,8 +36,8 @@ function proj_host_deploy_container_elev_privs()
 	# declare the function arguments as a local variable
 	local -A func_args=(
 			["env_block"]="$(proj_shared_define_env_vars_block "${ENV_NAME}" "${SCRIPT_TYPE}")"
-			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
-			["config_var"]="${CONFIG_DATA_VAR_NAME}"
+			["scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
+			["secret_var"]="${SECRET_DATA_VAR_NAME}"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 			["compose_path"]="${COMPOSE_PATH}"
 			["source_path"]="${SOURCE_PATH}"

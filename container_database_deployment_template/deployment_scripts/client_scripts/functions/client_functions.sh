@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# function that initializes the env_name variable and loads the client secret/configuration files, and process the $config_var so it can be passed to a bash script via STDIN
+# function that initializes the env_name variable and loads the client secret/configuration files, and process the $secret_var so it can be passed to a bash script via STDIN
 # This function accepts the following parameters as elements in the specified array name  (arg_array):
 # env_name: (optional) the environment name (dev, test, prod)
 # deploy_dest: (optional) deployment destination (local, server)
@@ -19,7 +19,7 @@ function proj_client_deploy_database ()
     fi
 
 	# validate the bash variable values
-	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "COMPOSE_PATH" "HOST_SOURCE_PATH" "GIT_URL" "CONFIG_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
+	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "COMPOSE_PATH" "HOST_SOURCE_PATH" "GIT_URL" "SECRET_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
         echo "Error: proj_client_deploy_database() function required bash variable validation failed" >&2
         return 1
 	fi
@@ -46,11 +46,11 @@ function proj_client_deploy_database ()
 			["deploy_dest"]="$(cds_shared_get_array_val "local_runtime_args" "deploy_dest")"
 			["target_host"]="${CONTAINER_HOSTNAME}"
 			["env_block"]="$(proj_shared_define_env_vars_block "$(cds_shared_get_array_val "local_runtime_args" "env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
-			["container_scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
+			["scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 			["compose_path"]="${COMPOSE_PATH}"
 			["source_path"]="${HOST_SOURCE_PATH}"
 			["git_url"]="${GIT_URL}"
-			["config_var"]="${CONFIG_DATA_VAR_NAME}"
+			["secret_var"]="${SECRET_DATA_VAR_NAME}"
 			["host_scripts_path"]="${HOST_SCRIPTS_PATH}"
 			["build_path"]="${BUILD_PATH}"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
@@ -59,8 +59,6 @@ function proj_client_deploy_database ()
 			["container_script_type"]="$(cds_shared_get_array_val "local_runtime_args" "container_script_type")"
 			["image_name"]="${IMAGE_NAME}"
 		)
-
-#	echo "calling cdd_client_execute_deploy_database() with the function arguments: $(cds_shared_dump_array_vals "deploy_args")"
 
 	# prepare and execute the corresponding deployment script:
 	cdd_client_execute_deploy_database "deploy_args"

@@ -37,7 +37,7 @@ function proj_container_initialize()
 	proj_container_generate_connection_strings "local_secrets_arr" "$@" || return 1
 }
 
-# function that cleans up container variables after the sqlplus scripts complete, it accepts 1 parameter:
+# function that cleans up container variables after the sqlplus scripts complete, it accepts the following parameters:
 # 1: the name of an associative array that maps the secret values passed to bash commands via STDIN
 # Example Usage: 
 # proj_container_cleanup "SECRET_MAPPING_ARR"
@@ -52,5 +52,5 @@ function proj_container_cleanup ()
     fi
 
 	# unset bash variables specified by STDIN
-	cds_shared_unset_config_variables "${secret_map}"
+	cds_shared_unset_secret_variables "${secret_map}"
 }

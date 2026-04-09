@@ -56,9 +56,10 @@ function cdd_client_process_runtime_arguments ()
 	local local_script_type=""
 	cdd_set_container_script_type_var "local_script_type" "$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
 
-	# Store the validated value back into the arguments array
+	# store the validated value back into the arguments array
 	cds_shared_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
+	# print the runtime arguments for informational purposes
 	echo "Runtime Argument Values:"
 	echo "env_name: $(cds_shared_get_array_val "${arg_array}" "env_name")"
 	echo "deploy_dest: $(cds_shared_get_array_val "${arg_array}" "deploy_dest")"
@@ -78,12 +79,12 @@ function cdd_client_process_runtime_arguments ()
 # target_host: container hostname to connect to
 # source_path: the container source directory on the container host
 # git_url: git url for the container project's repository
-# config_var: name of the configuration data variable
+# secret_var: name of the configuration data variable
 # host_scripts_path: the path to the folder where the host bash scripts are contained
 # build_path: the local container build folder path (/container_database_deployment)
 # compose_path: the path of the container compose file (relative to the container build folder path)
 # secret_map: the name of the associative array containing the secret names and corresponding bash variables
-# container_scripts_path: the path to the container's bash scripts folder
+# scripts_path: the path to the container's bash scripts folder
 # env_block: (optional) a formatted list of custom export commands that will precede the bash script call to define any environment variables that are necessary for the bash script
 # container_name: the name of the container that will have the database deployment script executed for it
 # image_name: the name of the image that is being built (e.g. pifsc/great-project:latest)
@@ -100,7 +101,7 @@ function cdd_client_execute_deploy_database ()
     fi
 
 	# input validation:
-	if ! cds_shared_validate_required_array_vals "${arg_array}" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "config_var" "host_scripts_path" "build_path" "compose_path" "secret_map" "container_scripts_path" "container_name" "container_script_type" "image_name"; then 
+	if ! cds_shared_validate_required_array_vals "${arg_array}" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "secret_var" "host_scripts_path" "build_path" "compose_path" "secret_map" "scripts_path" "container_name" "container_script_type" "image_name"; then 
         echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
         return 1
     fi
@@ -117,9 +118,9 @@ function cdd_client_execute_deploy_database ()
 				["source_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
 				["git_url"]="$(cds_shared_get_array_val "${arg_array}" "git_url")"
 				["ssh_cmd"]="$(cds_shared_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_shared_get_array_val "${arg_array}" "host_scripts_path")/host_deploy_database.sh"
-				["config_var"]="$(cds_shared_get_array_val "${arg_array}" "config_var")"
+				["secret_var"]="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
 				["secret_map"]="$(cds_shared_get_array_val "${arg_array}" "secret_map")"
-				["parse_config_data"]="yes"
+				["process_secrets"]="yes"
 			)
 		
 		# deploy the database to the remote server
@@ -140,7 +141,7 @@ function cdd_client_execute_deploy_database ()
 		cds_client_deploy_local_compose "compose_args"
 
 		# process the configuration data to pass securely via STDIN and clear the floating global bash variables
-		cds_shared_process_config_data "$(cds_shared_get_array_val "${arg_array}" "secret_map")" "$(cds_shared_get_array_val "${arg_array}" "config_var")"
+		cds_shared_process_secret_data "$(cds_shared_get_array_val "${arg_array}" "secret_map")" "$(cds_shared_get_array_val "${arg_array}" "secret_var")"
 
 		# execute the corresponding container scripts and shutdown the container
 		cdd_execute_container_script "${arg_array}"
