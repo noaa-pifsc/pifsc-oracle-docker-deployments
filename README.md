@@ -6,7 +6,7 @@ The Container Database Deployment (CDD) module was developed to automate the exe
 ## Resources
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
-    -   Version 1.3 (git tag: pifsc_container_database_deployment_v1.3)
+    -   Version 1.4 (git tag: pifsc_container_database_deployment_v1.4)
     -   Submodules:
         -   Container Deployment Scripts (CDS): 
             -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Deployment-Scripts

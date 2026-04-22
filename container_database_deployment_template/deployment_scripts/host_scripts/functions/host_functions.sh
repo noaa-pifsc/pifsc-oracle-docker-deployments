@@ -18,6 +18,7 @@ function proj_host_deploy_container()
 			["env_block"]="$(proj_shared_define_env_vars_block "${ENV_NAME}" "${SCRIPT_TYPE}")"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
 			["process_secrets"]="yes"
+			["persistent_container"]="no"
 		)
 
 	# initialize and build/run the container on the host machine with the specified function arguments:
