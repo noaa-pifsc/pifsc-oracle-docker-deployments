@@ -14,22 +14,25 @@ function proj_client_deploy_database ()
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: proj_client_deploy_database() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
 	# validate the bash variable values
 	if ! cds_shared_validate_required_vars	"DEPLOYMENT_SCRIPT_LOGS" "CONTAINER_SCRIPTS_PATH" "COMPOSE_PATH" "HOST_SOURCE_PATH" "GIT_URL" "SECRET_DATA_VAR_NAME" "HOST_SCRIPTS_PATH" "BUILD_PATH" "SECRET_MAPPING_VAR_NAME" "REPO_ROOT_PATH" "CONTAINER_NAME" "LOCAL_CONTAINER_SCRIPTS_PATH"; then
-        echo "Error: proj_client_deploy_database() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 	
+	# create a pointer to the arg_array variable to make it easy to access the argument array values
+	local -n arg_ref="${arg_array}"
+
 	# declare the function arguments for cdd_client_process_runtime_arguments()
 	local -A local_runtime_args=(
 			["log_path"]="${DEPLOYMENT_SCRIPT_LOGS}"
-			["env_name"]="$(cds_shared_get_array_val "${arg_array}" "env_name")"
-			["deploy_dest"]="$(cds_shared_get_array_val "${arg_array}" "deploy_dest")"
-			["container_script_type"]="$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
+			["env_name"]="${arg_ref[env_name]}"
+			["deploy_dest"]="${arg_ref[deploy_dest]}"
+			["container_script_type"]="${arg_ref[container_script_type]}"
 			["repo_root"]="${REPO_ROOT_PATH}"
 			["scripts_path"]="${LOCAL_CONTAINER_SCRIPTS_PATH}"
 		)
@@ -38,14 +41,14 @@ function proj_client_deploy_database ()
 	cdd_client_process_runtime_arguments "local_runtime_args"
 
 	# load the client secrets and server configuration files
-	proj_client_load_secrets "$(cds_shared_get_array_val "local_runtime_args" "env_name")"
+	proj_client_load_secrets "${local_runtime_args[env_name]}"
 
 	# declare the function arguments
 	local -A deploy_args=(
 			["parent_root_folder"]="${REPO_ROOT_PATH}"
-			["deploy_dest"]="$(cds_shared_get_array_val "local_runtime_args" "deploy_dest")"
+			["deploy_dest"]="${local_runtime_args[deploy_dest]}"
 			["target_host"]="${CONTAINER_HOSTNAME}"
-			["env_block"]="$(proj_shared_define_env_vars_block "$(cds_shared_get_array_val "local_runtime_args" "env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
+			["env_block"]="$(proj_shared_define_env_vars_block "${local_runtime_args[env_name]}" "${local_runtime_args[container_script_type]}")"
 			["scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 			["compose_path"]="${COMPOSE_PATH}"
 			["source_path"]="${HOST_SOURCE_PATH}"
@@ -54,9 +57,9 @@ function proj_client_deploy_database ()
 			["host_scripts_path"]="${HOST_SCRIPTS_PATH}"
 			["build_path"]="${BUILD_PATH}"
 			["secret_map"]="${SECRET_MAPPING_VAR_NAME}"
-			["ssh_env_vars"]="$(proj_client_generate_ssh_env_vars "$(cds_shared_get_array_val "local_runtime_args" "env_name")" "$(cds_shared_get_array_val "local_runtime_args" "container_script_type")")"
+			["ssh_env_vars"]="$(proj_client_generate_ssh_env_vars "${local_runtime_args[env_name]}" "${local_runtime_args[container_script_type]}")"
 			["container_name"]="${CONTAINER_NAME}"
-			["container_script_type"]="$(cds_shared_get_array_val "local_runtime_args" "container_script_type")"
+			["container_script_type"]="${local_runtime_args[container_script_type]}"
 			["image_name"]="${IMAGE_NAME}"
 		)
 
@@ -72,7 +75,7 @@ function proj_client_load_secrets()
 	
 	# validate the bash variable values
 	if ! cds_shared_validate_required_vars	"env_name"; then
-        echo "Error: proj_client_load_secrets() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 
@@ -97,7 +100,7 @@ function proj_client_generate_ssh_env_vars ()
 
 	# validate the bash variable values
 	if ! cds_shared_validate_required_vars	"env_name" "script_type"; then
-        echo "Error: proj_client_generate_ssh_env_vars() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
 	fi
 	

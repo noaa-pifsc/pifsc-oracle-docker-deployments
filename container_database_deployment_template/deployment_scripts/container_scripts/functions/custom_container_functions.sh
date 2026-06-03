@@ -5,20 +5,20 @@
 # 1: the name of the secure array containing the parsed secrets
 # 2-n: the names of the variables to output the connection strings to
 # Usage:
-# proj_container_generate_connection_strings "SECURE_SECRETS_ARR" "db_conn_string" "app_conn_string"
-function proj_container_generate_connection_strings ()
+# proj_container_custom_generate_connection_strings "SECURE_SECRETS_ARR" "db_conn_string" "app_conn_string"
+function proj_container_custom_generate_connection_strings ()
 {
 	local parsed_secrets_arr_name="${1}"
 
 	# input validation
 	if ! cds_shared_validate_required_vars	"DB_HOST" "DB_SERVICE_NAME"; then
-        echo "Error: proj_container_generate_connection_strings() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
     fi 
 
     # validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${parsed_secrets_arr_name}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: proj_container_generate_connection_strings() function argument '${parsed_secrets_arr_name}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${parsed_secrets_arr_name}' is not a valid associative array." >&2
         return 1
     fi
 
@@ -35,7 +35,7 @@ function proj_container_generate_connection_strings ()
 	# validate that the required secret keys exist safely within the securely parsed array
 	# Example:
 	# if ! cds_shared_validate_required_array_vals "${parsed_secrets_arr_name}" "ORACLE_DB_USER" "ORACLE_DB_PASS" "ORACLE_DB_APP_USER" "ORACLE_DB_APP_PASS"; then
-    #    echo "Error: proj_container_generate_connection_strings() function required secure array validation failed" >&2
+    #    echo "Error: proj_container_custom_generate_connection_strings() function required secure array validation failed" >&2
     #    return 1
 	#fi
 

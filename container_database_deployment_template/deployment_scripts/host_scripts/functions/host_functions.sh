@@ -5,7 +5,7 @@
 function proj_host_deploy_container()
 {
 	if ! cds_shared_validate_required_vars "PRIV_USER" "HOST_SOURCE_PATH" "SECRET_DATA_VAR_NAME" "ENV_NAME" "SCRIPT_TYPE" "SECRET_MAPPING_VAR_NAME"; then 
-        echo "Error: proj_host_deploy_container() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
 
@@ -30,7 +30,7 @@ function proj_host_deploy_container()
 function proj_host_deploy_container_elev_privs()
 {
 	if ! cds_shared_validate_required_vars "ENV_NAME" "SCRIPT_TYPE" "CONTAINER_SCRIPTS_PATH" "SECRET_DATA_VAR_NAME" "SECRET_MAPPING_VAR_NAME" "COMPOSE_PATH" "SOURCE_PATH" "CONTAINER_NAME" "BUILD_PATH" ; then 
-        echo "Error: proj_host_deploy_container_elev_privs() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
 

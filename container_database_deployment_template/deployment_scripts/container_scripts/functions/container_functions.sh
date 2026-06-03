@@ -14,13 +14,13 @@ function proj_container_initialize()
 
 	# input validation
 	if ! cds_shared_validate_required_vars "container_root_sql_path" "secret_map"; then
-        echo "Error: proj_container_initialize() function required bash variable validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
         return 1
     fi
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${secret_map}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: proj_container_initialize() function argument '${secret_map}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${secret_map}' is not a valid associative array." >&2
         return 1
     fi
 
@@ -34,7 +34,7 @@ function proj_container_initialize()
 	cdd_container_initialize_script "${container_root_sql_path}" "${secret_map}" "local_secrets_arr" || return 1
 
 	# pass the secure array and any remaining arguments ($@) dynamically to the project-specific connection string generator
-	proj_container_generate_connection_strings "local_secrets_arr" "$@" || return 1
+	proj_container_custom_generate_connection_strings "local_secrets_arr" "$@" || return 1
 }
 
 # function that cleans up container variables after the sqlplus scripts complete, it accepts the following parameters:
@@ -47,7 +47,7 @@ function proj_container_cleanup ()
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${secret_map}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: proj_container_cleanup() function argument '${secret_map}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${secret_map}' is not a valid associative array." >&2
         return 1
     fi
 
