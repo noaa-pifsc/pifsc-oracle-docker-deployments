@@ -47,7 +47,7 @@ function proj_client_deploy_database ()
 	local -A deploy_args=(
 			["parent_root_folder"]="${REPO_ROOT_PATH}"
 			["deploy_dest"]="${local_runtime_args[deploy_dest]}"
-			["target_host"]="${CONTAINER_HOSTNAME}"
+			["target_host"]="${HOSTNAME}"
 			["env_block"]="$(proj_shared_define_env_vars_block "${local_runtime_args[env_name]}" "${local_runtime_args[container_script_type]}")"
 			["scripts_path"]="${CONTAINER_SCRIPTS_PATH}"
 			["compose_path"]="${COMPOSE_PATH}"

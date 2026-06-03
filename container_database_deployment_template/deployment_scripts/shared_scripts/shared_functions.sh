@@ -12,13 +12,15 @@
 # 2: the script type
 function proj_shared_define_env_vars_block()
 {
-	local env_name="${1}"
-	local script_type="${2}"
+	local ENV_NAME="${1}"
+	local SCRIPT_TYPE="${2}"
 
-	# echo the strictly local runtime variables natively
-	echo "export ENV_NAME='${env_name}'"
-	echo "export SCRIPT_TYPE='${script_type}'"
-	
+	# validate the bash variable values
+	if ! cds_shared_validate_required_vars	"ENV_NAME" "SCRIPT_TYPE"; then
+        echo "Error: ${FUNCNAME[0]}() function required bash variable validation failed" >&2
+        return 1
+	fi
+
 	# use the dynamic generator for the global project configuration constants
-	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME"
+	cds_shared_generate_export_env_vars_block "DB_HOST" "DB_SERVICE_NAME" "ENV_NAME" "SCRIPT_TYPE"
 }
