@@ -15,32 +15,35 @@ function cdd_execute_container_script ()
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: cdd_execute_container_script() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
 	# input validation:
 	if ! cds_shared_validate_required_array_vals "${arg_array}" "scripts_path" "compose_path" "secret_var" "container_name" "build_path" "container_script_type"; then 
-        echo "Error: cdd_execute_container_script() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
+	
+	# define a pointer to the local array named ${arg_array}
+	local -n arg_ref="${arg_array}"
 	
 	# store the script type value while still in scope
 	
 	# store the specific array values while the local array is still in scope
-	local trap_secret_var="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
-	local trap_compose_path="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
-	local trap_build_path="$(cds_shared_get_array_val "${arg_array}" "build_path")"
+	local trap_secret_var="${arg_ref[secret_var]}"
+	local trap_compose_path="${arg_ref[compose_path]}"
+	local trap_build_path="${arg_ref[build_path]}"
 
 	# register an exit trap to ensure the container is always torn down. By using double quotes, the literal string values are specified as arguments before the cds_shared_execute_container_script() functon is run
 	trap "cds_shared_shutdown_cleanup_container_compose '${trap_secret_var}' '${trap_compose_path}' '${trap_build_path}'" EXIT
 
 	# construct arguments for the cds_shared_execute_container_script() function
 	local -A execute_container_script_args=(
-			["script_path"]="$(cds_shared_get_array_val "${arg_array}" "scripts_path")/container_$(cds_shared_get_array_val "${arg_array}" "container_script_type").sh"
-			["secret_var"]="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
-			["env_block"]="$(cds_shared_get_array_val "${arg_array}" "env_block")"
-			["container_name"]="$(cds_shared_get_array_val "${arg_array}" "container_name")"
+			["script_path"]="${arg_ref[scripts_path]}/container_${arg_ref[container_script_type]}.sh"
+			["secret_var"]="${arg_ref[secret_var]}"
+			["env_block"]="${arg_ref[env_block]}"
+			["container_name"]="${arg_ref[container_name]}"
 		)
 
 	# execute the script within the specified container

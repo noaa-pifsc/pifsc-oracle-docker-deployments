@@ -11,7 +11,7 @@ function cdd_set_container_script_type_var ()
 
 	# validate the bash variable values
 	if ! cds_shared_validate_required_vars	"out_var_name"; then
-        echo "Error: cdd_set_container_script_type_var() function required function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function required function argument validation failed" >&2
         return 1
 	fi
 	
@@ -39,35 +39,38 @@ function cdd_client_process_runtime_arguments ()
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: cdd_client_process_runtime_arguments() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
 	# input validation:
 	if ! cds_shared_validate_required_array_vals "${arg_array}" "log_path" "repo_root" "scripts_path"; then 
-        echo "Error: cdd_client_process_runtime_arguments() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
+
+	# define a pointer to the local array named ${arg_array}
+	local -n arg_ref="${arg_array}"
 
 	# process the runtime arguments using the arg_array variable that was passed as an argument
 	cds_client_process_runtime_arguments "${arg_array}"
 
 	# set the script type variable value into a local variable
 	local local_script_type=""
-	cdd_set_container_script_type_var "local_script_type" "$(cds_shared_get_array_val "${arg_array}" "container_script_type")"
+	cdd_set_container_script_type_var "local_script_type" "${arg_ref[container_script_type]}"
 
 	# store the validated value back into the arguments array
 	cds_shared_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
 	# print the runtime arguments for informational purposes
 	echo "Runtime Argument Values:"
-	echo "env_name: $(cds_shared_get_array_val "${arg_array}" "env_name")"
-	echo "deploy_dest: $(cds_shared_get_array_val "${arg_array}" "deploy_dest")"
+	echo "env_name: ${arg_ref[env_name]}"
+	echo "deploy_dest: ${arg_ref[deploy_dest]}"
 	echo "container_script_type: ${local_script_type}"
 
 	# validate that the corresponding container script exists:
-	if [ ! -f "$(cds_shared_get_array_val "${arg_array}" "scripts_path")/container_${local_script_type}.sh" ]; then
-		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: $(cds_shared_get_array_val "${arg_array}" "scripts_path")/container_${local_script_type}.sh"
+	if [ ! -f "${arg_ref[scripts_path]}/container_${local_script_type}.sh" ]; then
+		echo "Error: the script type definition (script type: ${local_script_type}) argument's corresponding container deployment file does not exist: ${arg_ref[scripts_path]}/container_${local_script_type}.sh"
 		return 1
 	fi
 }
@@ -96,30 +99,33 @@ function cdd_client_execute_deploy_database ()
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: cdd_client_execute_deploy_database() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
 	# input validation:
 	if ! cds_shared_validate_required_array_vals "${arg_array}" "ssh_env_vars" "deploy_dest" "target_host" "source_path" "git_url" "secret_var" "host_scripts_path" "build_path" "compose_path" "secret_map" "scripts_path" "container_name" "container_script_type" "image_name"; then 
-        echo "Error: cdd_client_execute_deploy_database() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
 
+	# define a pointer to the local array named ${arg_array}
+	local -n arg_ref="${arg_array}"
+
 	# Check if the deploy_dest variable is "server" 
-	if [[ "$(cds_shared_get_array_val "${arg_array}" "deploy_dest")" == "server" ]]; then
+	if [[ "${arg_ref[deploy_dest]}" == "server" ]]; then
 
 		# this is a server deployment
 		echo "deploy the database deployment container to the server"
 
 		# declare the function arguments
 		local -A remote_deploy_args=(
-				["target_host"]="$(cds_shared_get_array_val "${arg_array}" "target_host")"
-				["source_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
-				["git_url"]="$(cds_shared_get_array_val "${arg_array}" "git_url")"
-				["ssh_cmd"]="$(cds_shared_get_array_val "${arg_array}" "ssh_env_vars") bash $(cds_shared_get_array_val "${arg_array}" "host_scripts_path")/host_deploy_database.sh"
-				["secret_var"]="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
-				["secret_map"]="$(cds_shared_get_array_val "${arg_array}" "secret_map")"
+				["target_host"]="${arg_ref[target_host]}"
+				["source_path"]="${arg_ref[source_path]}"
+				["git_url"]="${arg_ref[git_url]}"
+				["ssh_cmd"]="${arg_ref[ssh_env_vars]} bash ${arg_ref[host_scripts_path]}/host_deploy_database.sh"
+				["secret_var"]="${arg_ref[secret_var]}"
+				["secret_map"]="${arg_ref[secret_map]}"
 				["process_secrets"]="yes"
 			)
 		
@@ -130,10 +136,10 @@ function cdd_client_execute_deploy_database ()
 
 		# construct the argument array for cds_shared_build_deploy_container_compose()
 		local -A compose_args=(
-			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
+			["compose_path"]="${arg_ref[compose_path]}"
 			["build_image"]="yes"
-			["build_path"]="$(cds_shared_get_array_val "${arg_array}" "build_path")"
-			["image_name"]="$(cds_shared_get_array_val "${arg_array}" "image_name")"
+			["build_path"]="${arg_ref[build_path]}"
+			["image_name"]="${arg_ref[image_name]}"
 			["export_secrets"]="no"
 		)
 
@@ -141,7 +147,7 @@ function cdd_client_execute_deploy_database ()
 		cds_client_deploy_local_compose "compose_args"
 
 		# process the configuration data to pass securely via STDIN and clear the floating global bash variables
-		cds_shared_process_secret_data "$(cds_shared_get_array_val "${arg_array}" "secret_map")" "$(cds_shared_get_array_val "${arg_array}" "secret_var")"
+		cds_shared_process_secret_data "${arg_ref[secret_map]}" "${arg_ref[secret_var]}"
 
 		# execute the corresponding container scripts and shutdown the container
 		cdd_execute_container_script "${arg_array}"

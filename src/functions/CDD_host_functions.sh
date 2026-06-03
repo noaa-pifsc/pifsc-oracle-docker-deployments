@@ -14,25 +14,28 @@ function cdd_host_deploy_container ()
 
     # Validation check: ensure the argument is a valid array
     if [[ "$(declare -p "${arg_array}" 2>/dev/null)" != "declare -A"* ]]; then
-        echo "Error: cdd_host_deploy_container() function argument '${arg_array}' is not a valid associative array." >&2
+        echo "Error: ${FUNCNAME[0]}() function argument '${arg_array}' is not a valid associative array." >&2
         return 1
     fi
 
 	# input validation:
 	if ! cds_shared_validate_required_array_vals "${arg_array}" "source_path" "compose_path" "secret_map" "secret_var" "image_name"; then 
-        echo "Error: cdd_host_deploy_container() function argument validation failed" >&2
+        echo "Error: ${FUNCNAME[0]}() function argument validation failed" >&2
         return 1
     fi
 
+	# define a pointer to the local array named ${arg_array}
+	local -n arg_ref="${arg_array}"
+
 	# process the stdin configuration data: parse and store in variables, construct the formatted variable identified by $secret_var
-	cds_host_process_stdin_secret_data "$(cds_shared_get_array_val "${arg_array}" "secret_map")" "$(cds_shared_get_array_val "${arg_array}" "secret_var")"
+	cds_host_process_stdin_secret_data "${arg_ref[secret_map]}" "${arg_ref[secret_var]}"
 
 	# construct the argument array for cds_shared_build_deploy_container_compose()
 	local -A local_build_deploy_container_compose_args=(
-		["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
+		["compose_path"]="${arg_ref[compose_path]}"
 		["build_image"]="yes"
-		["build_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
-		["image_name"]="$(cds_shared_get_array_val "${arg_array}" "image_name")"
+		["build_path"]="${arg_ref[source_path]}"
+		["image_name"]="${arg_ref[image_name]}"
 	)
 
 	# stop and remove any running container and build/run the container from the source code
@@ -68,13 +71,16 @@ function cdd_host_deploy_database_execute_container_script()
         return 1
     fi
 
+	# define a pointer to the local array named ${arg_array}
+	local -n arg_ref="${arg_array}"
+
 	# declare the function arguments
 	local -A deploy_container_args=(
-			["source_path"]="$(cds_shared_get_array_val "${arg_array}" "source_path")"
-			["compose_path"]="$(cds_shared_get_array_val "${arg_array}" "compose_path")"
-			["secret_var"]="$(cds_shared_get_array_val "${arg_array}" "secret_var")"
-			["secret_map"]="$(cds_shared_get_array_val "${arg_array}" "secret_map")"
-			["image_name"]="$(cds_shared_get_array_val "${arg_array}" "image_name")"
+			["source_path"]="${arg_ref[source_path]}"
+			["compose_path"]="${arg_ref[compose_path]}"
+			["secret_var"]="${arg_ref[secret_var]}"
+			["secret_map"]="${arg_ref[secret_map]}"
+			["image_name"]="${arg_ref[image_name]}"
 		)
 
 	# deploy the container to the host server
