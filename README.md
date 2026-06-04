@@ -6,10 +6,11 @@ The Container Database Deployment (CDD) module was developed to automate the exe
 ## Resources
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
-    -   Version 1.4 (git tag: pifsc_container_database_deployment_v1.4)
+    -   Version: 1.4 (git tag: pifsc_container_database_deployment_v1.4)
     -   Submodules:
         -   Container Deployment Scripts (CDS): 
             -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Deployment-Scripts
+            -   Version: 1.3 (Git tag: pifsc_container_deployment_system_v1.3)
 -   [Container Database Deployment Diagram](./diagrams/container_database_deployment_diagram.drawio.png)
     -   [Container Database Deployment Diagram Source File](./diagrams/container_database_deployment_diagram.drawio)
 
@@ -110,7 +111,7 @@ The Container Database Deployment (CDD) module was developed to automate the exe
             -   Replace the [CONTAINER_NAME] placeholder to specify a unique container name based on the project, if two containers run with the same name there will be a conflict and they won't be able to run concurrently.
         -   [deployment_scripts](./container_database_deployment_template/deployment_scripts)
             -   [container_scripts/functions/custom_container_functions.sh](./container_database_deployment_template/deployment_scripts/container_scripts/functions/custom_container_functions.sh):
-                -   Update proj_container_generate_connection_strings() to validate the required bash variable values and define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
+                -   Update proj_container_custom_generate_connection_strings() to validate the required bash variable values and define the global bash variables that provide the required database connection strings necessary to execute the database deployment scripts (examples are provided)
                     -   \*Note: these connection string variables should reference the bash variables defined in the secrets.sh and deploy_config.$\{env_name\}.sh script files.  Do **NOT** hardcode the usernames/passwords or hostname/service name values and save them in the repository
             -   [container_scripts](./container_database_deployment_template/deployment_scripts/container_scripts):
                 -   Create a new .sh file for each database deployment/upgrade/rollback script implemented in the data system project in the format container_$\{container_script_type\}.sh where $\{container_script_type\} is provided by the user at runtime when the [client_scripts/client_deploy_database.sh](./container_database_deployment_template/deployment_scripts/client_scripts/client_deploy_database.sh) script is executed
