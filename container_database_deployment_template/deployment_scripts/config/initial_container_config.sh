@@ -8,10 +8,10 @@
 	CONFIG_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	# determine where the designated container subfolder in the local filesystem is (/container_database_deployment):
-	BUILD_PATH="${CONFIG_DIR}/../../"
+	BUILD_PATH="${CONFIG_DIR}/../.."
 	
 	# determine where the repository root path based on the configuration file location
-	REPO_ROOT_PATH="${CONFIG_DIR}/../../../"
+	REPO_ROOT_PATH="${CONFIG_DIR}/../../.."
 
 ##### Container Configuration Variables: #####
 
