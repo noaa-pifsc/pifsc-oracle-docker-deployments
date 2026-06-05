@@ -35,7 +35,7 @@ function proj_container_custom_generate_connection_strings ()
 	# validate that the required secret keys exist safely within the securely parsed array
 	# Example:
 	# if ! cds_shared_validate_required_array_vals "${parsed_secrets_arr_name}" "ORACLE_DB_USER" "ORACLE_DB_PASS" "ORACLE_DB_APP_USER" "ORACLE_DB_APP_PASS"; then
-    #    echo "Error: proj_container_custom_generate_connection_strings() function required secure array validation failed" >&2
+    #    echo "Error: ${FUNCNAME[0]}() function required secure array validation failed" >&2
     #    return 1
 	#fi
 
