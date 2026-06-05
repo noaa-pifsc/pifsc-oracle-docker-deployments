@@ -63,10 +63,14 @@ function cdd_client_process_runtime_arguments ()
 	cds_shared_set_array_val "${arg_array}" "container_script_type" "${local_script_type}"
 
 	# print the runtime arguments for informational purposes
+	echo ""
+	echo "***************************************"
 	echo "Runtime Argument Values:"
 	echo "env_name: ${arg_ref[env_name]}"
 	echo "deploy_dest: ${arg_ref[deploy_dest]}"
 	echo "container_script_type: ${local_script_type}"
+	echo "***************************************"
+	echo ""
 
 	# validate that the corresponding container script exists:
 	if [ ! -f "${arg_ref[scripts_path]}/container_${local_script_type}.sh" ]; then
