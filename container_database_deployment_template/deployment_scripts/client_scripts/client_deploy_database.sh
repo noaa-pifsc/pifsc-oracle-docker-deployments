@@ -12,6 +12,15 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/includes/include_clien
 # $3: (optional) container_script_type: (optional) script type (e.g. deploy_version2.0, upgrade_version1.8, rollback_version1.6)
 function main ()
 {
+	# notify the user which script is being run
+	echo ""
+	echo "**********************************************************************"
+	echo "*********** Executing container database deployment script ***********"
+	echo "**********************************************************************"
+	echo ""
+	echo "*Note: This script will deploy the specified database to the specified destination"
+	echo ""
+
 	# declare the function arguments as a local variable
 	local -A func_args=(
 			["env_name"]="${1:-}"

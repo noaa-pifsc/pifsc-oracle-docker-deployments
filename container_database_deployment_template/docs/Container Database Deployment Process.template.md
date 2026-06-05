@@ -7,14 +7,11 @@ The [Container Database Deployment (CDD)](https://github.com/noaa-pifsc/PIFSC-Co
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
 
-## Platform Requirements
--   Refer to the [CDD Platform Requirements](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#platform-requirements) documentation
-
-## Data System Prerequisites
--    Refer to the [CDD Data System Prerequisites](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#data-system-prerequisites) documentation
+## Requirements
+-   Refer to the [Requirements](../../modules/CDD/README.md#requirements) documentation
 
 ## Database Instances
--    Refer to the [CDD Database Instances](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#database-instances) documentation
+-    Refer to the [CDD Database Instances](../../modules/CDD/README.md#database-instances) documentation
 
 ## Naming Conventions
 -   ### Functions:
@@ -25,25 +22,25 @@ The [Container Database Deployment (CDD)](https://github.com/noaa-pifsc/PIFSC-Co
         -   container_: Executes inside the container.
         -   host_: Executes on the remote container host server.
         -   shared_: Utilities utilized across multiple execution scopes.
-    -   Refer to the [CDD Function Naming Conventions](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#functions) documentation
+    -   Refer to the [CDD Function Naming Conventions](../../modules/CDD/README.md#functions) documentation
 -   ### Variables
     -   This project follows the defined [CDD variable naming conventions](../../modules/CDD/README.md#variables)
 
 ## CDD Folder Structure
--   Refer to the [CDD Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#cdd-folder-structure) documentation
+-   Refer to the [CDD Folder Structure](../../modules/CDD/README.md#cdd-folder-structure) documentation
 -   ### Project-Specific CDD Folder Structure
-    -   Refer to the [Project-Specific CDD Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#project-specific-cdd-folder-structure) documentation
+    -   Refer to the [Project-Specific CDD Folder Structure](../../modules/CDD/README.md#project-specific-cdd-folder-structure) documentation
 -   ### CDD Documentation and Source Code Folder Structure
-    -   Refer to the [CDD Documentation and Source Code Folder Structure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#cdd-documentation-and-source-code-folder-structure) documentation
+    -   Refer to the [CDD Documentation and Source Code Folder Structure](../../modules/CDD/README.md#cdd-documentation-and-source-code-folder-structure) documentation
 
 ## CDD Implementation Procedure
--   Refer to the [CDD Implementation Procedure](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#cdd-implementation-procedure) documentation
+-   Refer to the [CDD Implementation Procedure](../../modules/CDD/README.md#cdd-implementation-procedure) documentation
 
 ## Setup
--    See [CDD Setup](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#setup)
+-    See [CDD Setup](../../modules/CDD/README.md#setup)
 
 ## Executing the CDD Script
--   Refer to the [CDD Executing the CDD Script](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#executing-the-cdd-script) documentation
+-   Refer to the [CDD Executing the CDD Script](../../modules/CDD/README.md#executing-the-cdd-script) documentation
 
 ## Security Features
--   Refer to the [CDD Security Features](https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments/blob/main/README.md#security-features) documentation
+-   Refer to the [CDD Security Features](../../modules/CDD/README.md#security-features) documentation

@@ -7,33 +7,39 @@ The Container Database Deployment (CDD) module was developed to automate the exe
 -   CDD Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Database-Deployments
     -   Version: 1.4 (git tag: pifsc_container_database_deployment_v1.4)
-    -   Submodules:
-        -   Container Deployment Scripts (CDS): 
-            -   URL: https://github.com/noaa-pifsc/PIFSC-Container-Deployment-Scripts
-            -   Version: 1.3 (Git tag: pifsc_container_deployment_system_v1.3)
 -   [Container Database Deployment Diagram](./diagrams/container_database_deployment_diagram.drawio.png)
     -   [Container Database Deployment Diagram Source File](./diagrams/container_database_deployment_diagram.drawio)
 
-## Platform Requirements
--   Remote container host running in OCI that has connectivity to the corresponding OCI database instance
+## Requirements
+-   Client machine:
+    -   Bash (Linux) or Git Bash (Windows)
+    -   git
+    -   For remote container deployments only:
+        -   SSH is setup to work with CAC authentication
+        -   SSH is configured to specify the username in the ~/.ssh/config file for each container host (e.g. docker_dev for the dev container host)
+            -   The ForwardAgent feature is enabled to allow the git repositories to be cloned on the container host
+-   Container host: 
+    -   Connectivity to the corresponding database instance
     -   Docker
     -   dos2unix
     -   git
--   Windows/Linux machine serving as the local client
-    -   Git Bash
-    -   OpenSSH is setup to work with CAC authentication
-    -   OpenSSH is configured to specify the username in the ~/.ssh/config file for each container host (e.g. docker-dev for the dev container host)
-        -   The ForwardAgent feature is enabled to allow the git repositories to be cloned on the container host
-
-## Data System Prerequisites
--   The git database/app project must have automated SQLPlus scripts to deploy/upgrade/rollback the database/app
+-   Data System Prerequisites:
+    -   Automated database deployment scripts that can be executed via SQL*Plus to deploy/upgrade/rollback the database/app are required by the database/app project 
     -   The given schema(s) on the target database instance must be in the correct state for the desired script to run (e.g. blank database for new deployments, required database version for upgrades/rollbacks, etc.)
-    -   If there are different versions of the automated SQLPlus scripts for the different environments (development, test, production) they must incorporate the corresponding environment abbreviation (dev, test, prod) in the script name so the appropriate script can be run for each environment (e.g. deploy_apex_test_v1.5.sql for deploying version 1.5 of the APEX app to the test environment)
+    -   If there are different versions of the automated scripts for the different environments (development, test, production) they must incorporate the corresponding environment abbreviation (dev, test, prod) in the script name so the appropriate script can be run for each environment (e.g. deploy_apex_test_v1.5.sql for deploying version 1.5 of the APEX app to the test environment)
 
 ## Database Instances
 -   For the development container and database instances the abbreviation used is "dev" 
 -   For the test/test container and database instances the abbreviation used is "test" 
 -   For the production container and database instances the abbreviation used is "prod" 
+
+## Dependencies
+\* Note: all dependencies are implemented as git submodules in the [modules](./modules) folder
+-   ### Container Deployment System (CDS) Module Version Control Information
+    -   folder path: [modules/CDS](./modules/CDS)
+    -   Version Control Information:
+        -   URL: <git@github.com:noaa-pifsc/PIFSC-Container-Deployment-System.git>
+        -   Version: 1.3 (Git tag: pifsc_container_deployment_system_v1.3)
 
 ## Naming Conventions
 -   ### Functions
@@ -60,7 +66,7 @@ The Container Database Deployment (CDD) module was developed to automate the exe
             -   The [host_scripts](./container_database_deployment_template/deployment_scripts/host_scripts) folder contains scripts to execute on the container host
             -   The [shared_scripts](./container_database_deployment_template/deployment_scripts/shared_scripts) folder contains scripts that are executed in multiple execution scopes
         -   The [docs](./container_database_deployment_template/docs) folder contains documentation for the project-specific CAD implementation
-        -   The [secrets](./container_database_deployment_template/secrets) folder contains files to define the database credentials and other secret values that are used when building the container (these files are not committed to version control)
+        -   The [secrets](./container_database_deployment_template/secrets) folder contains subfolders for each one of the [Database Instances](#database-instances) and a secrets.sh file for each subfolder (e.g. dev/secrets.sh for the development instance) that contains the definition for all secret variables required for the database deployment (these files are not committed to version control)
         -   The [.dockerignore](./container_database_deployment_template/.dockerignore) file defines which source folders/files will be copied into the container image
         -   The [.env](./container_database_deployment_template/.env) file defines a project-specific container name to prevent naming conflicts to allow multiple CDD containers to run concurrently on the same docker host.
         -   The [.gitignore](./container_database_deployment_template/.gitignore) file prevents sensitive files from being committed
@@ -72,7 +78,7 @@ The Container Database Deployment (CDD) module was developed to automate the exe
         -   The [CDS](./modules/CDS) folder contains a pointer the CDS repository implemented as a git submodule
     -   The [src](./src) folder contains .sh files that define the reusable CDD module bash functions
     -   The [README.md](./README.md) file documents the CDD module
--   #### CDD Folder Diagram:
+-   #### Repository Folder Diagram:
     ```
     .
     |--- container_database_deployment_template
@@ -158,14 +164,11 @@ The Container Database Deployment (CDD) module was developed to automate the exe
 
 ## Security Features
 -   The CDD inherits security features from the [CDS module](./modules/CDS/README.md#security-features).
--   Strict Local Variable Scoping (No Global Leakage): Within the container runtime, secret values are parsed directly into strictly scoped local associative arrays. Secret values are never stored in floating global variables or the container's exported environment, effectively shielding them from potential exposure via container introspection tools or error dumps.
 -   Guaranteed Container Teardown (EXIT Traps): The deployment lifecycle is wrapped in a heavily enforced trap ... EXIT mechanism. At runtime the framework extracts and hardcodes the necessary cleanup variables immediately upon execution. If a deployment script encounters a fatal error, crashes, or is manually aborted, the trap guarantees that the container and all sensitive temporary data are immediately destroyed, preventing containers from lingering.
--   Decoupled Configuration Adapter Pattern: The CDD engine enforces a strict Separation of Concerns. It remains completely independent of project-specific global variables. It only operates on strictly validated associative arrays passed from the client adapter, ensuring that the engine itself cannot inadvertently expose or mishandle project-specific configurations.
--   Secure Connection String Generation: When dynamically generating database connection strings, the CDD framework retrieves values safely from the locally scoped secrets array and strictly quotes the passwords. This prevents special characters inside the database credentials from corrupting the connection string or breaking the SQL execution pipeline.
--   Immutable Shell Executions: When elevating privileges to run container commands, CDD utilizes rigid Heredocs (<<EOF and <<'CREDEND') to pipe commands into the new shell. This creates an immutable execution block that safely separates the runtime variables from the raw secret payload.
+-   Decoupled Configuration Adapter Pattern: The core CDD engine enforces a strict Separation of Concerns. It remains completely independent of project-specific global variables. It only operates on strictly validated associative arrays and arguments, ensuring that the engine itself cannot inadvertently expose or mishandle project-specific configurations.
 
 ## License
 See the [LICENSE.md](./LICENSE.md) for details
 
 ## Disclaimer
-This repository is a scientific product and is not official communication of the National Oceanic and Atmospheric Administration, or the United States Department of Commerce. All NOAA GitHub project code is provided on an ‘as is’ basis and the user assumes responsibility for its use. Any claims against the Department of Commerce or Department of Commerce bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation or favoring by the Department of Commerce. The Department of Commerce seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by DOC or the United States Government.
+This repository is a scientific product and is not official communication of the National Oceanic and Atmospheric Administration, or the United States Department of Commerce. All NOAA GitHub project code is provided on an 'as is' basis and the user assumes responsibility for its use. Any claims against the Department of Commerce or Department of Commerce bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation or favoring by the Department of Commerce. The Department of Commerce seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by DOC or the United States Government.
