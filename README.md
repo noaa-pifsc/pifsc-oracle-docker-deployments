@@ -167,6 +167,15 @@ The Container Database Deployment (CDD) module was developed to automate the exe
 -   Guaranteed Container Teardown (EXIT Traps): The deployment lifecycle is wrapped in a heavily enforced trap ... EXIT mechanism. At runtime the framework extracts and hardcodes the necessary cleanup variables immediately upon execution. If a deployment script encounters a fatal error, crashes, or is manually aborted, the trap guarantees that the container and all sensitive temporary data are immediately destroyed, preventing containers from lingering.
 -   Decoupled Configuration Adapter Pattern: The core CDD engine enforces a strict Separation of Concerns. It remains completely independent of project-specific global variables. It only operates on strictly validated associative arrays and arguments, ensuring that the engine itself cannot inadvertently expose or mishandle project-specific configurations.
 
+## Design Strategy
+-   Leverage the [CDS module](./modules/CDS/README.md#design-strategy) for its collection of flexible and reusable container functions
+    -   Benefits:
+        -   Reduce the amount of custom code needed for the CDD
+-   Define a collection of flexible and reusable container functions for a variety of workflows that support running database scripts from a container
+    -   Benefits:
+        -   Promote code reuse
+        -   Reduce the amount of custom code needed for specific database projects to implement the CDD
+
 ## License
 See the [LICENSE.md](./LICENSE.md) for details
 
